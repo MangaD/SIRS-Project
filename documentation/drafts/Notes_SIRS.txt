@@ -1,0 +1,53 @@
+Notes:
+
+Para além de usar um canal standard, vamos ter que fazer um canal nosso.
+
+1. Criar Web App
+	1.1. Servidor com ficheiros encriptados
+	1.2. Base Dados com Logins e pass's dos clientes
+	1.3. Client side com Login e Register forms e download dos ficheiros desencriptados
+
+2. App Android (Cliente)
+	2.1. 2FA, aquando do login no site, a aplicação android irá confirmar o login.
+
+3. Criar um canal de passagem dos tokens, que garanta as 4: Confidencialidade, Integridade, Autenticidade, Não repudio
+
+4. Usar um canal standard (ex: SSH) Do cliente para o servidor
+
+5. O Servidor tem que ser tolerante a falhas (Fault Tolerance). 
+	Ex: Se houver um crash quando os ficheiros ja estao desencriptados, garantir que voltam a ficar encriptados.
+
+6. Garantir que o smartphone está na proximidade da maquina.
+
+7. Do lado do Cliente, proteger contra ataques XSS, SQL Injection?
+
+
+ 	SSH	  	Costum Channel (TCP + Crypto)
+Server ----- Client -------------------------------------- Smartphone
+ VM	      VM's					    Telem/VM	
+	       |						|
+	       |------------------------------------------------|
+			Proximidade (Wriless ou Bluetooth) 
+
+
+
+
+Basic:
+	1. Create the server, client and use smartphone with 2FA;
+	2. 2FA covers authenticity;
+	3. use ssh between the server and the client;
+	4. XSS and SQL Injection protection;
+
+Medium:
+	1. Smartphone between Client, garantees Confidentiality and Integrity;
+	2. Server side encript and decript data;
+	
+	
+Advanced:
+	1. Smartphone between Cliente, garantees Availability;
+	2. Proximidade between Client and Smarphtone;
+	3. Fault Tolerance
+
+
+
+

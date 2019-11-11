@@ -1,0 +1,30 @@
+SIRS Proposal Draft:
+
+Requirements:
+1.	Web App (Server and Client sides) and Android App;
+2.	2FA - Two Factor Authentication (Duo) in Android App; 
+3.	Proximity between 2 devices (Wi-Fi/Bluetooth Connection) between Smartphone and computer;
+4.	1 Standard Channel (SSH) between Server and Client;
+5.	1 Custom Channel (TCP + Asymmetric Encryption) between Client and Smartphone;
+6.	Cover the CIA vulnerabilities (Confidentiality, Integrity and Availability) in the Custom channel (Authenticity is covered with 2FA);
+7.	Protect against XSS and SQL Injection in Server side;
+8.	Encryption/Decryption of data using Asymmetric and Symmetric Algorithms (To encrypt large files its necessary to MIX both Algorithms).
+9.	Fault Tolerance to the Server.
+
+Proposed Solution:
+
+Basic:
+•	Create Web App (Server and Client);
+•	Create Android App;
+•	Configure a standard channel (SSH) between 2 machines;
+•	Deploy server and client in 2 machines with secure channel (SSH);
+•	Connect Smartphone and machines through Wireless;
+Intermediate:
+•	Configure Duo (2FA mechanism) in android app, to ensure authenticity;
+•	Create a Custom channel (TCP + Asymmetric Encryption) that covers the 3 CIA vulnerabilities (Confidentiality, Integrity and Availability);
+•	Use the Custom channel to pass the security token between android app (smartphone) to client side;
+•	Protect against XSS and SQL Injection in Server side;
+Advanced:
+•	Make data accessible to the user only when the user is “fully” authenticated (2FA + Proximity + Secure Custom Channel);
+•	To make data accessible, use Asymmetric and Symmetric  Encryption/Decryption Algorithms(To encrypt large files its necessary to MIX both Algorithms);
+•	Server Fault Tolerance capability (When the server crashes and the data is decrypted, the other replicas need to encrypt the data);
