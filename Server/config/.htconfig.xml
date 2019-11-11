@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE DataBase SYSTEM './database.dtd'>
+<Config>
+	<DataBase>
+		<host>localhost</host>
+		<port>33306</port>
+		<db>sirs</db>
+		<username>sirs</username>
+		<password>password</password>
+	</DataBase>
+</Config>
