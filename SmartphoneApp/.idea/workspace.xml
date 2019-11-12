@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="947f4a41-f7bf-4e87-9a19-b1852e2048c6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ClientApp/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientApp/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ClientApp/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/../ClientApp/login.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmartphoneApp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SmartphoneApp.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ClientConnection.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ClientListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/WebsocketServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebsocketServer.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -94,6 +88,8 @@
       <workItem from="1573484952505" duration="664000" />
       <workItem from="1573485647442" duration="2276000" />
       <workItem from="1573564298521" duration="133000" />
+      <workItem from="1573564604883" duration="158000" />
+      <workItem from="1573582915323" duration="4987000" />
     </task>
     <servers />
   </component>
@@ -105,7 +101,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

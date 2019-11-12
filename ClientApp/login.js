@@ -13,4 +13,3 @@ function openConnection() {
     websocket.send(request);
  }
 
-
