@@ -49,6 +49,6 @@ public class WebsocketServer extends WebSocketServer {
 
     @Override
     public void onStart() {
-        System.out.println("onStart()");
+        System.out.println("Server Started on Port: " + TCP_PORT);
     }
 }
