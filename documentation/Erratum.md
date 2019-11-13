@@ -22,8 +22,6 @@ We did not add in our proposal brute force prevention through limiting login att
 
 Diffie-Hellman does not provide authenticity, so both entities must sign their shared public values with their private keys.
 
-
-
 ## Messages
 
 We did not add in our proposal non-repudiation and freshness guarantees, but this can be achieved through logging user actions, having a nonce and timestamp sent encrypted with each message and signed message hash.
