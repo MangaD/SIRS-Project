@@ -20,7 +20,17 @@
 
 - [documentation/proposal/T18_Mon_1500_0-14_proposal_revised.pdf](documentation/proposal/T18_Mon_1500_0-14_proposal_revised.pdf)
 
-## Erratum
+## Proposal erratum
 
-- [documentation/Erratum.md](documentation/Erratum.md)
+- [documentation/Proposal_erratum.md](documentation/Proposal_erratum.md)
 
+## Project setup
+
+- [documentation/setup/InstallVMs.md](documentation/setup/InstallVMs.md)
+- TODO - set up server
+- TODO - set up smartphone (with WPA3)
+- TODO - set up client
+
+## Attempting man-in-the-middle
+
+TODO (tcpdumps, etc)
