@@ -1,6 +1,6 @@
 # Install Virtual Machines
 
-**Note:** We use [Virtual Box](https://www.virtualbox.org/wiki/Downloads) for our VMs and [Lubuntu](https://lubuntu.net/downloads/) OS.
+**Note:** We use [VirtualBox](https://www.virtualbox.org/wiki/Downloads) for our VMs and [Lubuntu](https://lubuntu.net/downloads/) OS.
 
 We will setup 4 VMs:
 
@@ -53,22 +53,22 @@ This interface will be used to access the Internet.
 
 ## Configure virtual networks
 
-We will now configure the IP network (supported by virtual switch sw-1) with static IP addresses. 
+We will now configure the IP network (supported by virtual switches sw-1 and sw-2) with static IP addresses. 
 Smartphone VM, User VM and Gateway VM will talk using a subnet (sw-1). Gateway VM and Server VM will talk using another subnet (sw-2).
 
 For sw-1 we will use the private IP addresses 192.168.0.0/24 (meaning that the subnet mask is 255.255.255.0 – we can have 254 addresses to use (from 192.168.0.1 to 192.168.0.254). Note that 192.168.0.255 is reserved for broadcast).
 
 For sw-2 we will use the private IP addresses 192.168.1.0/24
 
-The IP address of Smartphone VM will be 192.168.0.10, of User VM will be 192.168.0.20, and of Gateway VM will be 192.168.0.100.
+The IP address of Smartphone VM will be 192.168.0.10, of User VM will be 192.168.0.20, and of Gateway VM will be 192.168.0.100 for the sw-1 subnet.
 
-The IP address of Gateway VM will be 192.168.1.254 and the address of Server VM will be 192.168.1.1. 
+The IP address of Gateway VM will be 192.168.1.254 and the address of Server VM will be 192.168.1.1 for the sw-2 subnet. 
 
 We are assuming that every VM except Server VM has an interface `enp0s3`(connected to sw-1) and Gateway VM has interfaces `enp0s3` (connected to sw-1), `enp0s8` (connected to sw-2), and `enp0s9` (connected to the internet). 
 These `en...` values are the network interface names and are automatically assigned by the operating system following a [device naming convention](https://en.wikipedia.org/wiki/Consistent_Network_Device_Naming).
 
 _How do you know which interface is connected to sw-1 and which one is connected to sw-2? 
-Look at their MAC Addresses. 
+Look at their MAC Addresses.  
 Running `ip a` shows the MAC address of each interface and you can compare with those of VirtualBox._
 
 ### Netplan
@@ -80,6 +80,7 @@ sudo su
 nano /etc/netplan/01-network-manager-all.yaml
 ```
 
+Paste:
 ```
 network:
   version: 2
@@ -94,8 +95,8 @@ network:
         addresses: [1.1.1.1, 1.0.0.1]
 ```
 
-_Note:
-1.1.1.1, 1.0.0.1 -> cloud flare dns
+_Note:  
+1.1.1.1, 1.0.0.1 -> cloud flare dns  
 8.8.8.8, 8.8.4.4 -> google dns_
 
 ```sh
@@ -113,6 +114,7 @@ sudo su
 nano /etc/netplan/01-network-manager-all.yaml
 ```
 
+Paste:
 ```
 network:
   version: 2
@@ -163,6 +165,7 @@ sudo su
 nano /etc/netplan/01-network-manager-all.yaml
 ```
 
+Paste:
 ```
 network:
   version: 2
