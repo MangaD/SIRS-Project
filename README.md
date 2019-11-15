@@ -27,7 +27,7 @@
 ## Project setup
 
 - [documentation/setup/InstallVMs.md](documentation/setup/InstallVMs.md)
-- TODO - set up server
+- [documentation/setup/ServerSetup.md](documentation/setup/ServerSetup.md)
 - TODO - set up smartphone (with WPA3)
 - TODO - set up client
 

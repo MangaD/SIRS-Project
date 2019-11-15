@@ -14,3 +14,5 @@ GRANT USAGE ON * . * TO 'sirs'@'%' IDENTIFIED BY 'password' WITH MAX_QUERIES_PER
 # Grant privileges
 GRANT ALL PRIVILEGES ON `sirs` . * TO 'sirs'@'localhost';
 GRANT ALL PRIVILEGES ON `sirs` . * TO 'sirs'@'%';
+
+FLUSH PRIVILEGES;
