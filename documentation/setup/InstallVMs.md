@@ -83,7 +83,7 @@ nano /etc/netplan/01-network-manager-all.yaml
 ```
 
 Paste:
-```
+```yaml
 network:
   version: 2
   renderer: NetworkManager
@@ -117,7 +117,7 @@ nano /etc/netplan/01-network-manager-all.yaml
 ```
 
 Paste:
-```
+```yaml
 network:
   version: 2
   renderer: NetworkManager
@@ -168,7 +168,7 @@ nano /etc/netplan/01-network-manager-all.yaml
 ```
 
 Paste:
-```
+```yaml
 network:
   version: 2
   renderer: NetworkManager
