@@ -2,6 +2,8 @@
 
 Make sure to have [installed the VMs](InstallVMs.md) first.
 
+## Install LAMP
+
 ```sh
 sudo apt update && sudo apt upgrade
 sudo apt install apache2 mariadb-server php libapache2-mod-php php-mysql
@@ -15,3 +17,8 @@ sudo nano /etc/apache2/mods-enabled/dir.conf
 sudo systemctl restart apache2
 ```
 
+## Add website
+
+```sh
+cd /var/www/html/
+```
