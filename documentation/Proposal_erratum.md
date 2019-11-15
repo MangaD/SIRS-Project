@@ -27,3 +27,7 @@ We did not add in our proposal non-repudiation and freshness guarantees.
 Non-repudiation could be achieved through digital signatures (e.g. signing the message hashes), logging and freshness.
 
 Freshness can be achieved by having a [nonce and timestamp](https://crypto.stackexchange.com/questions/41170/what-advantage-is-there-for-using-a-nonce-and-a-timestamp) sent encrypted with each message.
+
+**Why hash the message with random padding?**
+
+Since we're sending the hash encrypted together with the message, random padding is unnecessary. But if we were sending the hash separately, random padding would be important in order to make equal messages produce a different hash.
