@@ -31,6 +31,8 @@ sudo apt install iptables-persistent
 
 ## Create other VMs
 
+A **VirtualBox linked clone** is a virtual machine whose virtual disk links to another virtual machine's virtual disk and saves only the differences in files and data compared to the **linked** virtual machine. This saves disk space on the host computer.
+
 - On the first VM click `Clone`
 - Select the name you want to give to the new machine
 - MAC Adress Policy: Generate new MAC addresses for all network adapters
@@ -187,3 +189,4 @@ sudo netplan try
 sudo netplan apply
 sudo systemctl restart network-manager
 ```
+
