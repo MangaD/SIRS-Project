@@ -20,5 +20,11 @@ sudo systemctl restart apache2
 ## Add website
 
 ```sh
+cd ~
+git clone https://github.com/MangaD/SIRS-Project
+sudo mv SIRS-Project/ /var/www/html/project
 cd /var/www/html/
+
+# Access website in browser:
+# http://127.0.0.1/project/server/
 ```
