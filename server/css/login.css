@@ -17,6 +17,16 @@ html,body {
 	font-family: 'Numans', sans-serif;
 }
 
+a, a:hover, a:focus, a:visited {
+	color: lightblue;
+}
+
+h1 {
+	position: fixed;
+	margin-top: 50px;
+	text-shadow: 2px 2px 10px #000;
+}
+
 .container {
 	height: 100%;
 	align-content: center;
@@ -28,6 +38,7 @@ html,body {
 	margin-bottom: auto;
 	width: 400px;
 	background-color: rgba(0,0,0,0.5) !important;
+	box-shadow: 0px 1px 10px #112;
 }
 
 
@@ -37,7 +48,7 @@ html,body {
 
 .input-group-prepend span{
 	width: 50px;
-	background-color: #FFC312;
+	background-color: #3F73a2;
 	color: black;
 	border:0 !important;
 }
@@ -49,32 +60,32 @@ input:focus{
 }
 
 .remember{
-color: white;
+	color: white;
 }
 
 .remember input
 {
-width: 20px;
-height: 20px;
-margin-left: 15px;
-margin-right: 5px;
+	width: 20px;
+	height: 20px;
+	margin-left: 15px;
+	margin-right: 5px;
 }
 
 .login_btn{
-color: black;
-background-color: #FFC312;
-width: 100px;
+	color: black;
+	background-color: #3F73a2;
+	width: 100px;
 }
 
 .login_btn:hover{
-color: black;
-background-color: white;
+	color: black;
+	background-color: white;
 }
 
 .links{
-color: white;
+	color: white;
 }
 
 .links a{
-margin-left: 4px;
+	margin-left: 4px;
 }
