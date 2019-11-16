@@ -37,8 +37,11 @@ TODO (tcpdumps, etc)
 
 ## Credits
 
+**Client:**
+
 - [Bootstrap 4](https://getbootstrap.com/)
 - [Font Awesome 5](https://fontawesome.com/)
 - [ParticleJS](https://vincentgarreau.com/particles.js/)
-- [Login page theme](https://bootsnipp.com/snippets/vl4R7)
 - [Bootstrap 4 'Superhero' theme](https://bootswatch.com/)
+- [Loader](https://projects.lukehaas.me/css-loaders/)
+

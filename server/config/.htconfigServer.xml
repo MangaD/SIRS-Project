@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<Config>
-	<Server>
-		<host>localhost</host>
-		<port>80</port>
-		<ssl>443</ssl>
-	</Server>
-</Config>

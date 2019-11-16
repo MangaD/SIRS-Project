@@ -10,11 +10,19 @@
 	right: 0;
 	position: fixed;
 	z-index: -100;
+	background: rgba(0,0,0,0.8);
 }
 
 html,body {
 	height: 100%;
 	font-family: 'Numans', sans-serif;
+}
+
+body {
+	background-image: url('../img/bg.jpg');
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 a, a:hover, a:focus, a:visited {
@@ -23,8 +31,19 @@ a, a:hover, a:focus, a:visited {
 
 h1 {
 	position: fixed;
-	margin-top: 50px;
+	margin-top: 60px;
 	text-shadow: 2px 2px 10px #000;
+}
+
+.alert {
+	position: fixed;
+	border-radius: 5px;
+	top: 120px;
+}
+
+.alert-danger {
+	background-color: rgba(217, 83, 79, 0.5);
+	border: 3px solid rgba(217, 83, 79, 1);
 }
 
 .container {
@@ -32,15 +51,16 @@ h1 {
 	align-content: center;
 }
 
-.card {
-	height: 370px;
+#login_card.card {
+	/*height: 370px;*/
 	margin-top: auto;
 	margin-bottom: auto;
 	width: 400px;
 	background-color: rgba(0,0,0,0.5) !important;
 	box-shadow: 0px 1px 10px #112;
+	position: fixed;
+	margin-top: 170px;
 }
-
 
 .card-header h3{
 	color: white;
