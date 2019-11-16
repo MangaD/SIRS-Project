@@ -15,7 +15,7 @@ require_once PROJECT_ROOT.'inc/config.php';
 	<title>Uninstall <?php echo $app_title; ?></title>
 	<meta charset="UTF-8">
 
-	<link rel="shortcut icon" href="../favicon.png" type="image/png">
+	<link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
 
 	<style type="text/css">
 		a.disabled {
