@@ -1,6 +1,6 @@
-document.getElementById("login_btn").addEventListener("click", function(event) {
+$("#login_btn").click( function(e) {
 	login();
-	event.preventDefault();
+	e.preventDefault();
 });
 
 function login() {
@@ -16,16 +16,34 @@ function login() {
 			if (data.errors.already_logged === true) {
 				window.username = data.username;
 				window.uid = data.uid;
+
+				alert("Login successful!");
+
 				// TODO Switch to main window
 			} else {
-				// TODO Set error alert
+
+				for(var k in data.errors) {
+					$("#login_alerts").append(
+						'<div id="error_alert" class="alert alert-danger alert-dismissible" role="alert">' +
+						'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
+						data.errors[k] +
+						'</div>'
+					);
+				}
 			}
 		}
 
+		//console.log(data);
 		loaderEnd();
 	})
 	.catch((error2) => {
-		console.log(error2);
+		$("#login_alerts").append(
+			'<div id="error_alert" class="alert alert-danger alert-dismissible" role="alert">' +
+			'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
+			'Failed to connect to the server.' +
+			'</div>'
+		);
+		//console.log(error2);
 		loaderEnd();
 	});
 }

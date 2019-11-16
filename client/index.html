@@ -31,7 +31,6 @@
 		<script src="js/smartphone_connection.js"></script>
 		<script src="js/utils.js"></script>
 		<script src="js/main.js"></script>
-		<script src="js/login.js"></script>
 
 	</head>
 	<body>
@@ -39,7 +38,7 @@
 		<noscript>You need to enable JavaScript to run this app.</noscript>
 
 		<!-- Template from: https://bootsnipp.com/snippets/vl4R7 -->
-		<div class="container">
+		<div id="main_container" class="container">
 
 			<div class="d-flex justify-content-center h-100">
 
@@ -87,19 +86,46 @@
 					</div>
 				</div>
 
-				<div id="not_installed" class="alert alert-danger"
-					role="alert">
-					Sorry, the database is not installed!
-				</div>
+				<div id="login_alerts"></div>
 
+			</div>
+		</div>
+
+		<button id="settingsBtn" type="button" class="btn btn-default"
+			data-toggle="modal" data-target="#settingsModal">
+			<i class="fas fa-cog fa-spin"></i>
+		</button>
+
+		<div class="modal" id="settingsModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Settings</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<p>
+							<strong>Local settings:</strong>
+							<i class="fas fa-info-circle"></i>
+						</p>
+						<div class="form-group">
+							<label for="server" class="control-label">Server address:</label>
+							<input placeholder="Server address..." type="text"
+								id="serverAddress" class="form-control" value="../server">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button id="saveSettingsBtn" type="button" class="btn btn-default">Save</button>
+					</div>
+				</div>
 			</div>
 		</div>
 
 		<div id="loader" class="loader" style="display: none;"></div>
 
 		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-			integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
 			crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
 			integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
@@ -115,5 +141,8 @@
 				//console.log('callback - particles.js config loaded');
 			});
 		</script>
+
+		<script src="js/settings.js"></script>
+		<script src="js/login.js"></script>
 	</body>
 </html>
