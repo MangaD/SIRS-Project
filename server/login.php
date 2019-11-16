@@ -9,7 +9,7 @@ $errors = array();
 $data = array();
 
 if (!isInstalled()) {
-	$errors['not_installed'] = $app_title . ' server is not installed.';
+	$errors['not_installed'] = 'Server is not installed.';
 }
 elseif (SessionManager::isLoggedIn()) {
 	$errors['already_logged'] = true;
