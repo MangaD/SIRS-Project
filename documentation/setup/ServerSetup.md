@@ -14,6 +14,10 @@ sudo mysql_secure_installation
 
 sudo nano /etc/apache2/mods-enabled/dir.conf
 # Move index.php to first in the list
+
+sudo nano /etc/apache2/apache2.conf
+# Under '<Directory /var/www/>' change 'AllowOverride None' to 'AllowOverride All'
+
 sudo systemctl restart apache2
 ```
 
