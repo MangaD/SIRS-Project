@@ -3,6 +3,20 @@ $("#login_btn").click( function(e) {
 	e.preventDefault();
 });
 
+function isLoggedIn() {
+	postData("login.php", {})
+	.then((data) => {
+		if (!data.success) {
+			if (data.errors.already_logged === true) {
+				return true;
+			} else { return false; }
+		} else { return false; }
+	})
+	.catch((error2) => {
+		return false;
+	});
+}
+
 function login() {
 
 	loaderStart();
