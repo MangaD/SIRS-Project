@@ -17,7 +17,7 @@ elseif (SessionManager::isLoggedIn()) {
 	$data['uid'] = $_SESSION['uid'];
 }
 
-$username = $password = "";
+$username = $password = $confirm_pass = "";
 
 $json = "";
 
@@ -26,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 	$username = trim($json['username']);
 	$password = trim($json['password']);
+	$confirm_pass = trim($json['confirm_password']);
 
 	if (empty($username)) {
 		$errors['user'] = 'Please enter username.';
@@ -41,8 +42,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$errors['pwd'] = 'Password must have a minimum of 8 characters.';
 	} else if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&]).{8,}$/",$password)) {
 		$errors['pwd'] = "Password must contain uppercase, lowercase, digit and a special character.";
+	} else if ($password !== $confirm_pass) {
+		$errors['pwd'] = "Passwords don't match.";
 	}
-	
 } else {
 	$errors['post'] = 'Must send data over POST request method.';
 }
@@ -53,7 +55,7 @@ if (empty($errors)) {
 		$dbclass = new DBClass();
 		$conn = $dbclass->getConnection();
 
-		$stmt = $conn->prepare(" SELECT uid, username, password
+		$stmt = $conn->prepare(" SELECT uid
 			FROM users
 			WHERE username = :username ");
 
@@ -62,19 +64,18 @@ if (empty($errors)) {
 		$stmt->execute();
 
 		if (($row = $stmt->fetch()) !== false) {
-			if(password_verify($password, $row["password"])) {
-				SessionManager::sessionStart();
-				$_SESSION['username'] = $username;
-				$_SESSION['uid'] = $row["uid"];
-				$data['username'] = $_SESSION['username'];
-				$data['uid'] = $_SESSION['uid'];
-			} else {
-				$errors['pwd'] = 'The password you entered was not valid.';
-			}
+			$errors['user'] = 'This username is already taken.';
 		} else {
-			$errors['user'] = 'No account found with that username.';
-		}
+			$stmt = $conn->prepare(" INSERT INTO users (username, password) VALUES (:username, :password) ");
+			$stmt->bindParam(':username', $username);
+			$stmt->bindParam(':password', password_hash($password, PASSWORD_DEFAULT));
 
+			if ($stmt->execute() === false) {
+				// Because we have 'connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);'
+				// in dbclass.php, this code should never be reached.
+				$errors['exception'] = 'Unknown error.';
+			}
+		}
 	}
 	catch(PDOException $e) {
 		$errors['exception'] = $e->getMessage();
@@ -86,7 +87,7 @@ if ( ! empty($errors)) {
 	$data['errors']  = $errors;
 	$data['success'] = false;
 } else {
-	$data['message'] = "Login successful.";
+	$data['message'] = "Registration successful.";
 	$data['success'] = true;
 }
 

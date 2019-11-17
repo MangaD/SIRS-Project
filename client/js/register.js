@@ -1,26 +1,13 @@
-function isLoggedIn() {
-	postData("login.php", {})
-	.then((data) => {
-		if (!data.success) {
-			if (data.errors.already_logged === true) {
-				return true;
-			} else { return false; }
-		} else { return false; }
-	})
-	.catch((error2) => {
-		return false;
-	});
-}
-
-function login() {
+function register() {
 
 	loaderStart();
 
-	$("#login_alerts").html('');
+	$("#register_alerts").html('');
 
-	postData("login.php", {
-		username: document.getElementById("log_username").value,
-		password: document.getElementById("log_password").value,
+	postData("register.php", {
+		username: document.getElementById("reg_username").value,
+		password: document.getElementById("reg_password").value,
+		confirm_password: document.getElementById("reg_confirm_password").value,
 	})
 	.then((data) => {
 		if (!data.success) {
@@ -28,13 +15,13 @@ function login() {
 				window.username = data.username;
 				window.uid = data.uid;
 
-				alert("Login successful!");
+				alert("Alreade logged in!");
 
 				// TODO Switch to main window
 			} else {
 
 				for(var k in data.errors) {
-					$("#login_alerts").append(
+					$("#register_alerts").append(
 						'<div id="error_alert" class="alert alert-danger alert-dismissible" role="alert">' +
 						'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
 						data.errors[k] +
@@ -43,14 +30,14 @@ function login() {
 				}
 			}
 		} else {
-			// TODO Switch to main window
+			showLoginPage();
 		}
 
 		//console.log(data);
 		loaderEnd();
 	})
 	.catch((error2) => {
-		$("#login_alerts").append(
+		$("#register_alerts").append(
 			'<div id="error_alert" class="alert alert-danger alert-dismissible" role="alert">' +
 			'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
 			'Failed to connect to the server.' +
@@ -60,5 +47,3 @@ function login() {
 		loaderEnd();
 	});
 }
-
-
