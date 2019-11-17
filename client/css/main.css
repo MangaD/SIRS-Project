@@ -39,7 +39,8 @@ h1 {
  * Alerts
  */
 
-#login_alerts {
+#login_alerts,
+#register_alerts {
 	margin-top: 520px;
 	width: 400px;
 	max-height:200px;
@@ -65,7 +66,8 @@ h1 {
  * Login
  */
 
-#login_card.card {
+#login_card.card,
+#register_card.card {
 	/*height: 370px;*/
 	margin-top: auto;
 	margin-bottom: auto;
@@ -105,13 +107,15 @@ input:focus{
 	margin-right: 5px;
 }
 
-.login_btn{
+.login_btn,
+.register_btn {
 	color: black;
 	background-color: #3F73a2;
 	width: 100px;
 }
 
-.login_btn:hover{
+.login_btn:hover,
+.register_btn:hover {
 	color: black;
 	background-color: white;
 }

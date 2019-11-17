@@ -1,0 +1,80 @@
+<div class="d-flex justify-content-center h-100">
+
+<h1>Smartphone as a security token</h1>
+
+<div id="register_card" class="card">
+	<div class="card-header">
+		<h3>Register</h3>
+	</div>
+	<div class="card-body">
+		<form id="register_form">
+			<div class="input-group form-group">
+				<div class="input-group-prepend">
+					<span class="input-group-text">
+						<i class="fas fa-user"></i></span>
+				</div>
+				<input id="reg_username" type="text" class="form-control"
+					placeholder="username" pattern="[a-zA-Z0-9-_]{6,12}"
+					title="6 to 12 alphanumeric characters (optional underscore and/or hyphen)" required>
+				
+			</div>
+			<div class="input-group form-group">
+				<div class="input-group-prepend">
+					<span class="input-group-text">
+						<i class="fas fa-key"></i></span>
+				</div>
+				<input id="reg_password" type="password" class="form-control"
+					placeholder="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&]).{8,}"
+					title="Mimimum 8 characters. Must include uppercase, lowercase, digit and a special character." required>
+			</div>
+			<div class="input-group form-group">
+				<div class="input-group-prepend">
+					<span class="input-group-text">
+						<i class="fas fa-key"></i></span>
+				</div>
+				<input id="reg_confirm_password" type="password" class="form-control"
+					placeholder="confirm password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&]).{8,}"
+					title="Mimimum 8 characters. Must include uppercase, lowercase, digit and a special character." required
+					oninput="check(this)">
+				<script language='javascript' type='text/javascript'>
+					function check(input) {
+						if (input.value != document.getElementById('reg_password').value) {
+							input.setCustomValidity('Passwords must match.');
+						} else {
+							// input is valid -- reset the error message
+							input.setCustomValidity('');
+						}
+					}
+				</script>
+			</div>
+
+			<div class="form-group">
+				<input type="submit" value="Register" id="register_btn"
+					class="btn float-right register_btn">
+			</div>
+		</form>
+	</div>
+	<div class="card-footer">
+		<div class="d-flex justify-content-center links">
+			Already have an account?<a id="goto_login" href="#">Log In</a>
+		</div>
+		<div class="d-flex justify-content-center">
+			<a href="#">Forgot your password?</a>
+		</div>
+	</div>
+</div>
+
+<div id="register_alerts"></div>
+
+</div>
+
+<script>
+$("#goto_login").click( function(e) {
+	showLoginPage();
+	e.preventDefault();
+});
+$("#register_form").submit( function(e) {
+	register();
+	e.preventDefault();
+});
+</script>

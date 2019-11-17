@@ -4,17 +4,18 @@
 
 <div id="login_card" class="card">
 	<div class="card-header">
-		<h3>Sign In</h3>
+		<h3>Log In</h3>
 	</div>
 	<div class="card-body">
-		<form>
+		<form id="login_form">
 			<div class="input-group form-group">
 				<div class="input-group-prepend">
 					<span class="input-group-text">
 						<i class="fas fa-user"></i></span>
 				</div>
-				<input id="username" type="text" class="form-control"
-					placeholder="username">
+				<input id="log_username" type="text" class="form-control"
+					placeholder="username" pattern="[a-zA-Z0-9-_]{6,12}"
+					title="6 to 12 alphanumeric characters (optional underscore and/or hyphen)" required>
 				
 			</div>
 			<div class="input-group form-group">
@@ -22,21 +23,22 @@
 					<span class="input-group-text">
 						<i class="fas fa-key"></i></span>
 				</div>
-				<input id="password" type="password" class="form-control"
-					placeholder="password">
+				<input id="log_password" type="password" class="form-control"
+					placeholder="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&]).{8,}"
+					title="Mimimum 8 characters. Must include uppercase, lowercase, digit and a special character." required>
 			</div>
 			<div class="row align-items-center remember">
 				<input type="checkbox">Remember Me
 			</div>
 			<div class="form-group">
-				<input type="submit" value="Login" id="login_btn"
+				<input type="submit" value="Log In" id="login_btn"
 					class="btn float-right login_btn">
 			</div>
 		</form>
 	</div>
 	<div class="card-footer">
 		<div class="d-flex justify-content-center links">
-			Don't have an account?<a href="#">Sign Up</a>
+			Don't have an account?<a id="goto_register" href="#">Register</a>
 		</div>
 		<div class="d-flex justify-content-center">
 			<a href="#">Forgot your password?</a>
@@ -47,3 +49,14 @@
 <div id="login_alerts"></div>
 
 </div>
+
+<script>
+$("#goto_register").click( function(e) {
+	showRegisterPage();
+	e.preventDefault();
+});
+$("#login_form").submit( function(e) {
+	login();
+	e.preventDefault();
+});
+</script>

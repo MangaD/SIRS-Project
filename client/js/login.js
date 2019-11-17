@@ -1,8 +1,3 @@
-$("#login_btn").click( function(e) {
-	login();
-	e.preventDefault();
-});
-
 function isLoggedIn() {
 	postData("login.php", {})
 	.then((data) => {
@@ -22,8 +17,8 @@ function login() {
 	loaderStart();
 
 	postData("login.php", {
-		username: document.getElementById("username").value,
-		password: document.getElementById("password").value,
+		username: document.getElementById("log_username").value,
+		password: document.getElementById("log_password").value,
 	})
 	.then((data) => {
 		if (!data.success) {
@@ -62,34 +57,4 @@ function login() {
 	});
 }
 
-function validateUser() {
-
-	var username = document.getElementById("username").value;
-
-	var filter = /^([a-zA-Z0-9-_]{6,12})$/;
-
-	if ((username === "") || !filter.test(username)) {
-		alert('Please provide a valid user');
-		return false;
-	}
-	return true;
-}
-
-function validatePhone(theForm) {
-	return true;
-}
-
-
-function validatePassword(theForm) {
-
-	var password = document.getElementById("password").value;
-
-	var filter = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
-
-	if ((theForm.password.value === "" && theForm.password1.value === "") || theForm.password.value !== theForm.password1.value || (!filter.test(theForm.password.value) && !filter.test(theForm.password1.value))) {
-		alert('Please provide a valid password');
-		theForm.password.focus();
-		return false;
-	}
-}
 
