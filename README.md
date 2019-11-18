@@ -43,5 +43,6 @@ TODO (tcpdumps, etc)
 - [Font Awesome 5](https://fontawesome.com/)
 - [ParticleJS](https://vincentgarreau.com/particles.js/)
 - [Bootstrap 4 'Superhero' theme](https://bootswatch.com/)
-- [Loader](https://projects.lukehaas.me/css-loaders/)
+- [Spinner loader](https://projects.lukehaas.me/css-loaders/)
+- [Pace progress bar](https://github.hubspot.com/pace/docs/welcome/)
 
