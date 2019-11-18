@@ -28,7 +28,7 @@ function login() {
 				window.username = data.username;
 				window.uid = data.uid;
 
-				alert("Login successful!");
+				alert("Already logged in!");
 
 				// TODO Switch to main window
 			} else {
@@ -44,6 +44,8 @@ function login() {
 			}
 		} else {
 			// TODO Switch to main window
+
+			alert("Log in successful!");
 		}
 
 		//console.log(data);
