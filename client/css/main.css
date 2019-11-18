@@ -43,7 +43,7 @@ h1 {
 #register_alerts {
 	margin-top: 520px;
 	width: 400px;
-	max-height:200px;
+	height:110px;
 	max-height: 110px;
 	overflow: auto;
 }
