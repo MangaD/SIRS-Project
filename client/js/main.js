@@ -23,6 +23,9 @@ $(document).ready( function() {
 			} else {
 				showLoginPage();
 			}
+
+			// Enable tooltips
+			$('[data-toggle="tooltip"]').tooltip();
 		});
 	});
 

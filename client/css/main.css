@@ -146,6 +146,12 @@ input:focus{
 	opacity: .8;
 }
 
+#settings_info {
+	color: rgb(170, 204, 255);
+	margin-left: 10px;
+	margin-bottom: -1px;
+}
+
 /**
  * Scrollbar
  */
