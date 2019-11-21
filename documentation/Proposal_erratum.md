@@ -12,6 +12,10 @@ The advantage of using Diffie-Hellman is that [it provides perfect forward secre
 
 However, [Diffie-Hellman is vulnerable to man-in-the-middle attacks](https://stackoverflow.com/questions/10471009/how-does-the-man-in-the-middle-attack-work-in-diffie-hellman), so both entities must sign their shared public values with their private keys.
 
+## Using private key
+
+For extra security, the private key should never leave the smartphone. Everytime the client requires this key to perform an action, it should be the smartphone performing that action and giving the client the result.
+
 ## Register
 
 Because Diffie-Hellman is vulnerable to man-in-the-middle, it is important that the server signs his shared public values. Therefore, in order to register, the client shall first request the server's certificate and public key - we assume that the certificate authority is trusted. Even though an attacker could intercept the messages and establish a connection with the server, he could not deceive the client by impersonating the server, which is what matters. He could only DoS the client. And because no clients can authenticate before the server before they register, this does not pose a problem.
