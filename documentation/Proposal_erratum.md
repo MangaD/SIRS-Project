@@ -16,6 +16,14 @@ However, [Diffie-Hellman is vulnerable to man-in-the-middle attacks](https://sta
 
 For extra security, the private key should never leave the smartphone. Everytime the client requires this key to perform an action, it should be the smartphone performing that action and giving the client the result.
 
+## Password strength
+
+For the password to be secure against brute force attacks, it should be at least 10 characters long and include a mix of numbers, lowercase letters, uppercase letters and symbols.
+
+https://thycotic.force.com/support/s/article/Calculating-Password-Complexity
+
+It should also not have been disclosed anywhere so it is not susceptible to dictionary attacks.
+
 ## Register
 
 Because Diffie-Hellman is vulnerable to man-in-the-middle, it is important that the server signs his shared public values. Therefore, in order to register, the client shall first request the server's certificate and public key - we assume that the certificate authority is trusted. Even though an attacker could intercept the messages and establish a connection with the server, he could not deceive the client by impersonating the server, which is what matters. He could only DoS the client. And because no clients can authenticate before the server before they register, this does not pose a problem.
