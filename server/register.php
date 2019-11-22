@@ -38,9 +38,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 	if (empty($password)) {
 		$errors['pwd'] = 'Please enter your password.';
-	} else if (strlen($password) < 8) {
-		$errors['pwd'] = 'Password must have a minimum of 8 characters.';
-	} else if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&]).{8,}$/",$password)) {
+	} else if (strlen($password) < 10) {
+		$errors['pwd'] = 'Password must have a minimum of 10 characters.';
+	} else if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&]).{10,}$/",$password)) {
 		$errors['pwd'] = "Password must contain uppercase, lowercase, digit and a special character.";
 	} else if ($password !== $confirm_pass) {
 		$errors['pwd'] = "Passwords don't match.";
