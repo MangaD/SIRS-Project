@@ -27,6 +27,7 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<link rel="stylesheet" type="text/css" href="css/loader.css">
+		<link rel="stylesheet" type="text/css" href="css/switch.css">
 
 		<!--
 			Pace loader: https://github.hubspot.com/pace/docs/welcome/
@@ -66,9 +67,21 @@
 								data-toggle="tooltip" data-placement="auto"></i>
 						</p>
 						<div class="form-group">
-							<label for="server" class="control-label">Server address:</label>
+							<label for="serverAddress" class="control-label">Server address:</label>
 							<input placeholder="Server address..." type="text"
 								id="serverAddress" class="form-control" value="../server">
+						</div>
+						<div class="form-group">
+							<label for="toggleSecureChannel" class="control-label">Use custom secure channel:</label>
+							<br />
+							<label class="switch">
+								<input id="toggleSecureChannel" type="checkbox">
+								<span class="slider round"></span>
+							</label>
+						</div>
+						<div class="form-group">
+							<button id="clearCookiesBtn" type="button"
+								class="btn btn-default">Clear cookies</button>
 						</div>
 					</div>
 					<div class="modal-footer">

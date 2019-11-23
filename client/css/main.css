@@ -1,5 +1,25 @@
 @import url('https://fonts.googleapis.com/css?family=Numans');
 
+:root {
+	--font-color: #fff;
+	--title-color: #ccc;
+	--overlay: rgba(0,0,0,0.6);
+	--navbarBgColor: rgba(78,93,108, 0.5);
+	--bodyBg: rgba(43, 62, 80, 1); /* #2b3e50 */
+	--panelBg: rgba(23,32,40,0.8);
+	--panelHeaderFooterBg: rgba(30,30,40,0.8);
+	--btnBg: rgba(48,53,68,0.8);
+	--btnFont: #fff;
+	--btnDarkerBg: rgba(31,48,55,0.8);
+	--btnHoverBg: rgba(72,85,99,0.8);
+	--btnActiveBg: rgba(57,68,78,0.8);
+	--btnActiveFocusBg: rgba(42,50,58,0.8);
+	--outline: rgba(94, 158, 214, 1);
+	--saveColor: #5f5;
+	--deleteColor: #f99;
+}
+
+
 #particles-js {
 	width: 100%;
 	height: 100%;
@@ -23,12 +43,19 @@ body {
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-size: cover;
+	background-attachment: fixed;
+	background-color: rgba(43, 62, 80, 1) !important;
+	background-color: var(--bodyBg) !important;
+	margin: 0;
 }
-
-a, a:hover, a:focus, a:visited {
-	color: lightblue;
+a, a:hover, a:visited, a:focus {
+	color: #fff !important;
+	color: var(--font-color) !important;
 }
-
+hr {
+	border-top: 1px solid #aaa;
+	border-top: 1px solid var(--title-color) !important;
+}
 h1 {
 	position: absolute;
 	margin-top: 60px;
@@ -68,14 +95,13 @@ h1 {
 
 #login_card.card,
 #register_card.card {
-	/*height: 370px;*/
 	margin-top: auto;
 	margin-bottom: auto;
-	width: 400px;
 	background-color: rgba(0,0,0,0.5) !important;
 	box-shadow: 0px 1px 10px #112;
 	position: absolute;
 	margin-top: 170px;
+	width: 400px;
 }
 
 .card-header h3{
@@ -153,25 +179,133 @@ input:focus{
 }
 
 /**
+ * Navigation bar
+ */
+ .navbar-default {
+	background-color: rgba(78,93,108, 0.5) !important;
+	background-color: var(--navbarBgColor) !important;
+}
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
+	color: #fff !important;
+	color: var(--btnFont) !important;
+	background-color: rgba(57,68,78,0.8) !important;
+	background-color: var(--btnActiveBg) !important;
+}
+.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus {
+	color: #fff !important;
+	color: var(--btnFont) !important;
+	background-color: rgba(57,68,78,0.8) !important;
+	background-color: var(--btnActiveBg) !important;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+	background-color: var(--btnActiveBg) !important;
+}
+.dropdown-menu {
+	background-color: rgba(57,68,78,0.8) !important;
+	background-color: var(--btnActiveBg) !important;
+}
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:hover,
+.navbar-default .navbar-nav>.open>a:focus {
+	background-color: rgba(57,68,78,0.8) !important;
+	background-color: var(--btnActiveBg) !important;
+}
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
+	background-color: rgba(57,68,78,0.8) !important;
+	background-color: var(--btnActiveBg) !important;
+	outline: 0;
+}
+
+
+/* Modal / Popover */
+.popover,
+.modal-content {
+	background-color: rgba(40,40,50,0.8) !important;
+	background-color: var(--panelBg) !important;
+}
+.popover-title,
+.modal-header, .modal-footer {
+	background-color: rgba(30,30,40,0.8) !important;
+	background-color: var(--panelHeaderFooterBg) !important;
+}
+.popover.top > .arrow:after {
+	border-top-color: rgba(78,93,108,0.8) !important;
+	border-top-color: var(--btnBg) !important;
+}
+.popover.bottom > .arrow:after {
+	border-bottom-color: rgba(78,93,108,0.8) !important;
+	border-bottom-color: var(--btnBg) !important;
+}
+.popover.left > .arrow:after {
+	border-left-color: rgba(78,93,108,0.8) !important;
+	border-left-color: var(--btnBg) !important;
+}
+.popover.right > .arrow:after {
+	border-right-color: rgba(78,93,108,0.8) !important;
+	border-right-color: var(--btnBg) !important;
+}
+
+/**
+ * Buttons - START
+ */
+ .btn-default {
+	 color: #ffffff !important;
+	 color: var(--btnFont) !important;
+	 background-color: rgba(78,93,108,0.8) !important;
+	 background-color: var(--btnBg) !important;
+	 border-radius: 0 !important;
+ }
+ .btn-default:hover {
+	 background-color: rgba(72,85,99,0.8) !important;
+	 background-color: var(--btnHoverBg) !important;
+ }
+ .btn-default:active, .btn-default:focus {
+	 background-color: rgba(57,68,78,0.8) !important;
+	 background-color: var(--btnActiveBg) !important;
+ }
+ .btn-default:focus {
+	 outline: 5px auto -webkit-focus-ring-color!important;
+	 outline: 5px auto var(--outline)!important;
+	 outline-offset: -2px!important;
+ }
+ .btn-default:active:focus {
+	 background-color: rgba(42,50,58,0.8) !important;
+	 background-color: var(--btnActiveFocusBg) !important;
+	 outline: 5px auto var(--outline)!important;
+	 outline-offset: -2px!important;
+ }
+ [contenteditable]:focus {
+	 outline: 5px auto var(--outline)!important;
+ }
+ button.close:focus, button.close:active:focus {
+	 outline: none;
+ }
+ /**
+  * Buttons - END
+  */
+
+
+
+/**
  * Scrollbar
  */
+::-webkit-scrollbar {
+	background: rgba(0,0,0,0.6);
+	background: var(--overlay);
+	border-radius: 4px;
+	height: 8px;
+	width: 4px;
+}
+::-webkit-scrollbar-thumb {
+	background: rgba(78,93,108,0.8);
+	background: var(--btnBg);
+	border-radius: 4px;
+}
 ::-webkit-scrollbar-track
 {
+	box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 	border-radius: 2px;
 	background-color: #112;
-}
-
-::-webkit-scrollbar
-{
-	width: 6px;
-	background-color: #000;
-}
-
-::-webkit-scrollbar-thumb
-{
-	border-radius: 2px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	background-color: #e5e5f5;
 }
 

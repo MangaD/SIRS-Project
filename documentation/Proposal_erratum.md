@@ -4,7 +4,7 @@
 
 Private keys should be known only by the owner, so it should be the client creating the key pair and providing his public key to the server upon registration.
 
-We also forgot to mention that we'll be using RSA with 2048-bit keys.
+We also forgot to mention that we'll be using ECC instead of RSA for [better performance](https://www.globalsign.com/en/blog/elliptic-curve-cryptography/) with 256-bit keys.
 
 ## Why use Diffie-Hellman?
 
@@ -43,3 +43,16 @@ Freshness can be achieved by having a [nonce and timestamp](https://crypto.stack
 **Why hash the message with random padding?**
 
 Since we're sending the hash encrypted together with the message, random padding is unnecessary. But if we were sending the hash separately, random padding would be important in order to make equal messages produce a different hash.
+
+## Curiosities
+
+One of [IEEE Top 10 Software Security Design Flaws](https://ieeecs-media.computer.org/media/technical-activities/CYBSI/docs/Top-10-Flaws.pdf):
+
+2/10 Use authentication mechanism that cannot be bypassed or tampered with
+
+- Authentication is the act of validating an entity's identity
+- A securely designed system should also prevent that user from changing identity without re-authentication
+- Authentication techniques should require one or more factors for more sensitive operations – Factors:
+  - something you know,
+  - something you are, or
+  - something you have

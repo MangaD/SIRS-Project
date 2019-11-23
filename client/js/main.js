@@ -4,8 +4,8 @@ var register_html;
 
 $(document).ready( function() {
 
-	// Set server url
-	window.app_server = "../server";
+	loadSettings();
+
 	// Set app title
 	window.app_title = "Smartphone as a security token";
 
@@ -41,6 +41,4 @@ function showLoginPage() {
 	document.title = "Login | " + window.app_title;
 	$("#main_container").html(login_html);
 }
-
-
 

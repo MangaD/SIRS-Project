@@ -43,6 +43,34 @@ function getCookie(cname) {
 	}
 	return "";
 }
+/**
+ *
+ * Note that this code has two limitations:
+ *
+ * - It will not delete cookies with HttpOnly flag set, as the HttpOnly
+ * flag disables Javascript's access to the cookie.
+ * - It will not delete cookies that have been set with a Path value. (This is despite
+ * the fact that those cookies will appear in document.cookie,
+ * but you can't delete it without specifying the same Path value with which it was set.)
+ *
+ * https://stackoverflow.com/questions/179355/clearing-all-cookies-with-javascript
+ */
+function deleteAllCookies() {
+
+	if (document.cookie === "") return;
+
+	var cookies = document.cookie.split(";");
+
+	for (var i = 0; i < cookies.length; i++) {
+		var cookie = cookies[i];
+		var eqPos = cookie.indexOf("=");
+		var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+		// specify path
+		// https://www.w3schools.com/js/js_cookies.asp
+		document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	}
+}
+
 function loaderStart() {
 	try {
 		document.getElementById("loader").style.display = "block";
