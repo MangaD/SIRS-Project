@@ -1,3 +1,5 @@
+"use strict";
+
 function openConnection() {
 	websocket = new WebSocket("ws://127.0.0.1:4444");
 	websocket.onmessage = function (event) {

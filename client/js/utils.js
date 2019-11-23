@@ -1,3 +1,4 @@
+"use strict";
 
 /**
  * Server POST request
@@ -24,16 +25,16 @@ function postData(url, data) {
  * Settings utilities start
  */
 function setCookie(cname, cvalue, exdays) {
-	var d = new Date();
+	let d = new Date();
 	d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-	var expires = "expires="+d.toUTCString();
+	let expires = "expires="+d.toUTCString();
 	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 function getCookie(cname) {
-	var name = cname + "=";
-	var ca = document.cookie.split(';');
-	for(var i = 0; i < ca.length; i++) {
-		var c = ca[i];
+	let name = cname + "=";
+	let ca = document.cookie.split(';');
+	for(let i = 0; i < ca.length; i++) {
+		let c = ca[i];
 		while (c.charAt(0) === ' ') {
 			c = c.substring(1);
 		}
@@ -59,12 +60,12 @@ function deleteAllCookies() {
 
 	if (document.cookie === "") return;
 
-	var cookies = document.cookie.split(";");
+	let cookies = document.cookie.split(";");
 
-	for (var i = 0; i < cookies.length; i++) {
-		var cookie = cookies[i];
-		var eqPos = cookie.indexOf("=");
-		var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+	for (let i = 0; i < cookies.length; i++) {
+		let cookie = cookies[i];
+		let eqPos = cookie.indexOf("=");
+		let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
 		// specify path
 		// https://www.w3schools.com/js/js_cookies.asp
 		document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";

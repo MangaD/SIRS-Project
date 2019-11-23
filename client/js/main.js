@@ -1,6 +1,9 @@
+"use strict";
+
 // Load page's html into variables
-var login_html;
-var register_html;
+let login_html;
+let register_html;
+let main_html;
 
 $(document).ready( function() {
 
@@ -14,18 +17,30 @@ $(document).ready( function() {
 		login_html = data;
 
 		// Load register html
-		$.get("html/register.html", function(data) {
-			register_html = data;
+		$.get("html/register.html", function(data2) {
+			register_html = data2;
 
-			// Load login page if user not logged in
-			if (isLoggedIn()) {
-				// TODO switch to downloads page
-			} else {
-				showLoginPage();
-			}
+			// Load main page html
+			$.get("html/main.html", function(data3) {
+				main_html = data3;
 
-			// Enable tooltips
-			$('[data-toggle="tooltip"]').tooltip();
+				// Load login page if user not logged in
+				// else load main page
+				postData("login.php", {})
+				.then((data) => {
+					if (!data.success) {
+						if (data.errors.already_logged === true) {
+							showMainPage();
+						} else { showLoginPage(); }
+					} else { showLoginPage(); }
+				})
+				.catch((error2) => {
+					showLoginPage();
+				});
+
+				// Enable tooltips
+				$('[data-toggle="tooltip"]').tooltip();
+			});
 		});
 	});
 
@@ -42,3 +57,7 @@ function showLoginPage() {
 	$("#main_container").html(login_html);
 }
 
+function showMainPage() {
+	document.title = window.app_title;
+	$("#main_container").html(main_html);
+}

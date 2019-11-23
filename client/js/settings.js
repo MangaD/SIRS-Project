@@ -1,3 +1,5 @@
+"use strict";
+
 $("#saveSettingsBtn").click( function(e) {
 
 	saveSettings();
@@ -21,7 +23,7 @@ function saveSettings() {
 	setCookie("serverAddress", $("#serverAddress").val(), 365*5);
 	//console.log(window.app_server);
 
-	var secureCheckbox = document.getElementById("toggleSecureChannel");
+	let secureCheckbox = document.getElementById("toggleSecureChannel");
 	window.use_custom_secure_channel = secureCheckbox.checked;
 	setCookie("toggleSecureChannel", secureCheckbox.checked, 365*5);
 
@@ -34,7 +36,7 @@ function loadSettings() {
 	$("#serverAddress").val(window.app_server);
 
 	// User custom secure channel
-	var secureCheckbox = document.getElementById("toggleSecureChannel");
+	let secureCheckbox = document.getElementById("toggleSecureChannel");
 	window.use_custom_secure_channel = (getCookie("toggleSecureChannel") == "true" ? 
 		true : false);
 	secureCheckbox.checked = window.use_custom_secure_channel;

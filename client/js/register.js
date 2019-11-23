@@ -1,3 +1,5 @@
+"use strict";
+
 function register() {
 
 	loaderStart();
@@ -15,12 +17,11 @@ function register() {
 				window.username = data.username;
 				window.uid = data.uid;
 
-				alert("Alreade logged in!");
-
-				// TODO Switch to main window
+				//alert("Already logged in!");
+				showMainPage();
 			} else {
 
-				for(var k in data.errors) {
+				for(let k in data.errors) {
 					$("#register_alerts").append(
 						'<div id="error_alert" class="alert alert-danger alert-dismissible" role="alert">' +
 						'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +

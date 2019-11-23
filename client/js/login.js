@@ -1,16 +1,4 @@
-function isLoggedIn() {
-	postData("login.php", {})
-	.then((data) => {
-		if (!data.success) {
-			if (data.errors.already_logged === true) {
-				return true;
-			} else { return false; }
-		} else { return false; }
-	})
-	.catch((error2) => {
-		return false;
-	});
-}
+"use strict";
 
 function login() {
 
@@ -28,12 +16,11 @@ function login() {
 				window.username = data.username;
 				window.uid = data.uid;
 
-				alert("Already logged in!");
-
-				// TODO Switch to main window
+				//alert("Already logged in!");
+				showMainPage();
 			} else {
 
-				for(var k in data.errors) {
+				for(let k in data.errors) {
 					$("#login_alerts").append(
 						'<div id="error_alert" class="alert alert-danger alert-dismissible" role="alert">' +
 						'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
@@ -43,9 +30,8 @@ function login() {
 				}
 			}
 		} else {
-			// TODO Switch to main window
-
-			alert("Log in successful!");
+			showMainPage();
+			//alert("Log in successful!");
 		}
 
 		//console.log(data);
