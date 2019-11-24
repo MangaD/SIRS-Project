@@ -31,6 +31,7 @@ function register() {
 				}
 			}
 		} else {
+			alert("Registration successful!");
 			showLoginPage();
 		}
 

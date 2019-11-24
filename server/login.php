@@ -57,7 +57,7 @@ if (empty($errors)) {
 			FROM users
 			WHERE username = :username ");
 
-		$stmt->bindParam(':username', $username);
+		$stmt->bindValue(':username', $username, PDO::PARAM_STR);
 
 		$stmt->execute();
 

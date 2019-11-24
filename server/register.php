@@ -59,7 +59,7 @@ if (empty($errors)) {
 			FROM users
 			WHERE username = :username ");
 
-		$stmt->bindParam(':username', $username);
+		$stmt->bindValue(':username', $username, PDO::PARAM_STR);
 
 		$stmt->execute();
 
@@ -67,8 +67,8 @@ if (empty($errors)) {
 			$errors['user'] = 'This username is already taken.';
 		} else {
 			$stmt = $conn->prepare(" INSERT INTO users (username, password) VALUES (:username, :password) ");
-			$stmt->bindParam(':username', $username);
-			$stmt->bindParam(':password', password_hash($password, PASSWORD_DEFAULT));
+			$stmt->bindValue(':username', $username, PDO::PARAM_STR);
+			$stmt->bindValue(':password', password_hash($password, PASSWORD_DEFAULT), PDO::PARAM_STR);
 
 			if ($stmt->execute() === false) {
 				// Because we have 'connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);'
