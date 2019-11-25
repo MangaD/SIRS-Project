@@ -1,15 +1,79 @@
 <div class="d-flex justify-content-center h-100">
+  <h1>Smartphone as a security token</h1>
 
-	<h1>Smartphone as a security token</h1>
+  <h2>To be filled.</h2>
 
-	<h2>To be filled.</h2>
+  <button id="logoutBtn" type="button" class="btn btn-default">Logout</button>
+</div>
 
-	<button id="logoutBtn" type="button" class="btn btn-default">Logout</button>
+<div>
+	<br><br><br>
+	<h2>File Upload</h2>
+	Select file
+	<input type="file" id="filename" />
+	<br />
+	<input type="button" value="Connect" onclick="connectChatServer()" />
+	<br />
+	<input type="button" value="Upload" onclick="sendFile()" />
+
+	<h2>Send Request</h2>
+	<input type="text" id="request"/>
+	<br />
+	<input type="button" value="Send Request" onclick="sendRequest()" />
+
 </div>
 
 <script>
-	$("#logoutBtn").click( function(e) {
-		logout();
-		e.preventDefault();
-	});
-</script>	
+  $('#logoutBtn').click(function(e) {
+    logout();
+    e.preventDefault();
+  });
+
+  //Upload FIles to Smartphone
+  var ws;
+
+  function connectChatServer() {
+    ws = new WebSocket('ws://127.0.0.1:4444');
+
+    ws.binaryType = 'arraybuffer';
+    ws.onopen = function() {
+      alert('Connected.');
+    };
+
+    ws.onmessage = function(evt) {
+      alert(evt.msg);
+    };
+
+    ws.onclose = function() {
+      alert('Connection is closed...');
+    };
+    ws.onerror = function(e) {
+      alert(e.msg);
+    };
+  }
+
+  function sendFile() {
+    var file = document.getElementById('filename').files[0];
+    ws.send('filename:' + file.name);
+    var reader = new FileReader();
+    var rawData = new ArrayBuffer();
+    //alert(file.name);
+
+    reader.loadend = function() {};
+    reader.onload = function(e) {
+      rawData = e.target.result;
+      ws.send(rawData);
+      alert('the File has been transferred.');
+      ws.send('end');
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
+  function sendRequest(){
+	//var req = document.getElementById('request').
+	
+    //ws.send(req);
+	ws.send('login');
+	}
+</script>

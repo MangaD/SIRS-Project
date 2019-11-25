@@ -32,6 +32,7 @@ function login() {
 		} else {
 			showMainPage();
 			//alert("Log in successful!");
+			
 		}
 
 		//console.log(data);
