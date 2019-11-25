@@ -7,20 +7,19 @@
 </div>
 
 <div>
-	<br><br><br>
-	<h2>File Upload</h2>
-	Select file
-	<input type="file" id="filename" />
-	<br />
-	<input type="button" value="Connect" onclick="connectChatServer()" />
-	<br />
-	<input type="button" value="Upload" onclick="sendFile()" />
+  <br /><br /><br />
+  <h2>File Upload</h2>
+  Select file
+  <input type="file" id="filename" />
+  <br />
+  <input type="button" value="Connect" onclick="connectChatServer()" />
+  <br />
+  <input type="button" value="Upload" onclick="sendFile()" />
 
-	<h2>Send Request</h2>
-	<input type="text" id="request"/>
-	<br />
-	<input type="button" value="Send Request" onclick="sendRequest()" />
-
+  <h2>Send Request</h2>
+  <input type="text" id="request" />
+  <br />
+  <input type="button" value="Send Request" onclick="sendRequest()" />
 </div>
 
 <script>
@@ -35,13 +34,12 @@
   function connectChatServer() {
     ws = new WebSocket('ws://127.0.0.1:4444');
 
-    ws.binaryType = 'arraybuffer';
     ws.onopen = function() {
       alert('Connected.');
     };
 
     ws.onmessage = function(evt) {
-      alert(evt.msg);
+      alert(evt.data);
     };
 
     ws.onclose = function() {
@@ -52,28 +50,10 @@
     };
   }
 
-  function sendFile() {
-    var file = document.getElementById('filename').files[0];
-    ws.send('filename:' + file.name);
-    var reader = new FileReader();
-    var rawData = new ArrayBuffer();
-    //alert(file.name);
+  function sendRequest() {
+    var req = document.getElementById('request').value;
 
-    reader.loadend = function() {};
-    reader.onload = function(e) {
-      rawData = e.target.result;
-      ws.send(rawData);
-      alert('the File has been transferred.');
-      ws.send('end');
-    };
-
-    reader.readAsArrayBuffer(file);
+    ws.send(req);
   }
 
-  function sendRequest(){
-	//var req = document.getElementById('request').
-	
-    //ws.send(req);
-	ws.send('login');
-	}
 </script>
