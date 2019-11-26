@@ -5,23 +5,19 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class WebsocketServer extends WebSocketServer {
+public class SmartphoneServer extends WebSocketServer {
 
-    private static int TCP_PORT = 4444;
+    private int TCP_PORT;
     private Set<WebSocket> conns;
 
-    public WebsocketServer() {
-        super(new InetSocketAddress(TCP_PORT));
+    public SmartphoneServer(int port) {
+        super(new InetSocketAddress(port));
+        TCP_PORT = port;
         conns = new HashSet<>();
     }
 
@@ -43,7 +39,7 @@ public class WebsocketServer extends WebSocketServer {
 
         //System.out.println(jObj.toString());
 
-        for (Iterator key = jObj.keys(); key.hasNext();) {
+        for (Iterator<String> key = jObj.keys(); key.hasNext();) {
             String name = (String) jObj.get((String)key.next());
             System.out.println(name);
         }

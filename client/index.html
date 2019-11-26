@@ -35,7 +35,6 @@
 		-->
 		<script src="js/pace.min.js"></script>
 
-		<script src="js/smartphone_connection.js"></script>
 		<script src="js/utils.js"></script>
 
 	</head>
@@ -70,6 +69,17 @@
 							<label for="serverAddress" class="control-label">Server address:</label>
 							<input placeholder="Server address..." type="text"
 								id="serverAddress" class="form-control" value="../server">
+						</div>
+						<div class="form-group">
+							<label for="smartphoneAddress" class="control-label">Smartphone address:</label>
+							<input placeholder="Smartphone address..." type="text"
+								id="smartphoneAddress" class="form-control" value="127.0.0.1">
+						</div>
+						<div class="form-group">
+							<label for="smartphonePort" class="control-label">Smartphone port:</label>
+							<input placeholder="Smartphone port..." type="number"
+								min="1024" max="65535"
+								id="smartphonePort" class="form-control" value="4444">
 						</div>
 						<div class="form-group">
 							<label for="toggleSecureChannel" class="control-label">Use custom secure channel:</label>
@@ -121,5 +131,6 @@
 		<script src="js/logout.js"></script>
 		<script src="js/register.js"></script>
 		<script src="js/main.js"></script>
+		<script src="js/smartphone_connection.js"></script>
 	</body>
 </html>

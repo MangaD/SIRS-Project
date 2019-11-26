@@ -7,9 +7,10 @@ public class Main {
 
     public static Database db = null;
     public static String db_name = "smartphone.db";
+    
+    public static int port = 4444;
 
     public static void main(String[] args) throws SQLException {
-
 
         try {
             db = new Database(db_name);
@@ -18,12 +19,12 @@ public class Main {
             System.exit(0);
         }
 
-        db.selectAllHashKeyTable();
+        // Debug
+        db.printFilesTable();
 
-        String key = db.getKey("ola");
+        String key = db.getEncKey("ola");
         System.out.println(key);
 
-
-        new WebsocketServer().start();
+        new SmartphoneServer(port).start();
     }
 }
