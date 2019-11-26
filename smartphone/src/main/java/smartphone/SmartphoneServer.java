@@ -12,11 +12,12 @@ import java.util.Set;
 
 public class SmartphoneServer extends WebSocketServer {
 
-    private static int TCP_PORT = 4444;
+    private int TCP_PORT;
     private Set<WebSocket> conns;
 
-    public SmartphoneServer() {
-        super(new InetSocketAddress(TCP_PORT));
+    public SmartphoneServer(int port) {
+        super(new InetSocketAddress(port));
+        TCP_PORT = port;
         conns = new HashSet<>();
     }
 

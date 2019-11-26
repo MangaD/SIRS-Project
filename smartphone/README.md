@@ -54,4 +54,4 @@ gradle run
 
 ## Communication
 
-Communication between client and smartphone is done with Web sockets.
+Communication between client and smartphone is done with [Web sockets](https://github.com/TooTallNate/Java-WebSocket).
