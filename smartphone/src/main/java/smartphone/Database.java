@@ -49,10 +49,10 @@ public class Database {
     /**
      * Select all Hash/Key Table
      * http://www.sqlitetutorial.net/sqlite-java/select/
-     * <p>
+     * 
      * Select with parameters: http://www.sqlitetutorial.net/sqlite-java/select/
      */
-    public void selectAllHashKeyTable() {
+    public void printFilesTable() {
         String sql = "SELECT hash, enc_key FROM files";
 
         // try-with-resources
@@ -70,11 +70,11 @@ public class Database {
         }
     }
 
-    public String getKey(String h) {
+    public String getEncKey(String hash) {
         String sql = "SELECT enc_key FROM files WHERE hash = ?";
 
         try (PreparedStatement pstmt  = conn.prepareStatement(sql)) {
-            pstmt.setString(1, h);
+            pstmt.setString(1, hash);
 
             ResultSet rs  = pstmt.executeQuery();
 
@@ -90,13 +90,13 @@ public class Database {
         return null;
     }
 
-    public void insertHashKey(String h, String k) throws SQLException {
+    public void addFile(String hash, String encKey) throws SQLException {
 
         String sql = "INSERT INTO files (hash, enc_key) VALUES(?, ?)";
 
         PreparedStatement pstmt  = conn.prepareStatement(sql);
-        pstmt.setString(1, h);
-        pstmt.setString(2, k);
+        pstmt.setString(1, hash);
+        pstmt.setString(2, encKey);
 
         pstmt.executeUpdate();
     }

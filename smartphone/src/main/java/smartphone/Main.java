@@ -18,12 +18,13 @@ public class Main {
             System.exit(0);
         }
 
-        db.selectAllHashKeyTable();
+        // Debug
+        db.printFilesTable();
 
-        String key = db.getKey("ola");
+        String key = db.getEncKey("ola");
         System.out.println(key);
 
 
-        new WebsocketServer().start();
+        new SmartphoneServer().start();
     }
 }

@@ -10,12 +10,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class WebsocketServer extends WebSocketServer {
+public class SmartphoneServer extends WebSocketServer {
 
     private static int TCP_PORT = 4444;
     private Set<WebSocket> conns;
 
-    public WebsocketServer() {
+    public SmartphoneServer() {
         super(new InetSocketAddress(TCP_PORT));
         conns = new HashSet<>();
     }
