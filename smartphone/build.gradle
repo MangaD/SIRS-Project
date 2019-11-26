@@ -1,16 +1,20 @@
 // project interpreted as a java project
 apply plugin: 'java'
 
+// in order to generate eclipse project
+apply plugin: 'eclipse'
+
 // in order to run the application
 apply plugin: 'application'
 mainClassName = 'smartphone.Main'
 
-// in order to use SQLite
+// in order to use SQLite, websocket and json
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
+
 dependencies {
-    compile 'org.xerial:sqlite-jdbc:3.27.2.1'
+	compile 'org.xerial:sqlite-jdbc:3.27.2.1'
 	compile 'org.java-websocket:Java-WebSocket:1.3.8'
 	compile 'org.json:json:20190722'
 }
