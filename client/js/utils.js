@@ -4,7 +4,7 @@
  * Server POST request
  */
 function postData(url, data) {
-	return fetch(`${window.app_server}/${url}`, {
+	return fetch(`${window.serverAddress}/${url}`, {
 		body: JSON.stringify(data),
 		cache: 'no-cache',
 		credentials: 'include',

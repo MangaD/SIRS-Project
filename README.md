@@ -49,6 +49,7 @@ TODO (tcpdumps, etc)
 **Smartphone:**
 
 - [SQLite](https://www.sqlite.org/)
+- [SQLite JDBC](https://github.com/xerial/sqlite-jdbc)
 - [Java WebSockets](https://github.com/TooTallNate/Java-WebSocket)
   - [SLF4J](https://www.slf4j.org/)
 - [JSON In Java](https://mvnrepository.com/artifact/org.json/json)
