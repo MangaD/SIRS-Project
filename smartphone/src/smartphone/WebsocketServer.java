@@ -3,6 +3,7 @@ package smartphone;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,6 +38,10 @@ public class WebsocketServer extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {
+        JSONObject jObj = new JSONObject(message);
+
+        System.out.println(jObj.toString());
+
         System.out.println("Message from client: " + message);
         for (WebSocket sock : conns) {
             //respond only to correct client
