@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class WebsocketServer extends WebSocketServer {
@@ -40,7 +41,12 @@ public class WebsocketServer extends WebSocketServer {
     public void onMessage(WebSocket conn, String message) {
         JSONObject jObj = new JSONObject(message);
 
-        System.out.println(jObj.toString());
+        //System.out.println(jObj.toString());
+
+        for (Iterator key = jObj.keys(); key.hasNext();) {
+            String name = (String) jObj.get((String)key.next());
+            System.out.println(name);
+        }
 
         System.out.println("Message from client: " + message);
         for (WebSocket sock : conns) {
