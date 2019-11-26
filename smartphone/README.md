@@ -1,4 +1,4 @@
-## Smartphone as a security token | Server
+## Smartphone
 
 ## SQLite
 
