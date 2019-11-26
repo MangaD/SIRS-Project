@@ -5,7 +5,6 @@ SET time_zone = "+00:00";
 --
 -- Table structure of `users`
 --
-
 CREATE TABLE IF NOT EXISTS `users` (
 	`uid` int NOT NULL AUTO_INCREMENT,
 	`username` varchar(50) NOT NULL,
@@ -22,4 +21,19 @@ CREATE TABLE IF NOT EXISTS `users` (
 	FOREIGN KEY (`created_by`) REFERENCES `users`(`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `files` (
+	`owner` int NOT NULL,
+	`fid` int NOT NULL AUTO_INCREMENT,
+	`name` varchar(100) NOT NULL,
+	`path` varchar(200) NOT NULL,
+	`hash` varchar(64) NOT NULL,
+	PRIMARY KEY (`fid`),
+	FOREIGN KEY (`owner`) REFERENCES `users`(`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `file_permission` (
+	`hash` varchar(64) NOT NULL,
+	`permission_uid` int NOT NULL,
+	PRIMARY KEY (`hash`),
+	FOREIGN KEY (`permission_uid`) REFERENCES `users`(`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -35,6 +35,7 @@ if ( ! empty($errors)) {
 
 		$data['message'] = "Database created successfully.";
 		$data['success'] = true;
+
 	}
 	catch(PDOException $e) {
 		$errors['exception'] = $e->getMessage();
@@ -47,4 +48,3 @@ if ( ! empty($errors)) {
 echo json_encode($data);
 
 ?>
-
