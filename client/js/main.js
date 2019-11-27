@@ -34,7 +34,7 @@ $(document).ready( function() {
 							window.uid = data.uid;
 							showMainPage();
 						} else { showLoginPage(); }
-					} else { showLoginPage(); }
+					} else { showMainPage(); }
 				})
 				.catch((error2) => {
 					showLoginPage();
