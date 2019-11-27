@@ -41,5 +41,9 @@ function loadFiles() {
 		table_html += '</tr>';
 	}
 
+	if (files.length === 0) {
+		table_html += '<td colspan="5" style="text-align:center;">No files in the server.</td>';
+	}
+
 	$('#filesTable > tbody').html(table_html);
 }
