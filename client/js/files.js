@@ -27,6 +27,7 @@ function loadFiles() {
 	for (let index = 0, len = files.length; index < len; ++index) {
 		table_html += '<tr>';
 		table_html += '<td>' + files[index].name + '</td>';
+		table_html += '<td>' + files[index].owner + '</td>';
 		table_html += '<td>' + files[index].hash + '</td>';
 		table_html += '<td ' +
 			' style="color: #cfc;font-size: x-large;text-shadow: 0px 4px 0px #000;">' +
