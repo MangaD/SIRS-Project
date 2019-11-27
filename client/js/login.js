@@ -30,6 +30,9 @@ function login() {
 				}
 			}
 		} else {
+			window.username = data.username;
+			window.uid = data.uid;
+
 			showMainPage();
 			//alert("Log in successful!");
 			

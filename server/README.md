@@ -10,7 +10,7 @@ Password: sirs
 
 [../documentation/setup/ServerSetup.md](../documentation/setup/ServerSetup.md)
 
-1. `chmod` all directories 755 and files 644. Except `inc/config.php` which should be `chmod` 777 at first.
+1. `chmod` all directories 755 and files 644. Except `inc/config.php` which should be `chmod` 777 at first and `files` which should be `chmod` 777.
 
 2. Create a mysql user and a database for the application.
 

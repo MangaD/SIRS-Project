@@ -30,6 +30,8 @@ $(document).ready( function() {
 				.then((data) => {
 					if (!data.success) {
 						if (data.errors.already_logged === true) {
+							window.username = data.username;
+							window.uid = data.uid;
 							showMainPage();
 						} else { showLoginPage(); }
 					} else { showLoginPage(); }
@@ -60,4 +62,5 @@ function showLoginPage() {
 function showMainPage() {
 	document.title = window.app_title;
 	$("#main_container").html(main_html);
+	loadFiles();
 }

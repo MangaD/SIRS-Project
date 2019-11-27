@@ -92,7 +92,6 @@ h1 {
 /**
  * Login
  */
-
 #login_card.card,
 #register_card.card {
 	margin-top: auto;
@@ -157,7 +156,6 @@ input:focus{
 /**
  * Settings
  */
-
 #settingsBtn {
 	position: fixed;
 	bottom: 0;
@@ -176,6 +174,36 @@ input:focus{
 	color: rgb(170, 204, 255);
 	margin-left: 10px;
 	margin-bottom: -1px;
+}
+
+/**
+ * Main page
+ */
+ #logoutBtn {
+	 position: absolute;
+	 bottom: 10px;
+	 right: 10px;
+ }
+ #files_container {
+	position: absolute;
+	margin-top: 150px;
+	height: 50vh;
+ }
+ 
+/**
+ * Tables
+ */
+.table-dark th, .table-dark td, .table-dark thead th,
+.table-dark, .table-dark > th, .table-dark > td {
+	background-color: rgba(32, 54, 77, 0.3);
+	border-color: rgba(58,83,108, 0);
+}
+.table-dark th, .table-dark thead th, .table-dark > th {
+	background-color: rgba(3, 21, 37, 0.3);
+}
+.table-dark.table-hover tbody tr:hover {
+	color: #fff;
+	background-color: rgba(99, 93, 116, 0.35);
 }
 
 /**

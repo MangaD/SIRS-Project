@@ -1,31 +1,66 @@
 <div class="d-flex justify-content-center h-100">
 	<h1>Smartphone as a security token</h1>
 
-	<h2>To be filled.</h2>
+	<div class="container" id="files_container">
+
+		<div style="float:right;">
+			<div class="custom-file" style="display: none;">
+				<input type="file" class="custom-file-input" id="customFile">
+				<label class="custom-file-label" for="customFile">Choose file</label>
+			</div>
+			
+			<input type="button" value="Upload" class="btn btn-default"
+				onclick="document.getElementById('customFile').click();" />
+		</div>
+
+		<div class="table-responsive">
+			<table id="filesTable" class="table table-bordered table-dark table-striped table-hover"
+				style="margin-top: 15px;box-shadow: 0px 2px 5px #000;"">
+				<colgroup>
+					<col span="1" style="width: 30%;">
+					<col span="1" style="width: 70%;">
+					<col span="1" style="width: 30px;">
+					<col span="1" style="width: 30px;">
+				</colgroup>
+
+				<thead>
+					<tr>
+						<th>Filename</th>
+						<th>SHA-256</th>
+						<th>&nbsp;</th>
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+				<tfoot style="font-size: 0;">
+					<tr><td colspan="4">&nbsp;</td></tr>
+				</tfoot>
+			</table>
+		</div>
+	
+	</div>
 
 	<button id="logoutBtn" type="button" class="btn btn-default">Logout</button>
 </div>
 
-<div>
-	<br /><br /><br />
-	<h2>File Upload</h2>
-	Select file
-	<input type="file" id="filename" />
-	<br />
-	<input type="button" value="Upload" />
-
-	<br /><br /><br />
-	<input type="button" value="Connect to Smarpthone" onclick="connectToSmartphone()" />
-	<h2>Request</h2>
-	<input type="text" id="request1" placeholder="Req 1st Arg"/>
-	<input type="text" id="request2" placeholder="Req 2nd Arg"/>
-	<br />
-	<input type="button" value="Send Request" onclick="sendRequest()" />
-</div>
 
 <script>
 	$('#logoutBtn').click(function(e) {
 		logout();
 		e.preventDefault();
+	});
+
+	$(".custom-file-input").on("change", function() {
+		// Add the following code if you want the name of the file appear on select
+		var fileName = $(this).val().split("\\").pop();
+		$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+
+		fetch(window.serverAddress + '/process.php', {
+			method: 'POST',
+			body: $(this).val(),
+		}).then(response => {
+			console.log(response);
+		})
 	});
 </script>

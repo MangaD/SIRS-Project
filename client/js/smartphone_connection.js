@@ -25,14 +25,11 @@ function closeConnection() {
 	ws.close();
 }
 
-function sendRequest() {
-	var req_1st_arg = document.getElementById('request1').value;
-	var req_2nd_arg = document.getElementById('request2').value;
-
-	var  req = {
+function sendRequest(jsonData) {
+	/*var  req = {
 		arg1: req_1st_arg,
 		arg2: req_2nd_arg
-	};
+	};*/
 
-	ws.send(JSON.stringify(req));
+	ws.send(JSON.stringify(jsonData));
 }
