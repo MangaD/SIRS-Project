@@ -70,13 +70,13 @@ function showMainPage() {
 
 function show2FAModal() {
 	$('#duoModalBody').html('<script type="text/javascript" src="js/Duo-Web-v2.js"></script>' +
-	'<link rel="stylesheet" type="text/css" href="css/Duo-Frame.css">');
+	'<link rel="stylesheet" type="text/css" href="css/Duo-Frame.css">' +
+	'<iframe data-host="api-0cbbf77f.duosecurity.com" ' +
+	'data-sig-request="' + window.sig_request + '></iframe>');
 
-	var iframe = document.createElement('iframe');
-	iframe.setAttribute('data-host', 'api-0cbbf77f.duosecurity.com');
-	iframe.setAttribute('data-sig-reques', window.sig_request);
 
-	$('#duoModalBody').appendChild(iframe);
+	alert('window.sig_request: ' + window.sig_request);
+
 
 	$('#duoModal').modal('show');
 }

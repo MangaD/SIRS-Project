@@ -23,7 +23,7 @@ function login() {
          		*/
 			 	window.sig_request = data.sig_request;
 				
-				alert(window.sig_request);
+				//alert(window.sig_request);
 				show2FAModal();
 
 				alert("Already logged in!");
