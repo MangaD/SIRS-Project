@@ -45,16 +45,14 @@ $(document).ready( function() {
          						*/
 			 					window.sig_request = data.sig_request;
 				
-								//alert(data.sig_request);
+								alert(data.sig_request);
 
 			 					//show2faPage(window.sig_request);
 								
-								
 								showMainPage();
 
-
 							} else { showLoginPage(); }
-						} else { showLoginPage(); }
+						} else { showMainPage(); }
 					})
 					.catch((error2) => {
 						showLoginPage();

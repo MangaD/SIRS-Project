@@ -65,7 +65,11 @@ else if (isset($_POST['user']) && isset($_POST['pass'])) {
          * javascript and iframe.
          */
         $sig_request = Duo\Web::signRequest(IKEY, SKEY, AKEY, $_POST['user']);
+
+        echo "<script>alert('$sig_request');</script>";
+        
     ?>
+
         <script type="text/javascript" src="Duo-Web-v2.js"></script>
         <link rel="stylesheet" type="text/css" href="Duo-Frame.css">
         <iframe id="duo_iframe"

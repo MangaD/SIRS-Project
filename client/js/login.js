@@ -5,12 +5,13 @@ function login() {
 	loaderStart();
 
 	$("#login_alerts").html('');
-
+	
 	postData("login.php", {
 		username: document.getElementById("log_username").value,
 		password: document.getElementById("log_password").value,
 	})
 	.then((data) => {
+		
 		if (!data.success) {
 			if (data.errors.already_logged === true) {
 				window.username = data.username;
@@ -22,10 +23,10 @@ function login() {
          		*/
 			 	window.sig_request = data.sig_request;
 				
-				//alert(data.sig_request);
+				 alert(data.sig_request);
 				//show2faPage(window.sig_request);
 
-				//alert("Already logged in!");
+				alert("Already logged in!");
 				showMainPage();
 			} else {
 
@@ -48,7 +49,10 @@ function login() {
          	*/
 			window.sig_request = data.sig_request;
 				
+			console.log(data.username);
+			console.log(data);
 			alert(data.sig_request);
+			console.log(data.sig_request);
 
 			//show2faPage(window.sig_request);
 

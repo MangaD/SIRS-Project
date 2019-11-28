@@ -1,6 +1,9 @@
 "use strict";
 
 function loadFiles() {
+
+	loaderStart();
+
 	// TODO calls to server
 
 	// Demo
@@ -46,4 +49,6 @@ function loadFiles() {
 	}
 
 	$('#filesTable > tbody').html(table_html);
+
+	loaderEnd();
 }

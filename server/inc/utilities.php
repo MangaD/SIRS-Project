@@ -130,6 +130,7 @@ class SessionManager
 
 		if(!isset($_SESSION['username']) || empty($_SESSION['username']) ||
 			!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
+			self::logout();
 			return false;
 		}
 
