@@ -7,9 +7,9 @@ function register() {
 	$("#register_alerts").html('');
 
 	postData("register.php", {
-		username: document.getElementById("reg_username").value,
-		password: document.getElementById("reg_password").value,
-		confirm_password: document.getElementById("reg_confirm_password").value,
+		username: document.getElementById("username").value,
+		password: document.getElementById("password").value,
+		confirm_password: document.getElementById("confirm_password").value,
 	})
 	.then((data) => {
 		if (!data.success) {

@@ -7,8 +7,8 @@ function login() {
 	$("#login_alerts").html('');
 
 	postData("login.php", {
-		username: document.getElementById("log_username").value,
-		password: document.getElementById("log_password").value,
+		username: document.getElementById("username").value,
+		password: document.getElementById("password").value,
 	})
 	.then((data) => {
 		if (!data.success) {
