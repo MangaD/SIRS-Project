@@ -123,8 +123,6 @@ if ( ! empty($errors)) {
 
 	//Define sig_request
 	$data['sig_request'] = Duo\Web::signRequest(IKEY, SKEY, AKEY, $data['username']);
-	error_log(Duo\Web::signRequest(IKEY, SKEY, AKEY, $data['username']));
-
 }
 
 echo json_encode($data);

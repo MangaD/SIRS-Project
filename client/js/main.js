@@ -20,47 +20,31 @@ $(document).ready( function() {
 		// Load register html
 		$.get("html/register.html", function(data2) {
 			register_html = data2;
+		
+			// Load main page html
+			$.get("html/main.html", function(data3) {
+				main_html = data3;
 
-			//Load 2fa page html
-			$.get("html/2fa.html", function(data4) {
-				twofa_html = data4;
+				// Load login page if user not logged in
+				// else load main page
+				postData("login.php", {})
+				.then((data) => {
+					if (!data.success) {
+						if (data.errors.already_logged === true) {
+							window.username = data.username;
+							window.uid = data.uid;
+							
+							showMainPage();
 
-				// Load main page html
-				$.get("html/main.html", function(data3) {
-					main_html = data3;
-
-					// Load login page if user not logged in
-					// else load main page
-					postData("login.php", {})
-					.then((data) => {
-						if (!data.success) {
-							if (data.errors.already_logged === true) {
-								window.username = data.username;
-								window.uid = data.uid;
-								
-								
-								/*
-         						* Perform secondary auth, generate sig request, then load up Duo
-         						* javascript and iframe.
-         						*/
-			 					window.sig_request = data.sig_request;
-				
-								alert(data.sig_request);
-
-			 					//show2faPage(window.sig_request);
-								
-								showMainPage();
-
-							} else { showLoginPage(); }
-						} else { showMainPage(); }
-					})
-					.catch((error2) => {
-						showLoginPage();
-					});
-
-					// Enable tooltips
-					$('[data-toggle="tooltip"]').tooltip();
+						} else { showLoginPage(); }
+					} else { showMainPage(); }
+				})
+				.catch((error2) => {
+					showLoginPage();
 				});
+
+				// Enable tooltips
+				$('[data-toggle="tooltip"]').tooltip();
 			});
 		});
 	});
@@ -84,15 +68,15 @@ function showMainPage() {
 	loadFiles();
 }
 
-function show2faPage($sig_request) {
-	document.title = "2FA | " + window.app_title;
+function show2FAModal() {
+	$('#duoModalBody').html('<script type="text/javascript" src="js/Duo-Web-v2.js"></script>' +
+	'<link rel="stylesheet" type="text/css" href="css/Duo-Frame.css">');
 
-	//document.getElementById("duo_iframe").setAttribute("data-host", "api-0cbbf77f.duosecurity.com");
-	//document.getElementById("duo_iframe").setAttribute("data-sig-request", window.sig_request);
-	$("#main_container").html(twofa_html);
-	
+	var iframe = document.createElement('iframe');
+	iframe.setAttribute('data-host', 'api-0cbbf77f.duosecurity.com');
+	iframe.setAttribute('data-sig-reques', window.sig_request);
 
-	//alert($sig_request);
-	
-	
+	$('#duoModalBody').appendChild(iframe);
+
+	$('#duoModal').modal('show');
 }

@@ -23,11 +23,11 @@ function login() {
          		*/
 			 	window.sig_request = data.sig_request;
 				
-				 alert(data.sig_request);
-				//show2faPage(window.sig_request);
+				alert(window.sig_request);
+				show2FAModal();
 
 				alert("Already logged in!");
-				showMainPage();
+				//showMainPage();
 			} else {
 
 				for(let k in data.errors) {
@@ -49,14 +49,10 @@ function login() {
          	*/
 			window.sig_request = data.sig_request;
 				
-			console.log(data.username);
-			console.log(data);
-			alert(data.sig_request);
-			console.log(data.sig_request);
+			//alert(window.sig_request);
+			show2FAModal();
 
-			//show2faPage(window.sig_request);
-
-			showMainPage();
+			//showMainPage();
 			//alert("Log in successful!");
 			
 		}
