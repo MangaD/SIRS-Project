@@ -38,6 +38,7 @@ function login() {
 			 * javascript and iframe.
 			 */
 			window.sig_request = data.sig_request;
+			window.host = data.host;
 
 			show2FAModal();
 
