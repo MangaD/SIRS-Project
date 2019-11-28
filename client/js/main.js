@@ -4,7 +4,6 @@
 let login_html;
 let register_html;
 let main_html;
-let twofa_html;
 
 $(document).ready( function() {
 
@@ -70,13 +69,13 @@ function showMainPage() {
 
 function show2FAModal() {
 	$('#duoModalBody').html('<script type="text/javascript" src="js/Duo-Web-v2.js"></script>' +
-	'<link rel="stylesheet" type="text/css" href="css/Duo-Frame.css">' +
-	'<iframe data-host="api-0cbbf77f.duosecurity.com" ' +
-	'data-sig-request="' + window.sig_request + '></iframe>');
+	'<link rel="stylesheet" type="text/css" href="css/Duo-Frame.css">');
 
+	var iframe = document.createElement('iframe');
+	iframe.setAttribute("data-host", "api-0cbbf77f.duosecurity.com");
+	iframe.setAttribute("data-sig-request", window.sig_request);
 
-	alert('window.sig_request: ' + window.sig_request);
-
+	$('#duoModalBody').append(iframe);
 
 	$('#duoModal').modal('show');
 }
