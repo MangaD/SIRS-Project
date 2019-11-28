@@ -4,7 +4,6 @@
 let login_html;
 let register_html;
 let main_html;
-let twofa_html;
 
 $(document).ready( function() {
 
