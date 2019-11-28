@@ -16,6 +16,15 @@ function login() {
 				window.username = data.username;
 				window.uid = data.uid;
 
+				/*
+         		* Perform secondary auth, generate sig request, then load up Duo
+         		* javascript and iframe.
+         		*/
+			 	window.sig_request = data.sig_request;
+				
+				//alert(data.sig_request);
+				//show2faPage(window.sig_request);
+
 				//alert("Already logged in!");
 				showMainPage();
 			} else {
@@ -32,6 +41,16 @@ function login() {
 		} else {
 			window.username = data.username;
 			window.uid = data.uid;
+			
+			/*
+         	* Perform secondary auth, generate sig request, then load up Duo
+         	* javascript and iframe.
+         	*/
+			window.sig_request = data.sig_request;
+				
+			alert(data.sig_request);
+
+			//show2faPage(window.sig_request);
 
 			showMainPage();
 			//alert("Log in successful!");
