@@ -91,7 +91,7 @@ if (empty($errors)) {
 				} else {
 					$sig_response = trim($json['twoFAresponse']);
 
-					$resp = Duo\Web::verifyResponse(IKEY, SKEY, AKEY, $_POST['sig_response']);
+					$resp = Duo\Web::verifyResponse(IKEY, SKEY, AKEY, $sig_response);
 					if ($resp === $username) {
 						SessionManager::sessionStart();
 						$_SESSION['username'] = $username;
