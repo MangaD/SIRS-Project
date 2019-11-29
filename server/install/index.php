@@ -91,7 +91,7 @@ require_once PROJECT_ROOT.'inc/config.php';
 				<h4>Duo config:</h4>
 				<div id="akey-group" class="form-group">
 					<div class="alert alert-info">
-						Your akey is a string that you generate and keep secret from Duo. It
+						Your akey is a random string that you generate and keep secret from Duo. It
 						should be at least 40 characters long and stored alongside your Web SDK
 						application's integration key (ikey) and secret key (skey) in a configuration file.
 					</div>
