@@ -76,7 +76,7 @@ function show2FAModal() {
 		iframe: "duo_iframe",
 		host: window.host,
 		sig_request: window.sig_request,
-		submit_callback: this.twoFactorVerify.bind(this),
+		submit_callback: twoFactorVerify.bind(this),
 	});
 
 	$('#duoModal').modal('show');
