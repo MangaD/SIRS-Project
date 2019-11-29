@@ -38,4 +38,5 @@ sudo mysql
 > FLUSH PRIVILEGES;
 # Access website in browser:
 # http://127.0.0.1/project/server/install
+# Put in the DB credentials on the install page. For the Duo credentials please refer to DuoSetup.md
 ```
