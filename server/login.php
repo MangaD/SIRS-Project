@@ -83,7 +83,8 @@ if (empty($errors)) {
 				$data['uid'] = $row["uid"];
 
 				if (!array_key_exists("twoFAresponse", $json) || empty($sig_response)) {
-					$errors['arguments'] = "You did not provide 2FA response.";
+					$errors['2fa_response'] = "You did not provide 2FA response.";
+					$errors['missing2FA'] = true;
 					// Define Duo sig_request
 					$data['sig_request'] = Duo\Web::signRequest(IKEY, SKEY, AKEY, $data['username']);
 					$data['host'] = HOST;
@@ -96,7 +97,8 @@ if (empty($errors)) {
 						$_SESSION['username'] = $username;
 						$_SESSION['uid'] = $row["uid"];
 					} else {
-						$errors['arguments'] = "Your 2FA response is invalid.";
+						$errors['2fa_response'] = "Your 2FA response is invalid.";
+						$errors['missing2FA'] = true;
 						// Define Duo sig_request
 						$data['sig_request'] = Duo\Web::signRequest(IKEY, SKEY, AKEY, $data['username']);
 						$data['host'] = HOST;
