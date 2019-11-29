@@ -82,6 +82,7 @@ function show2FAModal() {
 }
 
 function twoFactorVerify(response) {
+	$('#duoModal').modal('hide');
 	console.log(response.elements.sig_response.value);
 	window.twoFAresponse = response.elements.sig_response.value
 	login();
