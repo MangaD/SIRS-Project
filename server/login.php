@@ -4,16 +4,6 @@ require_once '2fa/Web.php';
 require_once 'inc/dbclass.php';
 require_once 'inc/utilities.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-ini_set("log_errors", 1);
-// Probably need to change path
-ini_set("error_log", "php-error.log");
-// For testing
-error_log( "Hello, errors!" );
-
 cors();
 
 $errors = array();

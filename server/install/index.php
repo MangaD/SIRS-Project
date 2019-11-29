@@ -37,6 +37,7 @@ require_once PROJECT_ROOT.'inc/config.php';
 <body>
 	<div class="col-sm-6 offset-sm-3">
 		<h1>Install <?php echo $app_title; ?></h1>
+		<!-- Tab list -->
 		<ul class="nav nav-tabs" role="tablist">
 			<li class="nav-item">
 				<a class="nav-link active" id="table-tab" data-toggle="tab"
@@ -55,6 +56,7 @@ require_once PROJECT_ROOT.'inc/config.php';
 			</li>
 		</ul>
 		<div class="tab-content">
+			<!-- SQL tables tab -->
 			<div id="tables" class="tab-pane fade show active"
 			     role="tabpanel" aria-labelledby="table-tab">
 				<form id="build_db" action="build_db.php" method="post">
@@ -82,10 +84,47 @@ require_once PROJECT_ROOT.'inc/config.php';
 						Create tables</button>
 				</form>
 			</div>
+			<!-- Config file tab -->
 			<div id="config" class="tab-pane fade"
 			     role="tabpanel" aria-labelledby="config-tab">
 				<br />
-				<pre id="config-file"></pre>
+				<h4>Duo config:</h4>
+				<div id="akey-group" class="form-group">
+					<div class="alert alert-info">
+						Your akey is a string that you generate and keep secret from Duo. It
+						should be at least 40 characters long and stored alongside your Web SDK
+						application's integration key (ikey) and secret key (skey) in a configuration file.
+					</div>
+					<label for="akey">AKEY:</label>
+					<input type="text" class="form-control"
+							name="akey" placeholder="AKEY">
+					<button id="generateAKEYBtn" type="button" class="btn">Generate random AKEY</button>
+				</div>
+				<div id="ikey-group" class="form-group">
+					<div class="alert alert-info">
+						IKEY, SKEY, and HOST should come from the Duo Security admin dashboard
+						on the integrations page. For security reasons, these keys are best stored
+						outside of the webroot in a production implementation.
+ 					</div>
+					<label for="ikey">IKEY:</label>
+					<input type="text" class="form-control"
+							name="ikey" placeholder="IKEY">
+				</div>
+				<div id="skey-group" class="form-group">
+					<label for="skey">SKEY:</label>
+					<input type="text" class="form-control"
+							name="skey" placeholder="SKEY">
+				</div>
+				<div id="host-group" class="form-group">
+					<label for="host">HOST:</label>
+					<input type="text" class="form-control"
+							name="host" placeholder="HOST">
+				</div>
+				<br />
+				<h4>Configuration file defines:</h4>
+				<pre id="config-file" style="background-color: #eee;padding: 5px 10px;">
+					<!-- TO BE FILLED -->
+				</pre>
 				<button id="create-config" type="button" class="btn btn-default">
 					 Generate configuration file.</button>
 			</div>
