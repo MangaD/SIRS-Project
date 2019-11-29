@@ -71,6 +71,7 @@ function show2FAModal() {
 
 	$('#duo_iframe').src = "";
 
+	// https://stackoverflow.com/questions/48109090/unable-to-integrate-duo-web-sdk-with-angular-application
 	Duo.init({
 		iframe: "duo_iframe",
 		host: window.host,
