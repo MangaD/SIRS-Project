@@ -46,7 +46,8 @@ function login() {
 		} else {
 			window.username = data.username;
 			window.uid = data.uid;
-			
+			window.twoFAresponse = null;
+
 			showMainPage();
 		}
 
