@@ -74,7 +74,7 @@ if (empty($errors)) {
 					$errors['2fa_response'] = "You did not provide 2FA response.";
 					$errors['missing2FA'] = true;
 					// Define Duo sig_request
-					$data['sig_request'] = Duo\Web::signRequest(IKEY, SKEY, AKEY, $data['username']);
+					$data['sig_request'] = Duo\Web::signRequest(IKEY, SKEY, AKEY, $username);
 					$data['host'] = HOST;
 				} else {
 					$sig_response = trim($json['twoFAresponse']);
