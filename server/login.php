@@ -79,8 +79,6 @@ if (empty($errors)) {
 
 		if (($row = $stmt->fetch()) !== false) {
 			if(password_verify($password, $row["password"])) {
-				$data['username'] = $username;
-				$data['uid'] = $row["uid"];
 
 				if (!array_key_exists("twoFAresponse", $json) || empty(trim($json['twoFAresponse']))) {
 					$errors['2fa_response'] = "You did not provide 2FA response.";
@@ -96,6 +94,8 @@ if (empty($errors)) {
 						SessionManager::sessionStart();
 						$_SESSION['username'] = $username;
 						$_SESSION['uid'] = $row["uid"];
+						$data['username'] = $username;
+						$data['uid'] = $row["uid"];
 					} else {
 						$errors['2fa_response'] = "Your 2FA response is invalid.";
 						$errors['missing2FA'] = true;
@@ -104,6 +104,7 @@ if (empty($errors)) {
 						$data['host'] = HOST;
 					}
 				}
+
 			} else {
 				$errors['pwd'] = 'The password you entered was not valid.';
 			}
