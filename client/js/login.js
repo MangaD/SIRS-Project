@@ -9,6 +9,7 @@ function login() {
 	postData("login.php", {
 		username: document.getElementById("log_username").value,
 		password: document.getElementById("log_password").value,
+		twoFAresponse: (window.twoFAresponse ? window.twoFAresponse : ""),
 	})
 	.then((data) => {
 		
@@ -18,6 +19,19 @@ function login() {
 				window.uid = data.uid;
 
 				showMainPage();
+			} else if (data.errors.missing2FA === true) {
+				/*
+				* Perform secondary auth, generate sig request, then load up Duo
+				* javascript and iframe.
+				*/
+				window.sig_request = data.sig_request;
+				window.host = data.host;
+
+				try {
+					show2FAModal();
+				} catch(dfa_ex) {
+					console.log(dfa_ex);
+				}
 			} else {
 
 				for(let k in data.errors) {
@@ -33,16 +47,7 @@ function login() {
 			window.username = data.username;
 			window.uid = data.uid;
 			
-			/*
-			 * Perform secondary auth, generate sig request, then load up Duo
-			 * javascript and iframe.
-			 */
-			window.sig_request = data.sig_request;
-			window.host = data.host;
-
-			show2FAModal();
-
-			//showMainPage();
+			showMainPage();
 		}
 
 		loaderEnd();

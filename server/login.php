@@ -79,11 +79,29 @@ if (empty($errors)) {
 
 		if (($row = $stmt->fetch()) !== false) {
 			if(password_verify($password, $row["password"])) {
-				SessionManager::sessionStart();
-				$_SESSION['username'] = $username;
-				$_SESSION['uid'] = $row["uid"];
-				$data['username'] = $_SESSION['username'];
-				$data['uid'] = $_SESSION['uid'];
+				$data['username'] = $username;
+				$data['uid'] = $row["uid"];
+
+				if (!array_key_exists("twoFAresponse", $json) || empty($sig_response)) {
+					$errors['arguments'] = "You did not provide 2FA response.";
+					// Define Duo sig_request
+					$data['sig_request'] = Duo\Web::signRequest(IKEY, SKEY, AKEY, $data['username']);
+					$data['host'] = HOST;
+				} else {
+					$sig_response = trim($json['twoFAresponse']);
+
+					$resp = Duo\Web::verifyResponse(IKEY, SKEY, AKEY, $_POST['sig_response']);
+					if ($resp === $username) {
+						SessionManager::sessionStart();
+						$_SESSION['username'] = $username;
+						$_SESSION['uid'] = $row["uid"];
+					} else {
+						$errors['arguments'] = "Your 2FA response is invalid.";
+						// Define Duo sig_request
+						$data['sig_request'] = Duo\Web::signRequest(IKEY, SKEY, AKEY, $data['username']);
+						$data['host'] = HOST;
+					}
+				}
 			} else {
 				$errors['pwd'] = 'The password you entered was not valid.';
 			}
@@ -105,10 +123,6 @@ if ( ! empty($errors)) {
 } else {
 	$data['message'] = "Login successful.";
 	$data['success'] = true;
-
-	//Define sig_request
-	$data['sig_request'] = Duo\Web::signRequest(IKEY, SKEY, AKEY, $data['username']);
-	$data['host'] = HOST;
 }
 
 echo json_encode($data);

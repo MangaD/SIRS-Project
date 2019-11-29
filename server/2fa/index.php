@@ -71,7 +71,7 @@ else if (isset($_POST['user']) && isset($_POST['pass'])) {
     ?>
 
         <script type="text/javascript" src="Duo-Web-v2.js"></script>
-	    <link rel="stylesheet" type="text/css" href="css/Duo-Frame.css">
+	    <link rel="stylesheet" type="text/css" href="Duo-Frame.css">
 	    
     
         <!--<iframe id="duo_iframe"

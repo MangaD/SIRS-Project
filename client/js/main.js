@@ -69,17 +69,20 @@ function showMainPage() {
 
 function show2FAModal() {
 
-	alert('window.sig_request: ' + window.sig_request);
-	alert('window.host: ' + window.host);
+	$('#duo_iframe').src = "";
 
-	$('#duoModalBody').html('<script type="text/javascript" src="js/Duo-Web-v2.js"></script>' +
-	'<link rel="stylesheet" type="text/css" href="css/Duo-Frame.css">');
-
-	var iframe = document.createElement('iframe');
-	iframe.setAttribute("data-host", window.host);
-	iframe.setAttribute("data-sig-request", window.sig_request);
-
-	$('#duoModalBody').append(iframe);
+	Duo.init({
+		iframe: "duo_iframe",
+		host: window.host,
+		sig_request: window.sig_request,
+		submit_callback: this.twoFactorVerify.bind(this),
+	});
 
 	$('#duoModal').modal('show');
+}
+
+function twoFactorVerify(response) {
+	console.log(response.elements.sig_response.value);
+	window.twoFAresponse = response.elements.sig_response.value
+	login();
 }
