@@ -82,7 +82,7 @@ if (empty($errors)) {
 				$data['username'] = $username;
 				$data['uid'] = $row["uid"];
 
-				if (!array_key_exists("twoFAresponse", $json) || empty($sig_response)) {
+				if (!array_key_exists("twoFAresponse", $json) || empty(trim($json['twoFAresponse']))) {
 					$errors['2fa_response'] = "You did not provide 2FA response.";
 					$errors['missing2FA'] = true;
 					// Define Duo sig_request
