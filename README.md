@@ -38,8 +38,13 @@ TODO (tcpdumps, etc)
 
 ## Credits
 
+**2FA:**
+
+- [Duo Security](https://duo.com/)
+
 **Client:**
 
+- [jQuery](https://jquery.com/)
 - [Bootstrap 4](https://getbootstrap.com/)
 - [Font Awesome 5](https://fontawesome.com/)
 - [ParticleJS](https://vincentgarreau.com/particles.js/)
@@ -54,3 +59,4 @@ TODO (tcpdumps, etc)
 - [Java WebSockets](https://github.com/TooTallNate/Java-WebSocket)
   - [SLF4J](https://www.slf4j.org/)
 - [JSON In Java](https://mvnrepository.com/artifact/org.json/json)
+
