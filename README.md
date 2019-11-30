@@ -29,7 +29,7 @@
 - [documentation/setup/InstallVMs.md](documentation/setup/InstallVMs.md)
 - [documentation/setup/ServerSetup.md](documentation/setup/ServerSetup.md)
 - [documentation/setup/ClientSetup.md](documentation/setup/ClientSetup.md)
-- [documentation/setup/2FASetup.md](documentation/setup/2FASetup.md)
+- [documentation/setup/DuoSetup.md](documentation/setup/DuoSetup.md)
 - TODO - set up smartphone (with WPA3)
 
 ## Attempting man-in-the-middle
