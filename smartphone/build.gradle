@@ -4,6 +4,9 @@ apply plugin: 'java'
 // in order to generate eclipse project
 apply plugin: 'eclipse'
 
+// in order to generate IntelliJ IDEA project
+apply plugin: 'idea'
+
 // in order to run the application
 apply plugin: 'application'
 mainClassName = 'smartphone.Main'
@@ -21,4 +24,13 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
 	implementation "org.slf4j:slf4j-simple:1.6.1"
 	implementation "org.json:json:20190722"
+	// JUnit
+	// https://www.petrikainulainen.net/programming/testing/junit-5-tutorial-running-unit-tests-with-gradle/
+	// https://www.baeldung.com/junit-5-gradle
+	testImplementation "org.junit.jupiter:junit-jupiter-api:5.5.2"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.5.2"
+}
+
+test {
+	useJUnitPlatform()
 }

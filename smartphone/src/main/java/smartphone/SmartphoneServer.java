@@ -24,13 +24,15 @@ public class SmartphoneServer extends WebSocketServer {
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
         conns.add(conn);
-        System.out.println("New connection from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+        System.out.println("New connection from " + 
+        		conn.getRemoteSocketAddress().getAddress().getHostAddress());
     }
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         conns.remove(conn);
-        System.out.println("Closed connection to " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+        System.out.println("Closed connection to " + 
+        		conn.getRemoteSocketAddress().getAddress().getHostAddress());
     }
 
     @Override
@@ -60,7 +62,8 @@ public class SmartphoneServer extends WebSocketServer {
             conns.remove(conn);
             // do some thing if required
         }
-        System.out.println("ERROR from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+        System.out.println("ERROR from " +
+        		conn.getRemoteSocketAddress().getAddress().getHostAddress());
     }
 
     @Override

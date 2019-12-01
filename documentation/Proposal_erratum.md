@@ -4,7 +4,7 @@
 
 Private keys should be known only by the owner, so it should be the client creating the key pair and providing his public key to the server upon registration.
 
-We also forgot to mention that we'll be using ECC instead of RSA for [better performance](https://www.globalsign.com/en/blog/elliptic-curve-cryptography/) with 256-bit keys.
+~~We also forgot to mention that we'll be using ECC instead of RSA for [better performance](https://www.globalsign.com/en/blog/elliptic-curve-cryptography/) with 256-bit keys.~~ We did not find an easy way to encrypt session keys using ECC public key in Java as ECC apparently is missing from [this](https://docs.oracle.com/javase/7/docs/api/javax/crypto/Cipher.html) list, so we're using RSA with 2048-bit keys.
 
 ## Why use Diffie-Hellman?
 
@@ -43,6 +43,10 @@ Freshness can be achieved by having a [nonce and timestamp](https://crypto.stack
 **Why hash the message with random padding?**
 
 Since we're sending the hash encrypted together with the message, random padding is unnecessary. But if we were sending the hash separately, random padding would be important in order to make equal messages produce a different hash.
+
+## Smartphone authentication
+
+We forgot to mention that despite WPA2 offering us confidentiality, we have to implement authentication between the client and smartphone somehow.
 
 ## Curiosities
 
