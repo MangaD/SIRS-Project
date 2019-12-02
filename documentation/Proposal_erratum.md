@@ -46,7 +46,7 @@ Since we're sending the hash encrypted together with the message, random padding
 
 ## Smartphone authentication
 
-We forgot to mention that despite WPA2 offering us confidentiality, we have to implement authentication between the client and smartphone somehow.
+We forgot to mention that despite WPA2 offering us confidentiality, we have to implement authentication between the client and smartphone. For this we require a password to decrypt the private key that is stored in a `KeyStore`. The key pair is created by the user when he first launches the app.
 
 ## Curiosities
 

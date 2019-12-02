@@ -18,12 +18,14 @@ repositories {
 
 dependencies {
 	implementation "org.xerial:sqlite-jdbc:3.27.2.1"
-	implementation "org.java-websocket:Java-WebSocket:1.4.0"
+	implementation "org.json:json:20190722"
+
 	// Java-WebSocket uses SLF4J and there is this problem:
 	// https://stackoverflow.com/questions/7421612/slf4j-failed-to-load-class-org-slf4j-impl-staticloggerbinder
 	// https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+	implementation "org.java-websocket:Java-WebSocket:1.4.0"
 	implementation "org.slf4j:slf4j-simple:1.6.1"
-	implementation "org.json:json:20190722"
+
 	// JUnit
 	// https://www.petrikainulainen.net/programming/testing/junit-5-tutorial-running-unit-tests-with-gradle/
 	// https://www.baeldung.com/junit-5-gradle
@@ -31,6 +33,7 @@ dependencies {
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.5.2"
 }
 
+// JUnit
 test {
 	useJUnitPlatform()
 }
