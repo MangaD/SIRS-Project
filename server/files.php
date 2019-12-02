@@ -98,39 +98,46 @@ if (empty($errors)) {
 		
 				$file = $folderPath . $file_name;
 
-				$stmt = $conn->prepare(" INSERT INTO files(owner, name, path, hash) " .
-					" VALUES (:owner, :name, :path, :hash) ");
+				try {
+					$conn->beginTransaction();
 
-				$fileHash = hash_file('sha256', $file_tmp);
+					$stmt = $conn->prepare(" INSERT INTO files(owner, name, path, hash) " .
+						" VALUES (:owner, :name, :path, :hash) ");
 
-				$new_file_name = $folderPath . $fileHash . "." . $file_ext;
+					$fileHash = hash_file('sha256', $file_tmp);
 
-				$stmt->bindValue(':owner', $_SESSION['uid'], PDO::PARAM_INT);
-				$stmt->bindValue(':name', $file_name, PDO::PARAM_STR);
-				$stmt->bindValue(':path', $new_file_name, PDO::PARAM_STR);
-				$stmt->bindValue(':hash', $fileHash, PDO::PARAM_STR);
-
-				$stmt->execute();
-
-				if (!move_uploaded_file($file_tmp, $new_file_name)) {
-					$stmt = $conn->prepare(" DELETE FROM files WHERE " .
-					" owner = :owner AND hash = :hash ");
+					$new_file_name = $folderPath . $fileHash . "." . $file_ext;
 
 					$stmt->bindValue(':owner', $_SESSION['uid'], PDO::PARAM_INT);
+					$stmt->bindValue(':name', $file_name, PDO::PARAM_STR);
+					$stmt->bindValue(':path', $new_file_name, PDO::PARAM_STR);
 					$stmt->bindValue(':hash', $fileHash, PDO::PARAM_STR);
 
 					$stmt->execute();
 
-					$errors['move_uploaded_file'] = "Sorry, there was an error uploading your file " .
-						"on 'move_uploaded_file' function.";
+					if (!move_uploaded_file($file_tmp, $new_file_name)) {
+						$conn->rollBack();
+
+						$errors['move_uploaded_file'] = "Sorry, there was an error uploading your file " .
+							"on 'move_uploaded_file' function.";
+					} else {
+						$conn->commit();
+					}
+					
+				} catch(PDOException $e) {
+
+					$conn->rollBack();
+
+					if ($e->errorInfo[1] == 1062) {
+						$errors['already_exists_'.$file_name] =
+							"You have already uploaded this file: " . $file_name;
+					} else {
+						$errors['exception'] = $e->getMessage();
+					}
 				}
 			}
 		} catch(PDOException $e) {
-			if ($e->errorInfo[1] == 1062) {
-				$errors['already_exists'] = "You have already uploaded this file.";
-			} else {
-				$errors['exception'] = $msg;
-			}
+			$errors['exception'] = $e->getMessage();
 		}
 
 		$dbclass->closeConnection();
