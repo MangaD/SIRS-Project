@@ -22,6 +22,11 @@ function loadFiles() {
 			name: "hello5.txt",
 			hash: "ce342bef5df56c933352d71edbbc35b36a9160d8",
 			owner: "123456",
+		},
+		{
+			name: "try.txt",
+			hash: "dbb61a839dabe7e4d40ec8e6a34337e7bf3e57aff547d52fab93cd2c14d1045e",
+			owner: "1",
 		}
 	];
 
