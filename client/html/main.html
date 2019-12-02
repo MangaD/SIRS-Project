@@ -67,11 +67,19 @@
 			formData.append('files[]', file)
 		}
 
-		fetch(window.serverAddress + '/process.php', {
+		fetch(window.serverAddress + '/files.php', {
 			method: 'POST',
 			body: formData,
-		}).then(response => {
-			console.log(response);
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (!data.success) {
+				for (let k in data.errors) {
+					alert(data.errors[k]);
+					console.log("entrou");
+				}
+				console.log(data);
+			}
 		})
 	});
 </script>

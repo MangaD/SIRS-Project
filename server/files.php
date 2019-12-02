@@ -44,6 +44,7 @@ if (empty($errors) && $_SERVER['REQUEST_METHOD'] === 'POST') {
 
 			if (!in_array($file_ext, $extensions)) {
 				$errors['extension'] = 'Extension not allowed: ' . $file_name . ' ' . $file_type;
+				error_log( "Invalid" );
 			}
 
 			if ($file_size > 2097152) {
@@ -75,6 +76,7 @@ if (empty($errors) && $_SERVER['REQUEST_METHOD'] === 'POST') {
 if ( ! empty($errors)) {
 	$data['errors']  = $errors;
 	$data['success'] = false;
+	error_log( "Invalid 2" );
 } else {
 	$data['success'] = true;
 }
