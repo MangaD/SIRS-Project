@@ -6,7 +6,7 @@ function register() {
 
 	$("#register_alerts").html('');
 
-	postData("register.php", {
+	postJSONData("register.php", {
 		username: document.getElementById("reg_username").value,
 		password: document.getElementById("reg_password").value,
 		confirm_password: document.getElementById("reg_confirm_password").value,

@@ -26,7 +26,7 @@ $(document).ready( function() {
 
 				// Load login page if user not logged in
 				// else load main page
-				postData("login.php", {})
+				postJSONData("login.php", {})
 				.then((data) => {
 					if (!data.success) {
 						if (data.errors.already_logged === true) {

@@ -47,6 +47,7 @@ import java.io.InputStream;
  * EC vs ECDH vc ECDSA: https://security.stackexchange.com/questions/190869/is-the-jdk-standard-ec-keypairgenerator-suitable-for-use-with-both-ecdsa-and-ecd
  * Convert key bytes to object: https://stackoverflow.com/questions/19353748/how-to-convert-byte-array-to-privatekey-or-publickey-type
  * Key store tutorial: http://tutorials.jenkov.com/java-cryptography/keystore.html
+ * JAVA RSA example: https://gist.github.com/nielsutrecht/855f3bef0cf559d8d23e94e2aecd4ede
  */
 public class AsymmetricEncryptionRSA {
 

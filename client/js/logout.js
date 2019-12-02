@@ -6,7 +6,7 @@ function logout() {
 
 	$("#login_alerts").html('');
 
-	postData("logout.php", {})
+	postJSONData("logout.php", {})
 	.then((data) => {
 		if (!data.success) {
 			Object.keys(data.errors).forEach((k) => {

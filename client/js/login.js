@@ -6,7 +6,7 @@ function login() {
 
 	$("#login_alerts").html('');
 	
-	postData("login.php", {
+	postJSONData("login.php", {
 		username: document.getElementById("log_username").value,
 		password: document.getElementById("log_password").value,
 		twoFAresponse: (window.twoFAresponse ? window.twoFAresponse : ""),

@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * In your "php.ini" file, search for the file_uploads directive, and set it to On:
+ * file_uploads = On
+ * 
+ * Depending on maximum file size to allow, you can also modify:
+ * upload_max_filesize = 2M
+ */
+
 require_once 'inc/utilities.php';
 require_once 'inc/dbclass.php';
 
@@ -15,40 +24,56 @@ error_log( "Hello, errors!" );
 
 cors();
 
+setlocale(LC_ALL,'en_US.UTF-8');
+
 $errors = array();
 $data = array();
 
+// Must have trailing slash
+$folderPath = 'files/';
+$validExtensions = ['txt', 'pdf'];
+$validTypes = ['text/plain', 'application/pdf', 'application/wps-office.pdf'];
+// Must also change 'upload_max_filesize' in your "php.ini" file.
+$maxFileSize = 2*1024*1024; // 2MiB
+
 if (!isInstalled()) {
 	$errors['not_installed'] = $app_title . ' server is not installed.';
-}
-elseif (!SessionManager::isLoggedIn()) {
+} elseif (!SessionManager::isLoggedIn()) {
 	$errors['not_logged'] = 'You are not logged in!';
+} elseif ($_SERVER['REQUEST_METHOD'] != 'POST') {
+	$errors['post'] = 'Must send data over POST request method.';
 }
 
-if (empty($errors) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+if (empty($errors)) {
 	if (isset($_FILES['files'])) {
-		$errors = [];
-		$path = 'files/';
-		$extensions = ['txt', 'pdf'];
 
 		$all_files = count($_FILES['files']['tmp_name']);
 
 		for ($i = 0; $i < $all_files; $i++) {
 			$file_name = $_FILES['files']['name'][$i];
+			// https://stackoverflow.com/questions/37008227/what-is-the-difference-between-name-and-tmp-name
 			$file_tmp = $_FILES['files']['tmp_name'][$i];
 			$file_type = $_FILES['files']['type'][$i];
 			$file_size = $_FILES['files']['size'][$i];
-			$file_ext = strtolower(end(explode('.', $_FILES['files']['name'][$i])));
+			// https://stackoverflow.com/questions/173868/how-do-i-get-extract-a-file-extension-in-php
+			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
-			$file = $path . $file_name;
+			$file = $folderPath . $file_name;
 
-			if (!in_array($file_ext, $extensions)) {
-				$errors['extension'] = 'Extension not allowed: ' . $file_name . ' ' . $file_type;
-				error_log( "Invalid" );
+			if (!in_array($file_ext, $validExtensions)) {
+				$errors['extension'] = 'Extension not allowed. File name: ' . $file_name .
+					'. File extension: ' . $file_ext;
 			}
 
-			if ($file_size > 2097152) {
-				$errors['size'] = 'File size exceeds limit: ' . $file_name . ' ' . $file_type;
+			if (!in_array($file_ext, $validTypes)) {
+				$errors['size'] = 'File type not allowed. File name: ' . $file_name .
+				'. File type: ' . $file_type;
+			}
+
+			if ($file_size > $maxFileSize) {
+				$errors['size'] = 'File size exceeds limit. File name: ' . $file_name .
+					'. File size: ' . $file_size .
+					'. Max. size: ' . $maxFileSize/1024/1024 . "MiB";
 			}
 
 			if (empty($errors)) {
@@ -58,25 +83,39 @@ if (empty($errors) && $_SERVER['REQUEST_METHOD'] === 'POST') {
 				$stmt = $conn->prepare(" INSERT INTO files(owner, name, path, hash) " .
 					" VALUES (:owner, :name, :path, :hash) ");
 
-				$new_file_name = $path. hash_file('sha256', $file_tmp) . "." . $file_ext;
+				$fileHash = hash_file('sha256', $file_tmp);
 
-				$stmt->bindValue(':owner',  $_SESSION['uid'], PDO::PARAM_INT);
+				$new_file_name = $folderPath . $fileHash . "." . $file_ext;
+
+				$stmt->bindValue(':owner', $_SESSION['uid'], PDO::PARAM_INT);
 				$stmt->bindValue(':name', $file_name, PDO::PARAM_STR);
 				$stmt->bindValue(':path', $new_file_name, PDO::PARAM_STR);
-				$stmt->bindValue(':hash', hash_file('sha256', $file_tmp), PDO::PARAM_STR);
+				$stmt->bindValue(':hash', $fileHash, PDO::PARAM_STR);
 
 				$stmt->execute();
 
-				move_uploaded_file($file_tmp, $new_file_name);
+				if (!move_uploaded_file($file_tmp, $new_file_name)) {
+					$stmt = $conn->prepare(" DELETE FROM files WHERE " .
+					" owner = :owner AND hash = :hash) ");
+
+					$stmt->bindValue(':owner', $_SESSION['uid'], PDO::PARAM_INT);
+					$stmt->bindValue(':hash', $fileHash, PDO::PARAM_STR);
+
+					$stmt->execute();
+
+					$errors['move_uploaded_file'] = "Sorry, there was an error uploading your file " .
+						"on 'move_uploaded_file' function.";
+				}
 			}
 		}
+	} else {
+		$errors['_FILES'] = "\$_FILES['files'] not set.";
 	}
 }
 
 if ( ! empty($errors)) {
 	$data['errors']  = $errors;
 	$data['success'] = false;
-	error_log( "Invalid 2" );
 } else {
 	$data['success'] = true;
 }

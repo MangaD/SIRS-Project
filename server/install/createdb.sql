@@ -7,7 +7,7 @@ SET time_zone = "+00:00";
 --
 CREATE TABLE IF NOT EXISTS `users` (
 	`uid` int NOT NULL AUTO_INCREMENT,
-	`username` varchar(50) NOT NULL,
+	`username` varchar(50) UNIQUE NOT NULL,
 	`password` varchar(255) NOT NULL,
 	`admin` tinyint(1) NOT NULL DEFAULT 0,
 	-- https://stackoverflow.com/questions/5133580/which-mysql-datatype-to-use-for-an-ip-address
@@ -28,7 +28,8 @@ CREATE TABLE IF NOT EXISTS `files` (
 	`path` varchar(200) NOT NULL,
 	`hash` varchar(64) NOT NULL,
 	PRIMARY KEY (`fid`),
-	FOREIGN KEY (`owner`) REFERENCES `users`(`uid`)
+	FOREIGN KEY (`owner`) REFERENCES `users`(`uid`),
+	CONSTRAINT `UC_File` UNIQUE (`owner`,`hash`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `file_permission` (

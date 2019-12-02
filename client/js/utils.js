@@ -3,7 +3,7 @@
 /**
  * Server POST request
  */
-function postData(url, data) {
+function postJSONData(url, data) {
 	return fetch(`${window.serverAddress}/${url}`, {
 		body: JSON.stringify(data),
 		cache: 'no-cache',
@@ -12,6 +12,24 @@ function postData(url, data) {
 			'User-Agent': window.app_title,
 			'Accept': 'application/json',
 			'Content-Type': 'application/json; charset=utf-8',
+		},
+		method: 'POST',
+		mode: 'cors',
+		referrer: 'no-referrer',
+	})
+	.then(response => response.json())
+}
+
+function postData(url, data) {
+	// Don't set content-type:
+	// https://muffinman.io/uploading-files-using-fetch-multipart-form-data/
+	return fetch(`${window.serverAddress}/${url}`, {
+		body: data,
+		cache: 'no-cache',
+		credentials: 'include',
+		headers: {
+			'User-Agent': window.app_title,
+			'Accept': 'application/json',
 		},
 		method: 'POST',
 		mode: 'cors',

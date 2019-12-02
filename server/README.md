@@ -28,6 +28,9 @@ Password: sirs
 
 5. Remove `install` and `uninstall` directories or place a `.htaccess` file in them with `deny from all` so that they become inaccessible.
 
+6. In your `php.ini` file, search for the `file_uploads` directive, and set it to `On`:
+    `file_uploads = On`
+
 ## Debugging
 
 1. Create `php-error.log` file and `chmod` it with 777.
