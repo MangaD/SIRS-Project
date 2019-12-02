@@ -34,6 +34,8 @@ Generic tutorial: <https://spring.io/guides/gs/gradle/>
 
 Tutorial [SQLite JDBC driver with Gradle](https://stackoverflow.com/questions/50377264/using-sqlite-jdbc-driver-in-a-gradle-java-project).
 
+Tutorial [JUnit with Gradle](https://www.petrikainulainen.net/programming/testing/junit-5-tutorial-running-unit-tests-with-gradle/).
+
 ### Setup notes
 
 Generated Eclipse project using `gradle eclipse` command, while having `apply plugin: 'eclipse'` inside the `build.gradle` file. Tutorial: <http://www.thejavageek.com/2015/05/22/create-eclipse-project-with-gradle/>
@@ -50,6 +52,18 @@ gradle build
 
 ```sh
 gradle run
+```
+
+### Build & Run
+
+```sh
+gradle clean run
+```
+
+### Run unit tests
+
+```sh
+gradle clean test
 ```
 
 ## Communication
