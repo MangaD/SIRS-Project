@@ -32,7 +32,8 @@ $data = array();
 // Must have trailing slash
 $folderPath = 'files/';
 $validExtensions = ['txt', 'pdf'];
-$validTypes = ['text/plain', 'application/pdf', 'application/wps-office.pdf'];
+$validTypes = ['text/plain', 'application/pdf',
+	'application/wps-office.pdf'];
 // Must also change 'upload_max_filesize' in your "php.ini" file.
 $maxFileSize = 2*1024*1024; // 2MiB
 
@@ -65,7 +66,7 @@ if (empty($errors)) {
 					'. File extension: ' . $file_ext;
 			}
 
-			if (!in_array($file_ext, $validTypes)) {
+			if (!in_array($file_type, $validTypes)) {
 				$errors['size'] = 'File type not allowed. File name: ' . $file_name .
 				'. File type: ' . $file_type;
 			}
@@ -77,35 +78,46 @@ if (empty($errors)) {
 			}
 
 			if (empty($errors)) {
-				$dbclass = new DBClass();
-				$conn = $dbclass->getConnection();
 
-				$stmt = $conn->prepare(" INSERT INTO files(owner, name, path, hash) " .
-					" VALUES (:owner, :name, :path, :hash) ");
+				try {
+					$dbclass = new DBClass();
+					$conn = $dbclass->getConnection();
 
-				$fileHash = hash_file('sha256', $file_tmp);
+					$stmt = $conn->prepare(" INSERT INTO files(owner, name, path, hash) " .
+						" VALUES (:owner, :name, :path, :hash) ");
 
-				$new_file_name = $folderPath . $fileHash . "." . $file_ext;
+					$fileHash = hash_file('sha256', $file_tmp);
 
-				$stmt->bindValue(':owner', $_SESSION['uid'], PDO::PARAM_INT);
-				$stmt->bindValue(':name', $file_name, PDO::PARAM_STR);
-				$stmt->bindValue(':path', $new_file_name, PDO::PARAM_STR);
-				$stmt->bindValue(':hash', $fileHash, PDO::PARAM_STR);
-
-				$stmt->execute();
-
-				if (!move_uploaded_file($file_tmp, $new_file_name)) {
-					$stmt = $conn->prepare(" DELETE FROM files WHERE " .
-					" owner = :owner AND hash = :hash) ");
+					$new_file_name = $folderPath . $fileHash . "." . $file_ext;
 
 					$stmt->bindValue(':owner', $_SESSION['uid'], PDO::PARAM_INT);
+					$stmt->bindValue(':name', $file_name, PDO::PARAM_STR);
+					$stmt->bindValue(':path', $new_file_name, PDO::PARAM_STR);
 					$stmt->bindValue(':hash', $fileHash, PDO::PARAM_STR);
 
 					$stmt->execute();
 
-					$errors['move_uploaded_file'] = "Sorry, there was an error uploading your file " .
-						"on 'move_uploaded_file' function.";
+					if (!move_uploaded_file($file_tmp, $new_file_name)) {
+						$stmt = $conn->prepare(" DELETE FROM files WHERE " .
+						" owner = :owner AND hash = :hash ");
+	
+						$stmt->bindValue(':owner', $_SESSION['uid'], PDO::PARAM_INT);
+						$stmt->bindValue(':hash', $fileHash, PDO::PARAM_STR);
+	
+						$stmt->execute();
+	
+						$errors['move_uploaded_file'] = "Sorry, there was an error uploading your file " .
+							"on 'move_uploaded_file' function.";
+					}
+				} catch(PDOException $e) {
+					if ($e->errorInfo[1] == 1062) {
+						$errors['already_exists'] = "You already have a file with this hash.";
+					} else {
+						$errors['exception'] = $msg;
+					}
 				}
+
+				$dbclass->closeConnection();
 			}
 		}
 	} else {
