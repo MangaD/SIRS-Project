@@ -111,7 +111,7 @@ if (empty($errors)) {
 					}
 				} catch(PDOException $e) {
 					if ($e->errorInfo[1] == 1062) {
-						$errors['already_exists'] = "You already have a file with this hash.";
+						$errors['already_exists'] = "You have already uploaded this file.";
 					} else {
 						$errors['exception'] = $msg;
 					}
