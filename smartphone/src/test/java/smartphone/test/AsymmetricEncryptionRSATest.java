@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.KeyPair;
-import java.security.KeyStore;
+import java.security.PrivateKey;
 
 // JUnit 5 Tutorial:
 // https://www.petrikainulainen.net/programming/testing/junit-5-tutorial-writing-our-first-test-class/
@@ -62,15 +62,11 @@ class AsymmetricEncryptionRSATest {
     
     @Test
     @DisplayName("Key store set and get")
-    void keyStoreSetGet() throws Exception {
+    void encryptDecryptPrivateKey() throws Exception {
     	
-    	String s = "hello";
-		String signedTxt = aeRSA.sign(s, pair.getPrivate());
-		
-		KeyStore keystore = AsymmetricEncryptionRSA.savePairInKeyStore(pair, "123");
-		KeyPair pair2 = AsymmetricEncryptionRSA.loadKeyStore(keystore, "123");
-		
-		boolean isCorrect = aeRSA.verify(s, signedTxt, pair2.getPublic());
-		assertTrue(isCorrect);
+    	String pwd = "hello";
+		byte[] encPriv = AsymmetricEncryptionRSA.encryptPrivateKey(pair.getPrivate(), pwd);
+		PrivateKey privKey = AsymmetricEncryptionRSA.decryptPrivateKey(encPriv, pwd);
+		assertEquals(pair.getPrivate(), privKey);
     }
 }
