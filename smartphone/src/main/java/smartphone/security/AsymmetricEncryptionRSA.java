@@ -1,25 +1,7 @@
 package smartphone.security;
 
-import java.security.cert.Certificate;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.SecureRandom;
-import java.security.Signature;
-import java.security.UnrecoverableEntryException;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
+import java.security.spec.*;
+import java.security.*;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -28,13 +10,6 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * We use RSA because we did not find how to cipher with ECC public key
@@ -81,100 +56,6 @@ public class AsymmetricEncryptionRSA {
         //Key pvt = kp.getPrivate();
         return keys;
     }
-    
-    public static void savePairInKeyStore(String filename,
-    		KeyPair pair, String password)
-    				throws KeyStoreException, FileNotFoundException, IOException,
-    				       NoSuchAlgorithmException, CertificateException {
-    	
-    	// Can set a specific instance
-    	KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-    	
-    	// Password
-    	char[] keyStorePassword = password.toCharArray();
-    	KeyStore.ProtectionParameter kspp = new KeyStore.PasswordProtection(keyStorePassword);
-    	
-    	// Must load even if it doesn't exist (pass null)
-    	keyStore.load(null, keyStorePassword);
-    	
-    	// Create certificate with public key
-    	// https://www.codota.com/code/java/classes/java.security.cert.Certificate
-    	CertificateFactory certificateFactory = CertificateFactory.getInstance("X509");
-    	Certificate certificate = certificateFactory.generateCertificate(
-    			new ByteArrayInputStream(pair.getPublic().getEncoded()));
-
-    	
-    	KeyStore.PrivateKeyEntry privKeyEntry =
-    			new KeyStore.PrivateKeyEntry(pair.getPrivate(), new Certificate[] {certificate});
-    	
-    	keyStore.setEntry("privKey", privKeyEntry, kspp);
-    	keyStore.setCertificateEntry("certificate", certificate);
-    	
-    	try (FileOutputStream keyStoreOutputStream = new FileOutputStream(filename)) {
-    		keyStore.store(keyStoreOutputStream, keyStorePassword);
-    	}
-    }
-    
-    public static KeyStore savePairInKeyStore(KeyPair pair, String password)
-    				throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
-    	
-    	// Can set a specific instance
-    	KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-    	
-    	// Password
-    	char[] keyStorePassword = password.toCharArray();
-    	KeyStore.ProtectionParameter kspp = new KeyStore.PasswordProtection(keyStorePassword);
-    	
-    	// Must load even if it doesn't exist (pass null)
-    	keyStore.load(null, keyStorePassword);
-    	
-    	// Create certificate with public key
-    	// https://www.codota.com/code/java/classes/java.security.cert.Certificate
-    	CertificateFactory certificateFactory = CertificateFactory.getInstance("X509");
-    	Certificate certificate = certificateFactory.generateCertificate(
-    			new ByteArrayInputStream(pair.getPublic().getEncoded()));
-
-    	
-    	KeyStore.PrivateKeyEntry privKeyEntry =
-    			new KeyStore.PrivateKeyEntry(pair.getPrivate(), new Certificate[] {certificate});
-    	
-    	keyStore.setEntry("privKey", privKeyEntry, kspp);
-    	keyStore.setCertificateEntry("certificate", certificate);
-    	
-    	return keyStore;
-    }
-    
-    public static KeyPair loadKeyStore(String filename, String password)
-    		    throws KeyStoreException, FileNotFoundException, IOException,
-    		           NoSuchAlgorithmException, CertificateException, UnrecoverableEntryException {
-    	KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-    	char[] keyStorePassword = password.toCharArray();
-    	KeyStore.ProtectionParameter kspp = new KeyStore.PasswordProtection(keyStorePassword);
-    	try(InputStream keyStoreData = new FileInputStream(filename)){
-    	    keyStore.load(keyStoreData, keyStorePassword);
-    	}
-    	Certificate certificate = keyStore.getCertificate("certificate");
-    	KeyStore.PrivateKeyEntry privateKeyEntry = 
-    			(KeyStore.PrivateKeyEntry) keyStore.getEntry("privKey", kspp);
-    	PublicKey pubKey = certificate.getPublicKey();
-    	PrivateKey privKey = privateKeyEntry.getPrivateKey();
-    	
-    	return new KeyPair(pubKey, privKey);
-    }
-    
-    public static KeyPair loadKeyStore(KeyStore keyStore, String password)
-		    throws KeyStoreException, FileNotFoundException, IOException,
-		           NoSuchAlgorithmException, CertificateException, UnrecoverableEntryException {
-		char[] keyStorePassword = password.toCharArray();
-		KeyStore.ProtectionParameter kspp = new KeyStore.PasswordProtection(keyStorePassword);
-		Certificate certificate = keyStore.getCertificate("certificate");
-		KeyStore.PrivateKeyEntry privateKeyEntry = 
-				(KeyStore.PrivateKeyEntry) keyStore.getEntry("privKey", kspp);
-		PublicKey pubKey = certificate.getPublicKey();
-		PrivateKey privKey = privateKeyEntry.getPrivateKey();
-		
-		return new KeyPair(pubKey, privKey);
-	}
 
     public static byte[] publicKeyToByteArray(PublicKey publicKey) {
         return publicKey.getEncoded();
