@@ -86,15 +86,15 @@
 
 		loaderStart();
 
-		postData("files.php", formData)
+		postData("filesUpload.php", formData)
 		.then(data => {
 			if (!data.success) {
 				for (let k in data.errors) {
 					alert(data.errors[k]);
 				}
+			} else {
+				console.log("Uploaded " + data.countUploaded + " files.");
 			}
-
-			console.log("Uploaded " + data.countUploaded + " files.");
 
 			loadFiles();
 

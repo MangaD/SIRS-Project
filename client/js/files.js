@@ -4,7 +4,7 @@ function loadFiles() {
 
 	loaderStart();
 
-	postJSONData("filesVisualization.php", {})
+	postJSONData("files.php", {})
 	.then(data => {
 		if (!data.success) {
 			for (let k in data.errors) {
