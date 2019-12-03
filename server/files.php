@@ -11,17 +11,6 @@
 require_once 'inc/utilities.php';
 require_once 'inc/dbclass.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-ini_set("log_errors", 1);
-// Probably need to change path
-ini_set("error_log", "php-error.log");
-// For testing
-error_log( "Hello, errors!" );
-
-
 cors();
 
 setlocale(LC_ALL,'en_US.UTF-8');
@@ -46,6 +35,8 @@ if (!isInstalled()) {
 } elseif (!isset($_FILES['files'])) {
 	$errors['_FILES'] = "\$_FILES['files'] not set.";
 }
+
+$countUploaded = 0;
 
 if (empty($errors)) {
 
@@ -122,6 +113,7 @@ if (empty($errors)) {
 							"on 'move_uploaded_file' function.";
 					} else {
 						$conn->commit();
+						$countUploaded += 1;
 					}
 					
 				} catch(PDOException $e) {
@@ -149,6 +141,7 @@ if ( ! empty($errors)) {
 	$data['success'] = false;
 } else {
 	$data['success'] = true;
+	$data['countUploaded'] = $countUploaded;
 }
 
 echo json_encode($data);

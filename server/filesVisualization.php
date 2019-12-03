@@ -21,7 +21,7 @@ if (empty($errors)) {
 		$conn = $dbclass->getConnection();
 
 		// TODO Select only files where user has permissions to view
-		$stmt = $conn->prepare(" SELECT username, name, hash
+		$stmt = $conn->prepare(" SELECT username, name, hash, f.created_at
 			FROM files AS f INNER JOIN users AS u ON f.owner = u.uid");
 
 		$stmt->execute();

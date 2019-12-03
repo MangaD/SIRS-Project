@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `files` (
 	`name` varchar(100) NOT NULL,
 	`path` varchar(200) NOT NULL,
 	`hash` varchar(64) NOT NULL,
+	`created_at` datetime DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (`fid`),
 	FOREIGN KEY (`owner`) REFERENCES `users`(`uid`),
 	CONSTRAINT `UC_File` UNIQUE (`owner`,`hash`)

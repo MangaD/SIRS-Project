@@ -20,6 +20,7 @@ function loadFiles() {
 				table_html += '<td>' + files[index].name + '</td>';
 				table_html += '<td>' + files[index].username + '</td>';
 				table_html += '<td>' + files[index].hash + '</td>';
+				table_html += '<td>' + files[index].created_at + '</td>';
 				table_html += '<td ' +
 					' style="color: #cfc;font-size: x-large;text-shadow: 0px 4px 0px #000;">' +
 					'<i data-hash="' + files[index].hash + '" class="fas fa-download"></i></td>';
@@ -34,7 +35,7 @@ function loadFiles() {
 			}
 
 			if (files.length === 0) {
-				table_html += '<td colspan="5" style="text-align:center;">No files in the server.</td>';
+				table_html += '<td colspan="6" style="text-align:center;">No files in the server.</td>';
 			}
 
 			$('#filesTable > tbody').html(table_html);
