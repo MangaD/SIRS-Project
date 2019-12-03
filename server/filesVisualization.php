@@ -16,19 +16,20 @@ if (!isInstalled()) {
 }
 
 if (empty($errors)) {
-  try {
+	try {
 		$dbclass = new DBClass();
 		$conn = $dbclass->getConnection();
 
+		// TODO Select only files where user has permissions to view
 		$stmt = $conn->prepare(" SELECT username, name, hash
 			FROM files AS f INNER JOIN users AS u ON f.owner = u.uid");
 
 		$stmt->execute();
 
-    if (($row = $stmt->fetchAll()) !== false) {
-	      $data['list'] = $row;
-    } else {
-			$errors['show'] = 'No files in database.';
+		if (($row = $stmt->fetchAll()) !== false) {
+			$data['list'] = $row;
+		} else {
+			$errors['show'] = 'fetchAll failed.';
 		}
 	}
 	catch(PDOException $e) {

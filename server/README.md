@@ -31,6 +31,17 @@ Password: sirs
 6. In your `php.ini` file, search for the `file_uploads` directive, and set it to `On`:
     `file_uploads = On`
 
+#### Security
+
+Generate an RSA key pair with 2048-bit keys. For a production environment these keys should be stored outside of the web root, but for this project we'll place them in the `inc` folder and `chmod` these files with 600.
+
+```sh
+cd inc
+openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
+openssl rsa -pubout -in private_key.pem -out public_key.pem
+chmod 600 *.pem
+```
+
 ## Debugging
 
 1. Create `php-error.log` file and `chmod` it with 777.
