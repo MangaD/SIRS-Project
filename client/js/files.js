@@ -50,7 +50,7 @@ function loadFiles() {
 
 function fileDownload(el){
 	let hash = el.getAttribute('data-hash');
-	console.log(hash);
+	console.log("Hash: " + hash);
 
 	postJSONData("filesDownload.php", {
 		hash: hash,
