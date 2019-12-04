@@ -86,8 +86,6 @@ if (empty($errors)) {
 				$file_size = $_FILES['files']['size'][$i];
 				// https://stackoverflow.com/questions/173868/how-do-i-get-extract-a-file-extension-in-php
 				$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-		
-				$file = $folderPath . $file_name;
 
 				try {
 					$conn->beginTransaction();
