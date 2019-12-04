@@ -86,7 +86,8 @@
 
 		loaderStart();
 
-		postData("filesUpload.php", formData)
+		postJSONData("login.php", {
+		})
 		.then(data => {
 			if (!data.success) {
 				for (let k in data.errors) {

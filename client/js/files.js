@@ -23,7 +23,7 @@ function loadFiles() {
 				table_html += '<td>' + files[index].created_at + '</td>';
 				table_html += '<td ' +
 					' style="color: #cfc;font-size: x-large;text-shadow: 0px 4px 0px #000;">' +
-					'<i data-hash="' + files[index].hash + '" class="fas fa-download"></i></td>';
+					'<i data-hash="' + files[index].hash + '" class="fas fa-download" onclick="fileDownload(this);"></i></td>';
 
 				if (window.username === files[index].username) {
 					table_html += '<td style="color: #f77;font-size: x-large;text-shadow: 0px 4px 0px #000;">' +
@@ -44,4 +44,20 @@ function loadFiles() {
 
 		loaderEnd();
 	});
+}
+
+function fileDownload(el){
+	let hash = el.getAttribute('data-hash');
+
+	postJSONData("filesDownload.php", {
+		hash: hash,
+	})
+	.then(data => {
+		if (!data.success) {
+			console.log("Erro");
+		} else {
+			console.log("Aqui");
+			console.log(data);
+		}
+	})
 }

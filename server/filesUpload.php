@@ -3,7 +3,7 @@
 /**
  * In your "php.ini" file, search for the file_uploads directive, and set it to On:
  * file_uploads = On
- * 
+ *
  * Depending on maximum file size to allow, you can also modify:
  * upload_max_filesize = 2M
  */
@@ -43,7 +43,7 @@ if (empty($errors)) {
 	$all_files = count($_FILES['files']['tmp_name']);
 
 	for ($i = 0; $i < $all_files; $i++) {
-		
+
 		$file_name = $_FILES['files']['name'][$i];
 		// https://stackoverflow.com/questions/37008227/what-is-the-difference-between-name-and-tmp-name
 		$file_tmp = $_FILES['files']['tmp_name'][$i];
@@ -78,7 +78,7 @@ if (empty($errors)) {
 			$conn = $dbclass->getConnection();
 
 			for ($i = 0; $i < $all_files; $i++) {
-			
+
 				$file_name = $_FILES['files']['name'][$i];
 				// https://stackoverflow.com/questions/37008227/what-is-the-difference-between-name-and-tmp-name
 				$file_tmp = $_FILES['files']['tmp_name'][$i];
@@ -86,7 +86,7 @@ if (empty($errors)) {
 				$file_size = $_FILES['files']['size'][$i];
 				// https://stackoverflow.com/questions/173868/how-do-i-get-extract-a-file-extension-in-php
 				$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-		
+
 				$file = $folderPath . $file_name;
 
 				try {
@@ -115,7 +115,7 @@ if (empty($errors)) {
 						$conn->commit();
 						$countUploaded += 1;
 					}
-					
+
 				} catch(PDOException $e) {
 
 					$conn->rollBack();
