@@ -60,7 +60,7 @@ if (empty($errors)) {
 		}
 
 		if (!in_array($file_type, $validTypes)) {
-			$errors['size'] = 'File type not allowed. File name: ' . $file_name .
+			$errors['type'] = 'File type not allowed. File name: ' . $file_name .
 			'. File type: ' . $file_type;
 		}
 
