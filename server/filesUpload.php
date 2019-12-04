@@ -60,7 +60,7 @@ if (empty($errors)) {
 		}
 
 		if (!in_array($file_type, $validTypes)) {
-			$errors['size'] = 'File type not allowed. File name: ' . $file_name .
+			$errors['type'] = 'File type not allowed. File name: ' . $file_name .
 			'. File type: ' . $file_type;
 		}
 
@@ -86,8 +86,6 @@ if (empty($errors)) {
 				$file_size = $_FILES['files']['size'][$i];
 				// https://stackoverflow.com/questions/173868/how-do-i-get-extract-a-file-extension-in-php
 				$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-
-				$file = $folderPath . $file_name;
 
 				try {
 					$conn->beginTransaction();
