@@ -47,19 +47,6 @@ if (empty($errors)) {
 
 			if (($row = $stmt->fetch()) !== false) {
 				$data['path'] = $row;
-
-				/*
-				header('Content-Description: File Transfer');
-				header('Content-Type: application/octet-stream');
-				header('Content-Disposition: attachment; filename="'.basename($row).'"');
-				header('Expires: 0');
-				header('Pragma: public');
-				header('Content-Length: ' . filesize($row));
-				// Clear output buffer
-				flush();
-				readfile($row);*/
-
-				$data['success'] = true;
 			}
 		}
 		catch(PDOException $e) {
