@@ -26,7 +26,36 @@ if (!isInstalled()) {
 }
 
 if (empty($errors)) {
+
 	$json = json_decode(file_get_contents('php://input'), true);
+
+	if (!array_key_exists("hash", $json)) {
+		$errors['arguments'] = "You did not provide a hash to identify the file for download.";
+	} else {
+
+		$hash = trim($json['hash']);
+
+		try {
+			$dbclass = new DBClass();
+			$conn = $dbclass->getConnection();
+
+			$stmt = $conn->prepare(" SELECT path
+				FROM files
+				WHERE hash = :hash ");
+
+			$stmt->bindValue(':hash', $hash, PDO::PARAM_STR);
+
+			$stmt->execute();
+
+			if (($row = $stmt->fetch()) !== false) {
+				$data['path'] = $row;
+			}
+		}
+		catch(PDOException $e) {
+			$errors['exception'] = $e->getMessage();
+		}
+		$dbclass->closeConnection();
+	}
 }
 
 if ( ! empty($errors)) {
@@ -38,4 +67,5 @@ if ( ! empty($errors)) {
 }
 
 echo json_encode($data);
- ?>
+
+?>
