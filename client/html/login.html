@@ -27,9 +27,11 @@
 					placeholder="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&]).{10,}"
 					title="Mimimum 10 characters. Must include uppercase, lowercase, digit and a special character." required>
 			</div>
+			<!--
 			<div class="row align-items-center remember">
 				<input type="checkbox">Remember Me
 			</div>
+			-->
 			<div class="form-group">
 				<input type="submit" value="Log In" id="login_btn"
 					class="btn float-right login_btn">
@@ -40,9 +42,11 @@
 		<div class="d-flex justify-content-center links">
 			Don't have an account?<a id="goto_register" href="#">Register</a>
 		</div>
+		<!--
 		<div class="d-flex justify-content-center">
 			<a href="#">Forgot your password?</a>
 		</div>
+		-->
 	</div>
 </div>
 
@@ -72,7 +76,17 @@ $("#goto_register").click( function(e) {
 	e.preventDefault();
 });
 $("#login_form").submit( function(e) {
-	login();
+
+	if (!window.smartphonePassword) {
+		alert("Please set the smartphone's password in the settings.");
+	} else {
+		Smartphone.sendRequest({
+			action: "login",
+			password: window.smartphonePassword
+		});
+	}
+	
+	//login();
 	e.preventDefault();
 });
 </script>

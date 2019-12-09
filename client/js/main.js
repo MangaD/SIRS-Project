@@ -12,6 +12,9 @@ $(document).ready( function() {
 	// Set app title
 	window.app_title = "Smartphone as a security token";
 
+	//https://stackoverflow.com/questions/33342595/preloader-wont-ignore-websocket-pace-js
+	Pace.options.ajax.trackWebSockets = false;
+
 	// Load login html
 	$.get("html/login.html", function(data) {
 		login_html = data;

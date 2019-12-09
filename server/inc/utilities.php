@@ -130,7 +130,8 @@ class SessionManager
 
 		if(!isset($_SESSION['username']) || empty($_SESSION['username']) ||
 			!isset($_SESSION['uid']) || empty($_SESSION['uid'])) {
-			self::logout();
+			// Don't logout because of Diffie-Hellman key exchange
+			//self::logout();
 			return false;
 		}
 

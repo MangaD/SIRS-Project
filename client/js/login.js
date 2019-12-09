@@ -1,16 +1,24 @@
 "use strict";
 
-function login() {
+function login(ciphertext) {
 
 	loaderStart();
 
-	$("#login_alerts").html('');
+	cleanLoginErrors()
 	
-	postJSONData("login.php", {
-		username: document.getElementById("log_username").value,
-		password: document.getElementById("log_password").value,
-		twoFAresponse: (window.twoFAresponse ? window.twoFAresponse : ""),
-	})
+	// send as plaintext
+	if (!ciphertext) {
+		ciphertext = {
+			username: document.getElementById("log_username").value,
+			password: document.getElementById("log_password").value,
+			twoFAresponse: (window.twoFAresponse ? window.twoFAresponse : ""),
+		}
+	}
+
+	console.log(ciphertext);
+
+	// Login to server
+	postJSONData("login.php", ciphertext)
 	.then((data) => {
 		
 		if (!data.success) {
@@ -33,15 +41,7 @@ function login() {
 					console.log(dfa_ex);
 				}
 			} else {
-
-				for(let k in data.errors) {
-					$("#login_alerts").append(
-						'<div id="error_alert" class="alert alert-danger alert-dismissible" role="alert">' +
-						'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
-						data.errors[k] +
-						'</div>'
-					);
-				}
+				showLoginErrors(data.errors);
 			}
 		} else {
 			window.username = data.username;
@@ -54,13 +54,25 @@ function login() {
 		loaderEnd();
 	})
 	.catch((error2) => {
+		showLoginErrors([error2]);
+
+		console.log(error2);
+
+		loaderEnd();
+	});
+}
+
+function showLoginErrors(errors) {
+	for(let k in errors) {
 		$("#login_alerts").append(
 			'<div id="error_alert" class="alert alert-danger alert-dismissible" role="alert">' +
 			'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
-			'Failed to connect to the server.' +
+			errors[k] +
 			'</div>'
 		);
-		//console.log(error2);
-		loaderEnd();
-	});
+	}
+}
+
+function cleanLoginErrors() {
+	$("#login_alerts").html('');
 }

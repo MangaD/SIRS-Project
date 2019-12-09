@@ -5,7 +5,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Scanner;
 
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 
 public class Utils {
 
@@ -59,7 +63,28 @@ public class Utils {
 		Console c = System.console();
 
 		if (c == null) {
-			input = JOptionPane.showInputDialog(prompt);
+			// https://stackoverflow.com/questions/8881213/joptionpane-to-get-password
+			JPanel panel = new JPanel();
+			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+			// https://stackoverflow.com/questions/1090098/newline-in-jlabel
+			prompt = "<html>" + prompt + "</html><br />";
+			prompt = prompt.replaceAll("\n", "<br />");
+			JLabel label = new JLabel(prompt);
+			JPasswordField pass = new JPasswordField(10);
+			panel.add(label);
+			panel.add(pass);
+			String[] options = new String[]{"OK", "Cancel"};
+			int option = JOptionPane.showOptionDialog(null, panel, "Enter password",
+			                         JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+			                         null, options, options[0]);
+			if(option == 0) // pressing OK button
+			{
+			    char[] password = pass.getPassword();
+			    input = new String(password);
+			}
+			
+			// Old solution (reads plain text)
+			//input = JOptionPane.showInputDialog(prompt);
 		} else {
 			char[] in = System.console().readPassword(prompt);
 			input = String.valueOf(in);

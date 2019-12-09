@@ -1,9 +1,7 @@
 "use strict";
 
-$("#saveSettingsBtn").click( function(e) {
-
+$("#settings_form").submit( function(e) {
 	saveSettings();
-
 	e.preventDefault();
 });
 
@@ -32,6 +30,9 @@ function saveSettings() {
 	window.smartphonePort = $("#smartphonePort").val();
 	setCookie("smartphonePort", $("#smartphonePort").val(), 365*5);
 
+	window.smartphonePassword = $("#smartphonePwd").val();
+	setCookie("smartphonePassword", $("#smartphonePwd").val(), 365*5);
+
 	$('#settingsModal').modal('hide');
 }
 
@@ -53,4 +54,8 @@ function loadSettings() {
 	// Set smartphone port
 	window.smartphonePort = (getCookie("smartphonePort") ? getCookie("smartphonePort") : "4444");
 	$("#smartphonePort").val(window.smartphonePort);
+
+	// Set smartphone password
+	window.smartphonePassword = (getCookie("smartphonePassword") ? getCookie("smartphonePassword") : "");
+	$("#smartphonePwd").val(window.smartphonePassword);
 }

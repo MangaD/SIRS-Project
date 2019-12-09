@@ -56,4 +56,5 @@ chmod 600 *.pem
     ini_set("error_log", "/srv/http/server/php-error.log");
     // For testing
     error_log( "Hello, errors!" );
+    error_log(print_r($results,true));
     ```

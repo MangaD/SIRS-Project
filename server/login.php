@@ -3,6 +3,16 @@
 require_once '2fa/Web.php';
 require_once 'inc/dbclass.php';
 require_once 'inc/utilities.php';
+require_once 'DH.php';
+require_once 'AES.php';
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+ini_set("log_errors", 1);
+// Probably need to change path
+ini_set("error_log", "/srv/http/server/php-error.log");
 
 cors();
 
@@ -24,6 +34,21 @@ $json = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$json = json_decode(file_get_contents('php://input'), true);
+
+	if (array_key_exists("ciphertext", $json) && isset($_SESSION['dh']) && isset($_SESSION['aes'])) {
+		$ciphertext = base64_decode(trim($json['ciphertext']));
+		error_log("Key: " . $_SESSION['dh']->getSharedKey());
+		error_log($ciphertext);
+		$plaintext = $_SESSION['aes']->decrypt($ciphertext , $_SESSION['dh']->getSharedKey());
+		if ($plaintext === false) {
+			$errors['decrypt'] = "Decryption failed.";
+		} else {
+			$json = json_decode($plaintext, true);
+			error_log(print_r($json,true));
+			error_log($json);
+			error_log($plaintext);
+		}
+	}
 
 	if (!array_key_exists("username", $json) || !array_key_exists("password", $json)) {
 		$errors['arguments'] = "You did not provide username and/or password.";
