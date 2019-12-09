@@ -80,7 +80,7 @@ public class DiffieHellman {
         
         // Debug hash
         // https://stackoverflow.com/questions/5470219/get-md5-string-from-message-digest
-        
+        /*
         StringBuffer hexString = new StringBuffer();
         for (int i = 0; i < sharedSecretHash.length; i++) {
             if ((0xff & sharedSecretHash[i]) < 0x10) {
@@ -91,7 +91,7 @@ public class DiffieHellman {
             }
         }
         System.out.println(hexString);
-        
+        */
         
         return new SecretKeySpec(sharedSecretHash, "AES");
 	}

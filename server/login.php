@@ -37,43 +37,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 	if (array_key_exists("ciphertext", $json) && isset($_SESSION['dh']) && isset($_SESSION['aes'])) {
 		$ciphertext = base64_decode(trim($json['ciphertext']));
-		error_log("Key: " . $_SESSION['dh']->getSharedKey());
-		error_log($ciphertext);
-		$plaintext = $_SESSION['aes']->decrypt($ciphertext , $_SESSION['dh']->getSharedKey());
+		$key = $_SESSION['dh']->getSharedKey();
+		$plaintext = $_SESSION['aes']->decrypt($ciphertext , $key);
 		if ($plaintext === false) {
 			$errors['decrypt'] = "Decryption failed.";
 		} else {
 			$json = json_decode($plaintext, true);
-			error_log(print_r($json,true));
-			error_log($json);
-			error_log($plaintext);
 		}
 	}
 
-	if (!array_key_exists("username", $json) || !array_key_exists("password", $json)) {
-		$errors['arguments'] = "You did not provide username and/or password.";
-	} else {
+	if (empty($errors)) {
 
-		$username = trim($json['username']);
-		$password = trim($json['password']);
+		if (!array_key_exists("username", $json) || !array_key_exists("password", $json)) {
+			$errors['arguments'] = "You did not provide username and/or password.";
+		} else {
 
-		if (empty($username)) {
-			$errors['user'] = 'Please enter username.';
-		} else if (strlen($username) < 6 || strlen($username) > 12) {
-			$errors['user'] = 'Username must have 6 to 12 characters.';
-		} else if (!preg_match("/^[a-zA-Z0-9-_]{6,12}$/",$username)) {
-			$errors['user'] = "Username must contain only alphanumeric, hyphen or underscore.";
+			$username = trim($json['username']);
+			$password = trim($json['password']);
+
+			if (empty($username)) {
+				$errors['user'] = 'Please enter username.';
+			} else if (strlen($username) < 6 || strlen($username) > 12) {
+				$errors['user'] = 'Username must have 6 to 12 characters.';
+			} else if (!preg_match("/^[a-zA-Z0-9-_]{6,12}$/",$username)) {
+				$errors['user'] = "Username must contain only alphanumeric, hyphen or underscore.";
+			}
+
+			if (empty($password)) {
+				$errors['pwd'] = 'Please enter your password.';
+			} else if (strlen($password) < 10) {
+				$errors['pwd'] = 'Password must have a minimum of 10 characters.';
+			} else if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&]).{10,}$/",$password)) {
+				$errors['pwd'] = "Password must contain uppercase, lowercase, digit and a special character.";
+			}
 		}
-
-		if (empty($password)) {
-			$errors['pwd'] = 'Please enter your password.';
-		} else if (strlen($password) < 10) {
-			$errors['pwd'] = 'Password must have a minimum of 10 characters.';
-		} else if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&]).{10,}$/",$password)) {
-			$errors['pwd'] = "Password must contain uppercase, lowercase, digit and a special character.";
-		}
-	}
-	
+	}	
 } else {
 	$errors['post'] = 'Must send data over POST request method.';
 }

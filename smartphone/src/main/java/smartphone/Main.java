@@ -22,6 +22,7 @@ public class Main {
     public static Database db = null;
     public static String db_name = "smartphone.db";
     
+    public static SmartphoneServer smartphoneServer;
     public static int port = 4444;
     
     public static String pubKeyName = "publicKey.pub";
@@ -48,7 +49,8 @@ public class Main {
         }
 
         // Listen to incoming connections
-        new SmartphoneServer(port).start();
+        smartphoneServer = new SmartphoneServer(port);
+        smartphoneServer.start();
     }
     
     public static void createKeys() throws NoSuchAlgorithmException, InvalidKeyException,

@@ -100,3 +100,4 @@ function loaderEnd() {
 		document.getElementById("loader").style.display = "none";
 	} catch(e) {}
 }
+

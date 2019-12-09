@@ -1,5 +1,1 @@
-<FilesMatch "\.(txt|pdf)$" >
-    Order allow,deny
-    Allow from all
-    Satisfy any
-</FilesMatch>
+deny from all

@@ -48,11 +48,9 @@ public class SmartphoneServer extends WebSocketServer {
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
         try {
 			conns.add(new Client(conn));
-			System.out.println("New connection from " + 
-		        conn.getRemoteSocketAddress().getAddress().getHostAddress());
+			System.out.println("New connection from " + getAddress(conn));
 		} catch (Exception e) {
-			System.out.println("Failed to create client from " + 
-			        conn.getRemoteSocketAddress().getAddress().getHostAddress() +
+			System.out.println("Failed to create client from " + getAddress(conn) +
 			        " with: " + e.getMessage());
 			removeClient(conn);
 		}
@@ -61,8 +59,7 @@ public class SmartphoneServer extends WebSocketServer {
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
     	removeClient(conn);
-        System.out.println("Closed connection to " + 
-        		conn.getRemoteSocketAddress().getAddress().getHostAddress());
+        System.out.println("Closed connection to " + getAddress(conn));
     }
 
     @Override
@@ -95,6 +92,15 @@ public class SmartphoneServer extends WebSocketServer {
         	
         	if (action.equals("login")) {
         		
+        		System.out.println("Received login request from: " + getAddress(conn));
+        		
+        		if (c.isAuthenticated) {
+        			response.put("success", true);
+        			response.put("message", "Authentication succeeeded.");
+        			conn.send(response.toString());
+        			return;
+        		}
+        		
         		if (!jObj.has("password")) {
         			response.put("success", false);
         			response.put("message", "Please input a password.");
@@ -118,6 +124,8 @@ public class SmartphoneServer extends WebSocketServer {
         			removeClient(conn);
         		}
         	} else if (action.equals("dh")) {
+        		
+        		System.out.println("Received DH exchange request from: " + getAddress(conn));
         		
         		if (!jObj.has("key") || !jObj.has("p") ||
         				!jObj.has("g") || !jObj.has("l")) {
@@ -145,9 +153,17 @@ public class SmartphoneServer extends WebSocketServer {
         		conn.send(response.toString());
         		
         	} else if (action.equals("encrypt")) {
+        		
+        		System.out.println("Received encrypt request from: " + getAddress(conn));
+        		
         		if (!jObj.has("message")) {
         			response.put("success", false);
-        			response.put("message", "DH requires a public key, p, g and l values.");
+        			response.put("message", "You did not provide a message to encrypt.");
+        			conn.send(response.toString());
+        			return;
+        		} else if (c.key == null) {
+        			response.put("success", false);
+        			response.put("message", "You did not make a DH exchange.");
         			conn.send(response.toString());
         			return;
         		}
@@ -172,8 +188,7 @@ public class SmartphoneServer extends WebSocketServer {
     @Override
     public void onError(WebSocket conn, Exception ex) {
     	removeClient(conn);
-        System.out.println("ERROR from " +
-        		conn.getRemoteSocketAddress().getAddress().getHostAddress());
+        System.out.println("ERROR from " + getAddress(conn));
     }
 
     @Override
@@ -202,5 +217,9 @@ public class SmartphoneServer extends WebSocketServer {
     			break;
     		}
     	}
+    }
+    
+    private String getAddress(WebSocket conn) {
+    	return conn.getRemoteSocketAddress().getAddress().getHostAddress();
     }
 }

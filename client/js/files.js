@@ -50,7 +50,7 @@ function loadFiles() {
 
 function fileDownload(el){
 	let hash = el.getAttribute('data-hash');
-	console.log("Hash: " + hash);
+	console.log(hash);
 
 	postJSONData("filesDownload.php", {
 		hash: hash,
@@ -59,25 +59,8 @@ function fileDownload(el){
 		if (!data.success) {
 			console.log("Erro");
 		} else {
-			console.log(data['path'].path);
-
-			var fileName = data['path'].path.split('/').pop();
-			console.log(fileName);
-			fetch('../server/' + data['path'].path)
-				  .then(resp => resp.blob())
-				  .then(blob => {
-				    const url = window.URL.createObjectURL(blob);
-				    const a = document.createElement('a');
-				    a.style.display = 'none';
-				    a.href = url;
-				    // the filename you want
-				    a.download = fileName;
-				    document.body.appendChild(a);
-				    a.click();
-				    window.URL.revokeObjectURL(url);
-				    alert('Your file has downloaded');
-				  })
-				  .catch(() => alert('File not downloaded'));
+			console.log("Aqui");
+			console.log(data);
 		}
 	})
 }

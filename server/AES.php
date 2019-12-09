@@ -24,7 +24,7 @@ class AES {
 		}
 		$iv = openssl_random_pseudo_bytes($ivlen);
 		$ciphertext = openssl_encrypt($plainText, $this->cipher, $key,
-			$options=(OPENSSL_RAW_DATA | OPENSSL_NO_PADDING), $iv, $tag, $tag_length=$this->taglength*8);
+			$options=(OPENSSL_RAW_DATA | OPENSSL_NO_PADDING), $iv, $tag, $tag_length=$this->taglength);
 		// In Java the tag is unfortunately added at the end of the ciphertext. 
 		// https://stackoverflow.com/questions/23864440/aes-gcm-implementation-with-authentication-tag-in-java
 		return $iv . $ciphertext . $tag;
@@ -39,7 +39,7 @@ class AES {
 		$tag = substr($ciphertext, -$this->taglength);
 		$ciphertext = substr($ciphertext, $ivlen, -$this->taglength);
 		return openssl_decrypt($ciphertext, $this->cipher, $key,
-			$options=(OPENSSL_RAW_DATA | OPENSSL_NO_PADDING), $iv, $tag, $tag_length=$this->taglength*8);
+			$options=(OPENSSL_RAW_DATA | OPENSSL_NO_PADDING), $iv, $tag);
 	}
 
 }

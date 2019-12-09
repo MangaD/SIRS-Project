@@ -28,7 +28,7 @@ class Smartphone {
 
 						loaderStart();
 
-						postJSONData("DH.php", {
+						postJSONData("DHExchange.php", {
 							request: ''
 						})
 						.then((data) => {
@@ -65,7 +65,7 @@ class Smartphone {
 
 					loaderStart();
 
-					postJSONData("DH.php", {
+					postJSONData("DHExchange.php", {
 						request: response.pubKeyPEM
 					})
 					.then((data) => {
@@ -76,9 +76,9 @@ class Smartphone {
 								Smartphone.sendRequest({
 									action: "encrypt",
 									do: "login",
-									message: "{username: \"" + document.getElementById("log_username").value +
-									"\", password: \"" + document.getElementById("log_password").value +
-									"\",twoFAresponse: \"" + (window.twoFAresponse ? window.twoFAresponse : "") + "\"}"
+									message: '{"username": "' + document.getElementById("log_username").value +
+									'", "password": "' + document.getElementById("log_password").value +
+									'", "twoFAresponse": "' + (window.twoFAresponse ? window.twoFAresponse : "") + '"}'
 								});
 							}
 						}

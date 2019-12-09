@@ -15,8 +15,6 @@ function login(ciphertext) {
 		}
 	}
 
-	console.log(ciphertext);
-
 	// Login to server
 	postJSONData("login.php", ciphertext)
 	.then((data) => {

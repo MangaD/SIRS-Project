@@ -10,4 +10,4 @@
    
 2. **Confidentiality**
 
-    Despite messages being encrypted it is still visible what resources we're requesting (e.g. login.php, files.php...)
+    Despite messages being encrypted it is still visible what resources we're requesting (e.g. login.php, files.php...). This could be solved by having one PHP file for receiving all of the messages. Still, it is always possible to see that a communication between the client and server is going on, even if it is not possible to know the content.
