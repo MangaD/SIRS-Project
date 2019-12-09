@@ -10,18 +10,20 @@ $data = array();
 
 if (!isInstalled()) {
 	$errors['not_installed'] = 'Server is not installed.';
-}
-elseif (SessionManager::isLoggedIn()) {
+} elseif (SessionManager::isLoggedIn()) {
 	$errors['already_logged'] = true;
 	$data['username'] = $_SESSION['username'];
 	$data['uid'] = $_SESSION['uid'];
+} elseif ($_SERVER['REQUEST_METHOD'] != 'POST') {
+	$errors['post'] = 'Must send data over POST request method.';
 }
 
 $username = $password = $confirm_pass = "";
 
 $json = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (empty($errors)) {
+
 	$json = json_decode(file_get_contents('php://input'), true);
 
 	$username = trim($json['username']);
@@ -45,8 +47,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	} else if ($password !== $confirm_pass) {
 		$errors['pwd'] = "Passwords don't match.";
 	}
-} else {
-	$errors['post'] = 'Must send data over POST request method.';
 }
 
 if (empty($errors)) {

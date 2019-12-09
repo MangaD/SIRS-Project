@@ -1,8 +1,8 @@
 <?php
 
 require_once 'inc/utilities.php';
-require_once 'DH.php';
-require_once 'AES.php';
+require_once 'inc/DH.php';
+require_once 'inc/AES.php';
 
 cors();
 

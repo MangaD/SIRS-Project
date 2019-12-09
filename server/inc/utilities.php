@@ -1,6 +1,8 @@
 <?php
 
 require_once 'config.php';
+require_once 'DH.php';
+require_once 'AES.php';
 
 function isInstalled() {
 
@@ -197,6 +199,23 @@ class SessionManager
 			return false;
 
 		return true;
+	}
+}
+
+function decryptWithSessionKey($ciphertext) {
+
+	if (!isset($_SESSION['dh']) || !isset($_SESSION['aes'])) {
+		throw new Exception("Session key not set.");
+	}
+
+	$key = $_SESSION['dh']->getSharedKey();
+
+	$plaintext = $_SESSION['aes']->decrypt($ciphertext , $key);
+
+	if ($plaintext === false) {
+		throw new Exception("Decryption failed.");
+	} else {
+		return $plaintext;
 	}
 }
 

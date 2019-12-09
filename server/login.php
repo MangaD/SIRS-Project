@@ -3,8 +3,6 @@
 require_once '2fa/Web.php';
 require_once 'inc/dbclass.php';
 require_once 'inc/utilities.php';
-require_once 'DH.php';
-require_once 'AES.php';
 
 cors();
 
@@ -29,14 +27,13 @@ if (empty($errors)) {
 
 	$json = json_decode(file_get_contents('php://input'), true);
 
-	if (array_key_exists("ciphertext", $json) && isset($_SESSION['dh']) && isset($_SESSION['aes'])) {
+	if (array_key_exists("ciphertext", $json)) {
 		$ciphertext = base64_decode(trim($json['ciphertext']));
-		$key = $_SESSION['dh']->getSharedKey();
-		$plaintext = $_SESSION['aes']->decrypt($ciphertext , $key);
-		if ($plaintext === false) {
-			$errors['decrypt'] = "Decryption failed.";
-		} else {
+		try {
+			$plaintext = decryptWithSessionKey($ciphertext);
 			$json = json_decode($plaintext, true);
+		} catch(Exception $e) {
+			$errors['decrypt'] = $e->getMessage();
 		}
 	}
 
