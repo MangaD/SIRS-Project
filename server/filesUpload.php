@@ -90,8 +90,8 @@ if (empty($errors)) {
 				try {
 					$conn->beginTransaction();
 
-					$stmt = $conn->prepare(" INSERT INTO files(owner, name, path, hash) " .
-						" VALUES (:owner, :name, :path, :hash) ");
+					$stmt = $conn->prepare(" INSERT INTO files(owner, name, path, hash, size) " .
+						" VALUES (:owner, :name, :path, :hash, :size) ");
 
 					$fileHash = hash_file('sha256', $file_tmp);
 
@@ -101,6 +101,7 @@ if (empty($errors)) {
 					$stmt->bindValue(':name', $file_name, PDO::PARAM_STR);
 					$stmt->bindValue(':path', $new_file_name, PDO::PARAM_STR);
 					$stmt->bindValue(':hash', $fileHash, PDO::PARAM_STR);
+					$stmt->bindValue(':size', $file_size, PDO::PARAM_INT);
 
 					$stmt->execute();
 

@@ -2,20 +2,14 @@
 require_once 'inc/utilities.php';
 require_once 'inc/dbclass.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-ini_set("log_errors", 1);
-// Probably need to change path
-ini_set("error_log", "php-error.log");
-
 cors();
 
 $error = array();
 $data = array();
 
 $json = "";
+
+$name = $hash = $path = "";
 
 if (!isInstalled()) {
 	$errors['not_installed'] = $app_title . ' server is not installed.';
@@ -29,17 +23,18 @@ if (empty($errors)) {
 
 	$json = json_decode(file_get_contents('php://input'), true);
 
-	if (!array_key_exists("hash", $json)) {
-		$errors['arguments'] = "You did not provide a hash to identify the file for download.";
+	if (!array_key_exists("hash", $json) || !array_key_exists("name", $json)) {
+		$errors['arguments'] = "You did not provide a hash and/or name for the file to download.";
 	} else {
 
+		$name = trim($json['name']);
 		$hash = trim($json['hash']);
 
 		try {
 			$dbclass = new DBClass();
 			$conn = $dbclass->getConnection();
 
-			$stmt = $conn->prepare(" SELECT path
+			$stmt = $conn->prepare(" SELECT name, path
 				FROM files
 				WHERE hash = :hash ");
 
@@ -48,7 +43,10 @@ if (empty($errors)) {
 			$stmt->execute();
 
 			if (($row = $stmt->fetch()) !== false) {
-				$data['path'] = $row;
+				$data['name'] = $row["name"];
+				$path = $row["path"];
+			} else {
+				$errors['not_exists'] = "File '" . $name . "' does not exist in the database.";
 			}
 		}
 		catch(PDOException $e) {
@@ -58,14 +56,39 @@ if (empty($errors)) {
 	}
 }
 
+if (!file_exists($path)) {
+	$errors['not_exists'] = "File '" . $name . "' does not exist in the database.";
+}
+
 if ( ! empty($errors)) {
 	$data['errors']  = $errors;
 	$data['success'] = false;
 } else {
-	$data['message'] = "Download";
+	$data['message'] = "Download success.";
 	$data['success'] = true;
 }
 
-echo json_encode($data);
+if ($_SERVER['HTTP_ACCEPT'] === 'application/json') {
+	echo json_encode($data);
+} else if ($data['success'] === true) {
+	// https://serverfault.com/questions/316814/php-serve-a-file-for-download-without-providing-the-direct-link
+	// https://www.php.net/manual/en/function.readfile.php
+
+	header('Content-Description: File Transfer');
+	header('Content-Type: application/octet-stream');
+	header('Content-Disposition: attachment; filename="'.$path.'"');
+	header('Expires: 0');
+	header('Cache-Control: must-revalidate');
+	header('Pragma: public');
+	header('Content-Length: ' . filesize($path));
+
+	// https://stackoverflow.com/questions/8041564/php-readfile-adding-extra-bytes-to-downloaded-file
+	// add these two lines
+	ob_clean();   // discard any data in the output buffer (if possible)
+	flush();      // flush headers (if possible)
+
+	// Get file from path
+	readfile($path);
+}
 
 ?>

@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `files` (
 	`owner` int NOT NULL,
 	`fid` int NOT NULL AUTO_INCREMENT,
 	`name` varchar(100) NOT NULL,
+	`size` int NOT NULL,
 	`path` varchar(200) NOT NULL,
 	`hash` varchar(64) NOT NULL,
 	`created_at` datetime DEFAULT CURRENT_TIMESTAMP,

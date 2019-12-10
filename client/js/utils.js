@@ -38,6 +38,23 @@ function postData(url, data) {
 	.then(response => response.json())
 }
 
+function postDownload(url, data) {
+	return fetch(`${window.serverAddress}/${url}`, {
+		body: JSON.stringify(data),
+		cache: 'no-cache',
+		credentials: 'include',
+		headers: {
+			'User-Agent': window.app_title,
+			'Accept': 'application/octet-stream',
+			'Content-Type': 'application/json; charset=utf-8',
+		},
+		method: 'POST',
+		mode: 'cors',
+		referrer: 'no-referrer',
+	})
+	.then(response => response.blob())
+}
+
 
 /**
  * Settings utilities start
