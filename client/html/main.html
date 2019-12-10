@@ -9,17 +9,25 @@
 			</button>
 		</div>
 
-		<div style="float:right;">
+		<div style="float:left;margin-left: 10px;">
 			<div class="custom-file" style="display: none;">
 				<!--
 					onclick event sets value to null so that onchange can trigger for the same file
 					https://stackoverflow.com/questions/4109276/how-to-detect-input-type-file-change-for-the-same-file
 				-->
-				<input type="file" class="custom-file-input" id="customFile" onclick="this.value=null;" multiple>
-				<label class="custom-file-label" for="customFile">Choose file</label>
+				<input type="file" class="custom-file-input" id="uploadFileBtn" onclick="this.value=null;" multiple>
+				<label class="custom-file-label" for="uploadFileBtn">Choose file</label>
 			</div>
 
-			<input type="button" value="Upload" class="btn btn-default" onclick="document.getElementById('customFile').click();" />
+			<input type="button" value="Upload" class="btn btn-default" onclick="document.getElementById('uploadFileBtn').click();" />
+		</div>
+
+		<div style="float:right;">
+			<div class="custom-file" style="display: none;">
+				<input type="file" class="custom-file-input" id="viewFileBtn" onclick="this.value=null;">
+				<label class="custom-file-label" for="viewFileBtn">Choose file</label>
+			</div>
+			<input type="button" value="View file" class="btn btn-default" onclick="document.getElementById('viewFileBtn').click();" />
 		</div>
 
 		<div class="table-responsive">
@@ -59,6 +67,25 @@
 </div>
 
 
+<div class="modal" id="viewFileModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<!-- To be filled -->
+			</div>
+			<div class="modal-body">
+				<textarea id="viewFileTextarea" readonly>
+					<!-- To be filled -->
+				</textarea>
+			</div>
+			<div class="modal-footer" style="text-align: center;font-size: smaller;display: block;">
+				<!-- To be filled -->
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <script>
 	$('#logoutBtn').click(function(e) {
 		logout();
@@ -70,7 +97,46 @@
 		e.preventDefault();
 	});
 
-	$(".custom-file-input").on("change", function() {
+	// https://stackoverflow.com/questions/15284625/how-to-get-contents-of-a-file-selected-with-browse-button
+	// https://stackoverflow.com/questions/31746837/reading-uploaded-text-file-contents-in-html
+	$('#viewFileBtn').on("change", function(e) {
+		
+		var files = e.target.files; // FileList object
+
+		for (var i = 0, f; f = files[i]; i++) {
+			// Only process txt files.
+			if (f.type !== 'text/plain') {
+				alert(`File type '${f.type}' not supported.`);
+				continue;
+			}
+			
+			const reader = new FileReader();
+			reader.fileName = f.name;
+			reader.lastModifiedDate = f.lastModifiedDate;
+			reader.fileSize = f.size;
+			reader.fileType = f.type;
+
+			reader.onload = event => {
+				//console.log(event.target.result); // desired file content
+				// https://stackoverflow.com/questions/24245105/how-to-get-the-filename-from-the-javascript-filereader
+				$('#viewFileModal .modal-header').html(event.target.fileName);
+				$('#viewFileTextarea').html(event.target.result);
+				$('#viewFileModal').modal('show');
+				let footer = "<strong>Type:</strong> " + event.target.fileType;
+				footer += " <strong>Size:</strong> " + event.target.fileSize + " B";
+				footer += " <strong>Last modification:</strong> " + event.target.lastModifiedDate;
+				$('#viewFileModal .modal-footer').html(footer);
+			 }
+			reader.onerror = error => reject(error);
+			reader.onloadstart = () => loaderStart();
+			reader.onloadend = () => loaderEnd();
+			reader.readAsText(f); // you could also read images and other binaries
+		}
+
+		e.preventDefault();
+	});
+
+	$("#uploadFileBtn").on("change", function() {
 		// Add the following code if you want the name of the file appear on select
 		//var fileName = $(this).val().split("\\").pop();
 		//$(this).siblings(".custom-file-label").addClass("selected").html(fileName);

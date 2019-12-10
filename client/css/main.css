@@ -337,3 +337,18 @@ input:focus{
 	background-color: #112;
 }
 
+#viewFileTextarea {
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	height: 400px;
+	background: transparent;
+	color: #fff !important;
+	color: var(--font-color) !important;
+	border: none;
+}
+#viewFileTextarea:focus {
+	border: none;
+	outline: none;
+}

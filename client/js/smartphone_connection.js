@@ -5,7 +5,7 @@ var ws;
 class Smartphone {
 
 	static connectToSmartphone() {
-		ws = new WebSocket('ws://' + window.smartphoneAddress + ':' + window.smartphonePort);
+		ws = new WebSocket(`ws://${window.smartphoneAddress}:${window.smartphonePort}`);
 
 		ws.onopen = function() {
 			console.log('Connected to smartphone.');
@@ -76,9 +76,9 @@ class Smartphone {
 								Smartphone.sendRequest({
 									action: "encrypt",
 									do: "login",
-									message: '{"username": "' + document.getElementById("log_username").value +
-									'", "password": "' + document.getElementById("log_password").value +
-									'", "twoFAresponse": "' + (window.twoFAresponse ? window.twoFAresponse : "") + '"}'
+									message: `{"username": "${document.getElementById("log_username").value}",
+									"password": "${document.getElementById("log_password").value}",
+									"twoFAresponse": "${window.twoFAresponse ? window.twoFAresponse : ""}"}`
 								});
 							}
 						}
