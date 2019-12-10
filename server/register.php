@@ -113,7 +113,28 @@ if ( ! empty($errors)) {
 	$data['success'] = true;
 }
 
-echo json_encode($data);
+$response_json_data = '';
+
+if ($usingSecureChannel === true) {
+	try {
+		$ciphertext = base64_encode(encryptWithSessionKey(json_encode($data)));
+		$data = array();
+		$data['success'] = true;
+		$data['ciphertext'] = $ciphertext;
+		$response_json_data = json_encode($data);
+	} catch(Exception $e) {
+		$data = array();
+		$error = array();
+		$errors['encrypt'] = $e->getMessage();
+		$data['errors']  = $errors;
+		$data['success'] = false;
+		$response_json_data = json_encode($data);
+	}
+} else {
+	$response_json_data = json_encode($data);
+}
+
+echo $response_json_data;
 
 ?>
 
