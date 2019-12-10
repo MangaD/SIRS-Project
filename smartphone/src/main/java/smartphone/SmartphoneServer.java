@@ -86,14 +86,18 @@ public class SmartphoneServer extends WebSocketServer {
 			response.put("action", action);
 			
 			// do: What is the action (eg. login, DH) for? login, register...
+			String doAction = "";
 			if (jObj.has("do")) {
-				response.put("do", jObj.getString("do"));
+				doAction = jObj.getString("do");
+				response.put("do", doAction);
 			}
 			
 			if (action.equals("login")) {
-				
-				System.out.println("Received login request from: " + getAddress(conn));
-				
+
+				System.out.println("Received login request " +
+					(doAction.isEmpty() ? "" : "with do='" + doAction + "' ") +
+					"from: " + getAddress(conn));
+
 				if (c.isAuthenticated) {
 					response.put("success", true);
 					response.put("message", "Authentication succeeeded.");
@@ -125,7 +129,9 @@ public class SmartphoneServer extends WebSocketServer {
 				}
 			} else if (action.equals("dh")) {
 				
-				System.out.println("Received DH exchange request from: " + getAddress(conn));
+				System.out.println("Received DH exchange request " +
+					(doAction.isEmpty() ? "" : "with do='" + doAction + "' ") +
+					"from: " + getAddress(conn));
 				
 				if (!jObj.has("key") || !jObj.has("p") ||
 						!jObj.has("g") || !jObj.has("l")) {
@@ -154,7 +160,9 @@ public class SmartphoneServer extends WebSocketServer {
 				
 			} else if (action.equals("encrypt")) {
 
-				System.out.println("Received encrypt request from: " + getAddress(conn));
+				System.out.println("Received encrypt request " +
+					(doAction.isEmpty() ? "" : "with do='" + doAction + "' ") +
+					"from: " + getAddress(conn));
 				
 				if (!jObj.has("message")) {
 					response.put("success", false);
@@ -181,7 +189,9 @@ public class SmartphoneServer extends WebSocketServer {
 				conn.send(response.toString());
 			} else if (action.equals("decrypt")) {
 
-				System.out.println("Received decrypt request from: " + getAddress(conn));
+				System.out.println("Received decrypt request " +
+					(doAction.isEmpty() ? "" : "with do='" + doAction + "' ") +
+					"from: " + getAddress(conn));
 
 				if (!jObj.has("message")) {
 					response.put("success", false);

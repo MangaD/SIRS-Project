@@ -11,3 +11,7 @@
 2. **Confidentiality**
 
     Despite messages being encrypted it is still visible what resources we're requesting (e.g. login.php, files.php...). This could be solved by having one PHP file for receiving all of the messages. Still, it is always possible to see that a communication between the client and server is going on, even if it is not possible to know the content.
+    
+3. **JavaScript Crypto**
+
+   We considered using the smartphone to take care of all the cryptographic aspects of the client's needs, but later found out that JavaScript has a cryptographic API called [SubtleCrypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto).

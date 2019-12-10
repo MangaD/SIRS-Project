@@ -37,7 +37,9 @@ public class SymmetricEncryption_AES_GCM {
 	 * Symmetric encryption
 	 */
 	public static SecretKey generateAESKey() throws NoSuchAlgorithmException {
-		return KeyGenerator.getInstance("AES").generateKey();
+		KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+		keyGenerator.init(AES_KEY_SIZE);
+		return keyGenerator.generateKey();
 	}
 
 	public static byte[] secretKeyToByteArray(SecretKey secretKey) {
