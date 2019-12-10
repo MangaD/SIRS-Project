@@ -30,11 +30,11 @@ function loadFiles() {
 				}
 
 				table_html += '<tr>';
-				table_html += '<td>' + files[index].name + '</td>';
-				table_html += '<td>' + files[index].username + '</td>';
-				table_html += '<td>' + files[index].hash + '</td>';
-				table_html += '<td>' + fileSizeString + '</td>';
-				table_html += '<td>' + files[index].created_at + '</td>';
+				table_html += '<td title="' + files[index].name + '">' + files[index].name + '</td>';
+				table_html += '<td title="' + files[index].username + '">' + files[index].username + '</td>';
+				table_html += '<td title="' + files[index].hash + '">' + files[index].hash + '</td>';
+				table_html += '<td title="' + files[index].fileSizeString + '">' + fileSizeString + '</td>';
+				table_html += '<td title="' + files[index].created_at + '">' + files[index].created_at + '</td>';
 				table_html += '<td ' +
 					' style="color: #cfc;font-size: x-large;text-shadow: 0px 4px 0px #000;">' +
 					'<i data-name="' + files[index].name + '" data-hash="' + files[index].hash + '" class="fas fa-download" ' +

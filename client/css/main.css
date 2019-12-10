@@ -337,6 +337,9 @@ input:focus{
 	background-color: #112;
 }
 
+/**
+ * Files CSS
+ */
 #filesTable {
 	white-space: nowrap;
 	overflow: hidden;
@@ -348,6 +351,27 @@ input:focus{
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.grip{
+	width:13px;
+	height:10px;
+	margin-top:14px;
+	background-image:url('../img/grip.png');
+	margin-left:-7px;
+	position:relative;
+	z-index:88;
+	cursor:col-resize;
+}
+.grip:hover{
+	background-position-x:-14px;
+}
+.JCLRLastGrip .grip{
+	background-position-y:-9px;
+	left:-2px;
+}
+.dragging .grip{
+	background-position-x:-20px;
 }
 
 #viewFileTextarea {
