@@ -152,12 +152,12 @@
 		e.preventDefault();
 	});
 
-	$("#uploadFileBtn").on("change", function() {
+	$("#uploadFileBtn").on("change", function(e) {
 		// Add the following code if you want the name of the file appear on select
 		//var fileName = $(this).val().split("\\").pop();
 		//$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 
-		const files = document.querySelector('[type=file]').files;
+		const files = e.target.files; // FileList object
 		const formData = new FormData();
 
 		for (let i = 0; i < files.length; i++) {

@@ -112,20 +112,26 @@ function generateFilesTable(files) {
 			fileSizeString = Math.round(fileSizeInt / 1024 / 1024 / 1024* 100) / 100 + " GiB";
 		}
 
+		fileSizeString = htmlEntities(fileSizeString);
+		const fileName = htmlEntities(files[index].name);
+		const fileOwnerName = htmlEntities(files[index].username);
+		const fileHash = htmlEntities(files[index].hash);
+		const fileCreatedAt = htmlEntities(files[index].created_at);
+
 		table_html += '<tr>';
-		table_html += '<td title="' + files[index].name + '">' + files[index].name + '</td>';
-		table_html += '<td title="' + files[index].username + '">' + files[index].username + '</td>';
-		table_html += '<td title="' + files[index].hash + '">' + files[index].hash + '</td>';
-		table_html += '<td title="' + files[index].fileSizeString + '">' + fileSizeString + '</td>';
-		table_html += '<td title="' + files[index].created_at + '">' + files[index].created_at + '</td>';
+		table_html += '<td title="' + fileName + '">' + fileName + '</td>';
+		table_html += '<td title="' + fileOwnerName + '">' + fileOwnerName + '</td>';
+		table_html += '<td title="' + fileHash + '">' + fileHash + '</td>';
+		table_html += '<td title="' + fileSizeString + '">' + fileSizeString + '</td>';
+		table_html += '<td title="' + fileCreatedAt + '">' + fileCreatedAt + '</td>';
 		table_html += '<td ' +
 			' style="color: #cfc;font-size: x-large;text-shadow: 0px 4px 0px #000;">' +
-			'<i data-name="' + files[index].name + '" data-hash="' + files[index].hash + '" class="fas fa-download" ' +
+			'<i data-name="' + fileName + '" data-hash="' + fileHash + '" class="fas fa-download" ' +
 			'style="cursor:pointer;" onclick="fileDownload(this);"></i></td>';
 
 		if (window.username === files[index].username) {
 			table_html += '<td style="color: #f77;font-size: x-large;text-shadow: 0px 4px 0px #000;">' +
-				'<i data-name="' + files[index].name + '" data-hash="' + files[index].hash + '" class="fas fa-trash-alt" ' +
+				'<i data-name="' + fileName + '" data-hash="' + fileHash + '" class="fas fa-trash-alt" ' +
 				'style="cursor:pointer;" ></i></td>';
 		} else {
 			table_html += '<td>&nbsp;</td>';
@@ -134,7 +140,7 @@ function generateFilesTable(files) {
 	}
 
 	if (files.length === 0) {
-		table_html += '<td colspan="6" style="text-align:center;">No files in the server.</td>';
+		table_html += '<td colspan="7" style="text-align:center;">No files in the server.</td>';
 	}
 
 	$('#filesTable > tbody').html(table_html);
