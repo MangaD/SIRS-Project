@@ -76,7 +76,18 @@ $("#goto_login").click( function(e) {
 	e.preventDefault();
 });
 $("#register_form").submit( function(e) {
-	register();
+
+	if (!window.smartphonePassword) {
+		alert("Please set the smartphone's password in the settings.");
+	} else {
+		Smartphone.sendRequest({
+			action: "login",
+			password: window.smartphonePassword,
+			do: "register"
+		});
+	}
+
+	//register();
 	e.preventDefault();
 });
 </script>

@@ -82,7 +82,8 @@ $("#login_form").submit( function(e) {
 	} else {
 		Smartphone.sendRequest({
 			action: "login",
-			password: window.smartphonePassword
+			password: window.smartphonePassword,
+			do: "login"
 		});
 	}
 	

@@ -93,7 +93,10 @@ if (empty($errors)) {
 
 					$resp = Duo\Web::verifyResponse(IKEY, SKEY, AKEY, $sig_response);
 					if ($resp === $username) {
-						SessionManager::sessionStart();
+						// Note: SessionManager::isLoggedIn() already starts the session and does
+						// not destroy it because of the DH exchange
+
+						// SessionManager::sessionStart();
 						$_SESSION['username'] = $username;
 						$_SESSION['uid'] = $row["uid"];
 						$data['username'] = $username;

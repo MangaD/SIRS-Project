@@ -26,26 +26,45 @@ if (empty($errors)) {
 
 	$json = json_decode(file_get_contents('php://input'), true);
 
-	$username = trim($json['username']);
-	$password = trim($json['password']);
-	$confirm_pass = trim($json['confirm_password']);
-
-	if (empty($username)) {
-		$errors['user'] = 'Please enter username.';
-	} else if (strlen($username) < 6 || strlen($username) > 12) {
-		$errors['user'] = 'Username must have 6 to 12 characters.';
-	} else if (!preg_match("/^[a-zA-Z0-9-_]{6,12}$/",$username)) {
-		$errors['user'] = "Username must contain only alphanumeric, hyphen or underscore.";
+	if (array_key_exists("ciphertext", $json)) {
+		$ciphertext = base64_decode(trim($json['ciphertext']));
+		try {
+			$plaintext = decryptWithSessionKey($ciphertext);
+			$json = json_decode($plaintext, true);
+		} catch(Exception $e) {
+			$errors['decrypt'] = $e->getMessage();
+		}
 	}
 
-	if (empty($password)) {
-		$errors['pwd'] = 'Please enter your password.';
-	} else if (strlen($password) < 10) {
-		$errors['pwd'] = 'Password must have a minimum of 10 characters.';
-	} else if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&]).{10,}$/",$password)) {
-		$errors['pwd'] = "Password must contain uppercase, lowercase, digit and a special character.";
-	} else if ($password !== $confirm_pass) {
-		$errors['pwd'] = "Passwords don't match.";
+	if (empty($errors)) {
+
+		if (!array_key_exists("username", $json) || !array_key_exists("password", $json) ||
+				!array_key_exists("confirm_password", $json)) {
+			$errors['arguments'] = "You did not provide username and/or password.";
+		} else {
+
+			$username = trim($json['username']);
+			$password = trim($json['password']);
+			$confirm_pass = trim($json['confirm_password']);
+
+			if (empty($username)) {
+				$errors['user'] = 'Please enter username.';
+			} else if (strlen($username) < 6 || strlen($username) > 12) {
+				$errors['user'] = 'Username must have 6 to 12 characters.';
+			} else if (!preg_match("/^[a-zA-Z0-9-_]{6,12}$/",$username)) {
+				$errors['user'] = "Username must contain only alphanumeric, hyphen or underscore.";
+			}
+
+			if (empty($password)) {
+				$errors['pwd'] = 'Please enter your password.';
+			} else if (strlen($password) < 10) {
+				$errors['pwd'] = 'Password must have a minimum of 10 characters.';
+			} else if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&]).{10,}$/",$password)) {
+				$errors['pwd'] = "Password must contain uppercase, lowercase, digit and a special character.";
+			} else if ($password !== $confirm_pass) {
+				$errors['pwd'] = "Passwords don't match.";
+			}
+		}
 	}
 }
 

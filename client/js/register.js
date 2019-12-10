@@ -1,16 +1,17 @@
 "use strict";
 
-function register() {
+function register(ciphertext) {
 
 	loaderStart();
 
-	$("#register_alerts").html('');
+	cleanRegisterErrors();
 
-	postJSONData("register.php", {
-		username: document.getElementById("reg_username").value,
-		password: document.getElementById("reg_password").value,
-		confirm_password: document.getElementById("reg_confirm_password").value,
-	})
+	// send as plaintext if no cipher provided
+	if (!ciphertext) {
+		ciphertext = generateRegisterRequestObject();
+	}
+
+	postJSONData("register.php", ciphertext)
 	.then((data) => {
 		if (!data.success) {
 			if (data.errors.already_logged === true) {
@@ -20,15 +21,7 @@ function register() {
 				//alert("Already logged in!");
 				showMainPage();
 			} else {
-
-				for(let k in data.errors) {
-					$("#register_alerts").append(
-						'<div id="error_alert" class="alert alert-danger alert-dismissible" role="alert">' +
-						'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
-						data.errors[k] +
-						'</div>'
-					);
-				}
+				showRegisterErrors(data.errors);
 			}
 		} else {
 			alert("Registration successful!");
@@ -39,13 +32,38 @@ function register() {
 		loaderEnd();
 	})
 	.catch((error2) => {
+		showRegisterErrors([error2]);
+		console.log(error2);
+		loaderEnd();
+	});
+}
+
+function showRegisterErrors(errors) {
+	for(let k in errors) {
 		$("#register_alerts").append(
 			'<div id="error_alert" class="alert alert-danger alert-dismissible" role="alert">' +
 			'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
-			'Failed to connect to the server.' +
+			errors[k] +
 			'</div>'
 		);
-		//console.log(error2);
-		loaderEnd();
-	});
+	}
+}
+
+function cleanRegisterErrors() {
+	$("#register_alerts").html('');
+}
+
+function generateRegisterRequestObject() {
+	let usernameVal = (document.getElementById("reg_username") ? document.getElementById("reg_username").value : "");
+	let passwordVal = (document.getElementById("reg_password") ? document.getElementById("reg_password").value : "");
+	let confirm_passwordVal = (document.getElementById("reg_confirm_password") ? document.getElementById("reg_confirm_password").value : "");
+	return {
+		username: usernameVal,
+		password: passwordVal,
+		confirm_password: confirm_passwordVal
+	};
+}
+
+function generateRegisterRequestString() {
+	return JSON.stringify(generateRegisterRequestObject());
 }

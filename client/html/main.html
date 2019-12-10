@@ -101,11 +101,12 @@
 	// https://stackoverflow.com/questions/31746837/reading-uploaded-text-file-contents-in-html
 	$('#viewFileBtn').on("change", function(e) {
 		
-		var files = e.target.files; // FileList object
+		const files = e.target.files; // FileList object
+		const supportedTypes = ['text/plain', 'text/x-log'];
 
-		for (var i = 0, f; f = files[i]; i++) {
+		for (let i = 0, f; f = files[i]; i++) {
 			// Only process txt files.
-			if (f.type !== 'text/plain') {
+			if (!supportedTypes.includes(f.type)) {
 				alert(`File type '${f.type}' not supported.`);
 				continue;
 			}

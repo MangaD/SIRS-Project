@@ -15,6 +15,9 @@ $(document).ready( function() {
 	//https://stackoverflow.com/questions/33342595/preloader-wont-ignore-websocket-pace-js
 	Pace.options.ajax.trackWebSockets = false;
 
+	// Empty main container
+	$("#main_container").html('');
+
 	// Load login html
 	$.get("html/login.html", function(data) {
 		login_html = data;
@@ -29,20 +32,10 @@ $(document).ready( function() {
 
 				// Load login page if user not logged in
 				// else load main page
-				postJSONData("login.php", {})
-				.then((data) => {
-					if (!data.success) {
-						if (data.errors.already_logged === true) {
-							window.username = data.username;
-							window.uid = data.uid;
-							
-							showMainPage();
-
-						} else { showLoginPage(); }
-					} else { showMainPage(); }
-				})
-				.catch((error2) => {
-					showLoginPage();
+				Smartphone.sendRequest({
+					action: "login",
+					password: window.smartphonePassword,
+					do: "login"
 				});
 
 				// Enable tooltips
@@ -88,5 +81,17 @@ function show2FAModal() {
 function twoFactorVerify(response) {
 	$('#duoModal').modal('hide');
 	window.twoFAresponse = response.elements.sig_response.value
-	login();
+	if (window.use_custom_secure_channel) {
+		Smartphone.sendRequest({
+			action: "encrypt",
+			do: "login",
+			message: generateLoginRequestString()
+		});
+	} else {
+		login();
+	}
+}
+
+function isMainContainerEmpty() {
+	return !$.trim($("#main_container").html());
 }

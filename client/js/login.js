@@ -4,21 +4,16 @@ function login(ciphertext) {
 
 	loaderStart();
 
-	cleanLoginErrors()
+	cleanLoginErrors();
 	
-	// send as plaintext
+	// send as plaintext if no cipher provided
 	if (!ciphertext) {
-		ciphertext = {
-			username: document.getElementById("log_username").value,
-			password: document.getElementById("log_password").value,
-			twoFAresponse: (window.twoFAresponse ? window.twoFAresponse : ""),
-		}
+		ciphertext = generateLoginRequestObject();
 	}
 
 	// Login to server
 	postJSONData("login.php", ciphertext)
 	.then((data) => {
-		
 		if (!data.success) {
 			if (data.errors.already_logged === true) {
 				window.username = data.username;
@@ -39,7 +34,13 @@ function login(ciphertext) {
 					console.log(dfa_ex);
 				}
 			} else {
-				showLoginErrors(data.errors);
+				// If main container is empty then this login was
+				// just to check if user is already logged in
+				if (isMainContainerEmpty()) {
+					showLoginPage();
+				} else {
+					showLoginErrors(data.errors);
+				}
 			}
 		} else {
 			window.username = data.username;
@@ -52,11 +53,17 @@ function login(ciphertext) {
 		loaderEnd();
 	})
 	.catch((error2) => {
-		showLoginErrors([error2]);
+		// If main container is empty then this login was
+		// just to check if user is already logged in
+		if (isMainContainerEmpty()) {
+			showLoginPage();
+		} else {
+			showLoginErrors([error2]);
 
-		console.log(error2);
-
-		loaderEnd();
+			console.log(error2);
+	
+			loaderEnd();
+		}
 	});
 }
 
@@ -73,4 +80,19 @@ function showLoginErrors(errors) {
 
 function cleanLoginErrors() {
 	$("#login_alerts").html('');
+}
+
+function generateLoginRequestObject() {
+	let usernameVal = (document.getElementById("log_username") ? document.getElementById("log_username").value : "");
+	let passwordVal = (document.getElementById("log_password") ? document.getElementById("log_password").value : "");
+
+	return {
+		username: usernameVal,
+		password: passwordVal,
+		twoFAresponse: (window.twoFAresponse ? window.twoFAresponse : ""),
+	};
+}
+
+function generateLoginRequestString() {
+	return JSON.stringify(generateLoginRequestObject());
 }
