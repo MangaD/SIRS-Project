@@ -71,7 +71,16 @@ TODO (tcpdumps, etc)
 - [Java WebSockets](https://github.com/TooTallNate/Java-WebSocket)
   - [SLF4J](https://www.slf4j.org/)
 - [JSON In Java](https://mvnrepository.com/artifact/org.json/json)
+- [JUnit 5](https://junit.org/junit5/)
+- [Java Cryptography Architecture](https://en.wikipedia.org/wiki/Java_Cryptography_Architecture)
 
 **Server:**
 
 - [Duo 2FA for  PHP web applications ](https://github.com/duosecurity/duo_php)
+- [PHP OpenSSL](https://www.php.net/manual/en/book.openssl.php)
+- [PHP Hash](https://www.php.net/manual/en/book.hash.php)
+- [PHP Session](https://www.php.net/manual/en/book.session.php)
+- [PHP PDO](https://www.php.net/manual/en/book.pdo.php)
+- [PHP JSON](https://www.php.net/manual/en/book.json.php)
+- [PHP URLs](https://www.php.net/manual/en/book.url.php)
+

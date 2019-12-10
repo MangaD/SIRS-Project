@@ -4,11 +4,31 @@
 
 Make sure to have [installed the VMs](InstallVMs.md) first.
 
-## Install JDK + Gradle
+## Install JDK
 
 ```sh
 sudo apt update && sudo apt upgrade
-sudo apt install default-jdk gradle
+sudo apt install default-jdk
+```
+
+## Install latest Gradle (currently version 6.0.1)
+
+```sh
+sudo mkdir /opt/gradle
+cd /opt/gradle
+sudo wget https://services.gradle.org/distributions/gradle-6.0.1-bin.zip
+sudo unzip gradle-6.0.1-bin.zip
+sudo rm gradle-6.0.1-bin.zip
+cd ~
+nano .bash_profile
+```
+Add the following to the end of the file:
+```
+export PATH=$PATH:/opt/gradle/gradle-6.0.1/bin
+```
+Activate for current session:
+```sh
+source ~/.bash_profile
 ```
 
 ## Install and run application
