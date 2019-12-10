@@ -16,6 +16,25 @@ if (!isInstalled()) {
 	$errors['post'] = 'Must send data over POST request method.';
 }
 
+$usingSecureChannel = false;
+
+if (empty($errors)) {
+
+	$json = json_decode(file_get_contents('php://input'), true);
+	
+	if (array_key_exists("ciphertext", $json)) {
+		$usingSecureChannel = true;
+		$ciphertext = base64_decode(trim($json['ciphertext']));
+		try {
+			$plaintext = decryptWithSessionKey($ciphertext);
+			$json = json_decode($plaintext, true);
+		} catch(Exception $e) {
+			$errors['decrypt'] = $e->getMessage();
+		}
+	}
+
+}
+
 if (empty($errors)) {
 	try {
 		$dbclass = new DBClass();
@@ -47,6 +66,27 @@ if ( ! empty($errors)) {
 	$data['success'] = true;
 }
 
-echo json_encode($data);
+$response_json_data = '';
 
- ?>
+if ($usingSecureChannel === true) {
+	try {
+		$ciphertext = base64_encode(encryptWithSessionKey(json_encode($data)));
+		$data = array();
+		$data['success'] = true;
+		$data['ciphertext'] = $ciphertext;
+		$response_json_data = json_encode($data);
+	} catch(Exception $e) {
+		$data = array();
+		$error = array();
+		$errors['encrypt'] = $e->getMessage();
+		$data['errors']  = $errors;
+		$data['success'] = false;
+		$response_json_data = json_encode($data);
+	}
+} else {
+	$response_json_data = json_encode($data);
+}
+
+echo $response_json_data;
+
+?>

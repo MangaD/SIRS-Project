@@ -1,6 +1,7 @@
 "use strict";
 
 var ws;
+var smartphonePingID;
 
 class Smartphone {
 
@@ -9,6 +10,11 @@ class Smartphone {
 
 		ws.onopen = function() {
 			console.log('Connected to smartphone.');
+			smartphonePingID = window.setInterval(function() {
+				Smartphone.sendRequest({
+					action: "ping"
+				}, false);
+			}, 5000);
 		};
 
 		ws.onmessage = function(evt) {
@@ -72,9 +78,9 @@ class Smartphone {
 					} else {
 						// Plaintext server request
 						if (response.do === "login") {
-							login();
+							postLogin();
 						} else if (response.do === "register") {
-							register();
+							postRegister();
 						}
 					}
 
@@ -143,7 +149,7 @@ class Smartphone {
 			 * Encrypt smartphone response.
 			 * 
 			 * JSON parameters:
-			 * success - boolean, if login was successful
+			 * success - boolean, if encryption was successful
 			 * message - string, for eventual errors or success message
 			 * ciphertext - base64 string with encrypted message
 			 * do - what to do after encrypt  (eg. server login, server register...)
@@ -152,9 +158,46 @@ class Smartphone {
 				if (response.success) {
 					if (response.do) {
 						if (response.do === "login") {
-							login({ciphertext: response.ciphertext});
+							postLogin({ciphertext: response.ciphertext});
 						} else if (response.do === "register") {
-							register({ciphertext: response.ciphertext});
+							postRegister({ciphertext: response.ciphertext});
+						} else if (response.do === "files") {
+							postLoadFiles({ciphertext: response.ciphertext});
+						}
+					}
+				} else {
+					if (response.do) {
+						if (response.do === "login") {
+							showLoginErrors(['Smartphone AES: ' + response.message]);
+						} else if (response.do === "register") {
+							showRegisterErrors(['Smartphone AES: ' + response.message]);
+						} else {
+							alert('Smartphone AES: ' + response.message);
+						}
+					} else {
+						alert('Smartphone AES: ' + response.message);
+					}
+				}
+
+			/**
+			 * Decrypt server response.
+			 * 
+			 * JSON parameters:
+			 * success - boolean, if decryption was successful
+			 * message - string, for eventual errors or success message
+			 * plaintext - decrypted message
+			 * do - what to do after decryption  (eg. list files)
+			 */
+			} else if (response.action === "decrypt") {
+				if (response.success) {
+					let data = JSON.parse(response.plaintext);
+					if (response.do) {
+						if (response.do === "login") {
+							serverResponseLogin(data);
+						} else if (response.do === "register") {
+							serverResponseRegister(data);
+						} else if (response.do === "filesList") {
+							serverResponseLoadFiles(data);
 						}
 					}
 				} else {
@@ -175,13 +218,15 @@ class Smartphone {
 
 		ws.onclose = function() {
 			ws = null;
+			window.clearInterval(smartphonePingID);
 			logout();
 			console.log('Connection to smartphone is closed...');
 			loaderEnd();
 		};
 		ws.onerror = function(e) {
-			alert("Smartphone error: " + (e.msg ? e.msg : "Couldn't connect to smartphone."));
+			window.clearInterval(smartphonePingID);
 			logout();
+			alert("Smartphone error: " + (e.msg ? e.msg : "Couldn't connect to smartphone."));
 			loaderEnd();
 		};
 	}
@@ -191,8 +236,8 @@ class Smartphone {
 		ws = null;
 	}
 
-	static sendRequest(jsonData) {
-		loaderStart();
+	static sendRequest(jsonData, startLoader=true) {
+		if (startLoader === true) loaderStart();
 		if (!ws) {
 			this.connectToSmartphone();
 		}

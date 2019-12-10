@@ -153,7 +153,7 @@ public class SmartphoneServer extends WebSocketServer {
 				conn.send(response.toString());
 				
 			} else if (action.equals("encrypt")) {
-				
+
 				System.out.println("Received encrypt request from: " + getAddress(conn));
 				
 				if (!jObj.has("message")) {
@@ -167,9 +167,9 @@ public class SmartphoneServer extends WebSocketServer {
 					conn.send(response.toString());
 					return;
 				}
-				
+
 				String plaintext = jObj.getString("message");
-				
+
 				try {
 					byte[] ciphertext = c.aes_gcm.encrypt(plaintext, c.key);
 					response.put("success", true);
@@ -179,8 +179,35 @@ public class SmartphoneServer extends WebSocketServer {
 					response.put("message", e.getMessage());
 				}
 				conn.send(response.toString());
+			} else if (action.equals("decrypt")) {
+
+				System.out.println("Received decrypt request from: " + getAddress(conn));
+
+				if (!jObj.has("message")) {
+					response.put("success", false);
+					response.put("message", "You did not provide a message to decrypt.");
+					conn.send(response.toString());
+					return;
+				} else if (c.key == null) {
+					response.put("success", false);
+					response.put("message", "You did not make a DH exchange.");
+					conn.send(response.toString());
+					return;
+				}
+
+				String ciphertext = jObj.getString("message");
+
+				try {
+					String plaintext = c.aes_gcm.decryptBase64(ciphertext, c.key);
+					response.put("success", true);
+					response.put("plaintext", plaintext);
+				} catch (Exception e) {
+					response.put("success", false);
+					response.put("message", e.getMessage());
+				}
+				conn.send(response.toString());
 			}
-			
+
 		}
 
 	}

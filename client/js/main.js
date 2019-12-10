@@ -30,13 +30,9 @@ $(document).ready( function() {
 			$.get("html/main.html", function(data3) {
 				main_html = data3;
 
-				// Load login page if user not logged in
-				// else load main page
-				Smartphone.sendRequest({
-					action: "login",
-					password: window.smartphonePassword,
-					do: "login"
-				});
+				// Loads login page if user not logged in
+				// else loads main page
+				login();
 
 				// Enable tooltips
 				$('[data-toggle="tooltip"]').tooltip();

@@ -90,13 +90,16 @@
 
 <script>
 
-	$("#filesTable").colResizable({
-		liveDrag:true,
-		resizeMode:'fit',
-		gripInnerHtml:"<div class='grip'></div>", 
-		draggingClass:'JCLRgripDrag',
-		minWidth: 50,
-		marginTop: 15,
+	$(function(){
+		$("#filesTable").colResizable({
+			liveDrag:true,
+			partialRefresh: true,
+			resizeMode:'fit',
+			gripInnerHtml:"<div class='grip'></div>", 
+			draggingClass:'JCLRgripDrag',
+			minWidth: 50,
+			marginTop: 15,
+		});
 	});
 
 	$('#logoutBtn').click(function(e) {
@@ -174,7 +177,9 @@
 			} else {
 				console.log("Uploaded " + data.countUploaded + " files.");
 			}
+
 			loadFiles();
+
 			loaderEnd();
 		})
 	});

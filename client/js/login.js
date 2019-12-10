@@ -1,6 +1,14 @@
 "use strict";
 
-function login(ciphertext) {
+function login() {
+	Smartphone.sendRequest({
+		action: "login",
+		password: window.smartphonePassword,
+		do: "login"
+	});
+}
+
+function postLogin(ciphertext) {
 
 	loaderStart();
 
@@ -14,43 +22,17 @@ function login(ciphertext) {
 	// Login to server
 	postJSONData("login.php", ciphertext)
 	.then((data) => {
-		if (!data.success) {
-			if (data.errors.already_logged === true) {
-				window.username = data.username;
-				window.uid = data.uid;
 
-				showMainPage();
-			} else if (data.errors.missing2FA === true) {
-				/*
-				* Perform secondary auth, generate sig request, then load up Duo
-				* javascript and iframe.
-				*/
-				window.sig_request = data.sig_request;
-				window.host = data.host;
-
-				try {
-					show2FAModal();
-				} catch(dfa_ex) {
-					console.log(dfa_ex);
-				}
-			} else {
-				// If main container is empty then this login was
-				// just to check if user is already logged in
-				if (isMainContainerEmpty()) {
-					showLoginPage();
-				} else {
-					showLoginErrors(data.errors);
-				}
-			}
+		if (data.hasOwnProperty('ciphertext')) {
+			Smartphone.sendRequest({
+				action: "decrypt",
+				do: "login",
+				message: data.ciphertext
+			});
 		} else {
-			window.username = data.username;
-			window.uid = data.uid;
-			window.twoFAresponse = null;
-
-			showMainPage();
+			serverResponseLogin(data);
 		}
 
-		loaderEnd();
 	})
 	.catch((error2) => {
 		// If main container is empty then this login was
@@ -59,12 +41,51 @@ function login(ciphertext) {
 			showLoginPage();
 		} else {
 			showLoginErrors([error2]);
-
 			console.log(error2);
-	
 			loaderEnd();
 		}
 	});
+}
+
+function serverResponseLogin(data) {
+
+	if (!data.success) {
+		if (data.errors.already_logged === true) {
+			window.username = data.username;
+			window.uid = data.uid;
+
+			showMainPage();
+		} else if (data.errors.missing2FA === true) {
+			/*
+			* Perform secondary auth, generate sig request, then load up Duo
+			* javascript and iframe.
+			*/
+			window.sig_request = data.sig_request;
+			window.host = data.host;
+
+			try {
+				show2FAModal();
+			} catch(dfa_ex) {
+				console.log(dfa_ex);
+			}
+		} else {
+			// If main container is empty then this login was
+			// just to check if user is already logged in
+			if (isMainContainerEmpty()) {
+				showLoginPage();
+			} else {
+				showLoginErrors(data.errors);
+			}
+		}
+	} else {
+		window.username = data.username;
+		window.uid = data.uid;
+		window.twoFAresponse = null;
+
+		showMainPage();
+	}
+
+	loaderEnd();
 }
 
 function showLoginErrors(errors) {

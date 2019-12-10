@@ -202,6 +202,23 @@ class SessionManager
 	}
 }
 
+function encryptWithSessionKey($plaintext) {
+
+	if (!isset($_SESSION['dh']) || !isset($_SESSION['aes'])) {
+		throw new Exception("Session key not set.");
+	}
+
+	$key = $_SESSION['dh']->getSharedKey();
+
+	$ciphertext = $_SESSION['aes']->encrypt($plaintext , $key);
+
+	if ($ciphertext === false) {
+		throw new Exception("Encryption failed.");
+	} else {
+		return $ciphertext;
+	}
+}
+
 function decryptWithSessionKey($ciphertext) {
 
 	if (!isset($_SESSION['dh']) || !isset($_SESSION['aes'])) {

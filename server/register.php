@@ -22,11 +22,14 @@ $username = $password = $confirm_pass = "";
 
 $json = "";
 
+$usingSecureChannel = false;
+
 if (empty($errors)) {
 
 	$json = json_decode(file_get_contents('php://input'), true);
 
 	if (array_key_exists("ciphertext", $json)) {
+		$usingSecureChannel = true;
 		$ciphertext = base64_decode(trim($json['ciphertext']));
 		try {
 			$plaintext = decryptWithSessionKey($ciphertext);

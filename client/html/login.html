@@ -80,14 +80,9 @@ $("#login_form").submit( function(e) {
 	if (!window.smartphonePassword) {
 		alert("Please set the smartphone's password in the settings.");
 	} else {
-		Smartphone.sendRequest({
-			action: "login",
-			password: window.smartphonePassword,
-			do: "login"
-		});
+		login();
 	}
 	
-	//login();
 	e.preventDefault();
 });
 </script>

@@ -1,6 +1,14 @@
 "use strict";
 
-function register(ciphertext) {
+function register() {
+	Smartphone.sendRequest({
+		action: "login",
+		password: window.smartphonePassword,
+		do: "register"
+	});
+}
+
+function postRegister(ciphertext) {
 
 	loaderStart();
 
@@ -13,29 +21,41 @@ function register(ciphertext) {
 
 	postJSONData("register.php", ciphertext)
 	.then((data) => {
-		if (!data.success) {
-			if (data.errors.already_logged === true) {
-				window.username = data.username;
-				window.uid = data.uid;
-
-				//alert("Already logged in!");
-				showMainPage();
-			} else {
-				showRegisterErrors(data.errors);
-			}
+		if (data.hasOwnProperty('ciphertext')) {
+			Smartphone.sendRequest({
+				action: "decrypt",
+				do: "register",
+				message: data.ciphertext
+			});
 		} else {
-			alert("Registration successful!");
-			showLoginPage();
+			serverResponseRegister(data);
 		}
-
-		//console.log(data);
-		loaderEnd();
 	})
 	.catch((error2) => {
 		showRegisterErrors([error2]);
 		console.log(error2);
 		loaderEnd();
 	});
+}
+
+function serverResponseRegister(data) {
+	if (!data.success) {
+		if (data.errors.already_logged === true) {
+			window.username = data.username;
+			window.uid = data.uid;
+
+			//alert("Already logged in!");
+			showMainPage();
+		} else {
+			showRegisterErrors(data.errors);
+		}
+	} else {
+		alert("Registration successful!");
+		showLoginPage();
+	}
+
+	//console.log(data);
+	loaderEnd();
 }
 
 function showRegisterErrors(errors) {

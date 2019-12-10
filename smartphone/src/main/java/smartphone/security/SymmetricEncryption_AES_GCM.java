@@ -23,82 +23,82 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class SymmetricEncryption_AES_GCM {
 	
-    public static final int AES_KEY_SIZE = 256;
-    public static final int GCM_IV_LENGTH = 12;
-    public static final int GCM_TAG_LENGTH = 16;
+	public static final int AES_KEY_SIZE = 256;
+	public static final int GCM_IV_LENGTH = 12;
+	public static final int GCM_TAG_LENGTH = 16;
 
-    private Cipher cipher;
+	private Cipher cipher;
 
-    public SymmetricEncryption_AES_GCM() throws NoSuchAlgorithmException, NoSuchPaddingException {
-        this.cipher = Cipher.getInstance("AES/GCM/NoPadding");
-    }
+	public SymmetricEncryption_AES_GCM() throws NoSuchAlgorithmException, NoSuchPaddingException {
+		this.cipher = Cipher.getInstance("AES/GCM/NoPadding");
+	}
 
-    /**
-     * Symmetric encryption
-     */
-    public static SecretKey generateAESKey() throws NoSuchAlgorithmException {
-        return KeyGenerator.getInstance("AES").generateKey();
-    }
+	/**
+	 * Symmetric encryption
+	 */
+	public static SecretKey generateAESKey() throws NoSuchAlgorithmException {
+		return KeyGenerator.getInstance("AES").generateKey();
+	}
 
-    public static byte[] secretKeyToByteArray(SecretKey secretKey) {
-        return secretKey.getEncoded();
-    }
+	public static byte[] secretKeyToByteArray(SecretKey secretKey) {
+		return secretKey.getEncoded();
+	}
 
-    public static SecretKey secretKeyFromByteArray(byte[] data) {
-        return new SecretKeySpec(data, 0, data.length, "AES");
-    }
+	public static SecretKey secretKeyFromByteArray(byte[] data) {
+		return new SecretKeySpec(data, 0, data.length, "AES");
+	}
 
-    public byte[] encrypt(String content, SecretKey secretKey)
-            throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException,
-            InvalidAlgorithmParameterException {
+	public byte[] encrypt(String content, SecretKey secretKey)
+			throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException,
+			InvalidAlgorithmParameterException {
 
-        // Generating IV.
-        byte[] iv = new byte[GCM_IV_LENGTH];
-        SecureRandom random = new SecureRandom();
-        random.nextBytes(iv);
-        
-        // Create GCMParameterSpec
-        GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv);
-        
-        // Initialize Cipher for ENCRYPT_MODE
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, gcmParameterSpec);
-        
-        byte[] encrypted = cipher.doFinal(content.getBytes());
+		// Generating IV.
+		byte[] iv = new byte[GCM_IV_LENGTH];
+		SecureRandom random = new SecureRandom();
+		random.nextBytes(iv);
+		
+		// Create GCMParameterSpec
+		GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv);
+		
+		// Initialize Cipher for ENCRYPT_MODE
+		cipher.init(Cipher.ENCRYPT_MODE, secretKey, gcmParameterSpec);
+		
+		byte[] encrypted = cipher.doFinal(content.getBytes());
 
-        // In Java the tag is unfortunately added at the end of the ciphertext. 
-        // https://stackoverflow.com/questions/23864440/aes-gcm-implementation-with-authentication-tag-in-java
-        byte[] encryptedIVAndText = new byte[GCM_IV_LENGTH + encrypted.length];
-        System.arraycopy(iv, 0, encryptedIVAndText, 0, GCM_IV_LENGTH);
-        System.arraycopy(encrypted, 0, encryptedIVAndText, GCM_IV_LENGTH, encrypted.length);
+		// In Java the tag is unfortunately added at the end of the ciphertext. 
+		// https://stackoverflow.com/questions/23864440/aes-gcm-implementation-with-authentication-tag-in-java
+		byte[] encryptedIVAndText = new byte[GCM_IV_LENGTH + encrypted.length];
+		System.arraycopy(iv, 0, encryptedIVAndText, 0, GCM_IV_LENGTH);
+		System.arraycopy(encrypted, 0, encryptedIVAndText, GCM_IV_LENGTH, encrypted.length);
 
-        return encryptedIVAndText;
-    }
+		return encryptedIVAndText;
+	}
 
-    public String decrypt(byte[] encryptedIvTextBytes, SecretKey secretKey)
-            throws InvalidKeyException, InvalidAlgorithmParameterException, BadPaddingException,
-            IllegalBlockSizeException, NoSuchAlgorithmException, NoSuchPaddingException {
+	public String decrypt(byte[] encryptedIvTextBytes, SecretKey secretKey)
+			throws InvalidKeyException, InvalidAlgorithmParameterException, BadPaddingException,
+			IllegalBlockSizeException, NoSuchAlgorithmException, NoSuchPaddingException {
 
-        // Extract IV.
-        byte[] iv = new byte[GCM_IV_LENGTH];
-        System.arraycopy(encryptedIvTextBytes, 0, iv, 0, iv.length);
-        GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv);
+		// Extract IV.
+		byte[] iv = new byte[GCM_IV_LENGTH];
+		System.arraycopy(encryptedIvTextBytes, 0, iv, 0, iv.length);
+		GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv);
 
-        // Extract encrypted part.
-        int encryptedSize = encryptedIvTextBytes.length - GCM_IV_LENGTH;
-        byte[] encryptedBytes = new byte[encryptedSize];
-        System.arraycopy(encryptedIvTextBytes, GCM_IV_LENGTH, encryptedBytes, 0, encryptedSize);
+		// Extract encrypted part.
+		int encryptedSize = encryptedIvTextBytes.length - GCM_IV_LENGTH;
+		byte[] encryptedBytes = new byte[encryptedSize];
+		System.arraycopy(encryptedIvTextBytes, GCM_IV_LENGTH, encryptedBytes, 0, encryptedSize);
 
-        // Decrypt.
-        this.cipher.init(Cipher.DECRYPT_MODE, secretKey, gcmParameterSpec);
-        byte[] decrypted = this.cipher.doFinal(encryptedBytes);
+		// Decrypt.
+		this.cipher.init(Cipher.DECRYPT_MODE, secretKey, gcmParameterSpec);
+		byte[] decrypted = this.cipher.doFinal(encryptedBytes);
 
-        return new String(decrypted);
-    }
-    
-    public String decryptAES(String encryptedIvTextBytesBase64, SecretKey secretKey)
-            throws InvalidKeyException, InvalidAlgorithmParameterException, BadPaddingException,
-            IllegalBlockSizeException, NoSuchAlgorithmException, NoSuchPaddingException {
-    	byte[] encryptedIvTextBytes = Utility.base64ToBytes(encryptedIvTextBytesBase64);
-    	return this.decrypt(encryptedIvTextBytes, secretKey);
-    }
+		return new String(decrypted);
+	}
+	
+	public String decryptBase64(String encryptedIvTextBytesBase64, SecretKey secretKey)
+			throws InvalidKeyException, InvalidAlgorithmParameterException, BadPaddingException,
+			IllegalBlockSizeException, NoSuchAlgorithmException, NoSuchPaddingException {
+		byte[] encryptedIvTextBytes = Utility.base64ToBytes(encryptedIvTextBytesBase64);
+		return this.decrypt(encryptedIvTextBytes, secretKey);
+	}
 }
