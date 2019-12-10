@@ -2,6 +2,8 @@
 
 **NOTE**: Due to time constraints and prioritizing the security aspect of this project, we did not develop an actual Android application, we developed a Desktop application instead. In theory we'd use WPA2 or WPA3 for the wireless protocol in order to assure confidentiality, integrity and authenticity.
 
+**NOTE 2:** On Windows you may need to install [Java Cryptography Extension (JCE)](https://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html) because of [this](https://stackoverflow.com/questions/24907530/java-security-invalidkeyexception-illegal-key-size-or-default-parameters-in-and).
+
 Make sure to have [installed the VMs](InstallVMs.md) first.
 
 ## Install JDK

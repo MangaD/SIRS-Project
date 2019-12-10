@@ -337,6 +337,19 @@ input:focus{
 	background-color: #112;
 }
 
+#filesTable {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#filesTable td,
+#filesTable th {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 #viewFileTextarea {
 	width: 100%;
 	-webkit-box-sizing: border-box;

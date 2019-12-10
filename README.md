@@ -62,6 +62,7 @@ TODO (tcpdumps, etc)
 - [Bootstrap 4 'Superhero' theme](https://bootswatch.com/)
 - [Spinner loader](https://projects.lukehaas.me/css-loaders/)
 - [Pace progress bar](https://github.hubspot.com/pace/docs/welcome/)
+- [colResizable](https://github.com/alvaro-prieto/colResizable)
 - [Duo 2FA for  PHP web applications ](https://github.com/duosecurity/duo_php)
 
 **Smartphone:**
@@ -72,7 +73,8 @@ TODO (tcpdumps, etc)
   - [SLF4J](https://www.slf4j.org/)
 - [JSON In Java](https://mvnrepository.com/artifact/org.json/json)
 - [JUnit 5](https://junit.org/junit5/)
-- [Java Cryptography Architecture](https://en.wikipedia.org/wiki/Java_Cryptography_Architecture)
+- [Java Cryptography Architecture (JCA)](https://en.wikipedia.org/wiki/Java_Cryptography_Architecture)
+- [Java Cryptography Extension (JCE)](https://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html)
 
 **Server:**
 

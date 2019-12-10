@@ -19,7 +19,9 @@ function loadFiles() {
 
 				let fileSizeInt = parseInt(files[index].size);
 				let fileSizeString;
-				if (fileSizeInt >= 1024) {
+				if (fileSizeInt < 1024) {
+					fileSizeString = fileSizeInt + " B";
+				} else if (fileSizeInt >= 1024) {
 					fileSizeString = Math.round(fileSizeInt / 1024* 100) / 100 + " KiB";
 				} else if (fileSizeInt >= 1024*1024) {
 					fileSizeString = Math.round(fileSizeInt / 1024 / 1024* 100) / 100 + " MiB";
