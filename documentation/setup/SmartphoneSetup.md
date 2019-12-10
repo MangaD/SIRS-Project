@@ -19,16 +19,19 @@ cd /opt/gradle
 sudo wget https://services.gradle.org/distributions/gradle-6.0.1-bin.zip
 sudo unzip gradle-6.0.1-bin.zip
 sudo rm gradle-6.0.1-bin.zip
-cd ~
-nano .bash_profile
+sudo nano /etc/profile.d/gradle.sh
 ```
 Add the following to the end of the file:
 ```
-export PATH=$PATH:/opt/gradle/gradle-6.0.1/bin
+export GRADLE_HOME=/opt/gradle/gradle-6.0.1
+export PATH=${GRADLE_HOME}/bin:${PATH}
 ```
-Activate for current session:
+Make script executable and load:
 ```sh
-source ~/.bash_profile
+sudo chmod +x /etc/profile.d/gradle.sh
+cd ~
+source /etc/profile.d/gradle.sh
+gradle -v
 ```
 
 ## Install and run application
