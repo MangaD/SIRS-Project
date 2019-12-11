@@ -38,7 +38,7 @@ TODO (tcpdumps, etc)
 
 ## Report
 
-- [documentation/report/T18_Mon_1500_0-14_report.pdf](documentation/report/T18_Mon_1500_0-14_report.pdf) - TODO
+- [documentation/report/T18_Mon_1500_0-14_report.pdf](documentation/report/T18_Mon_1500_0-14_report.pdf)
 
 ## Presentation
 

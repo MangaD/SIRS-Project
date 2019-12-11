@@ -5,14 +5,6 @@ require_once 'inc/dbclass.php';
 require_once 'inc/DH.php';
 require_once 'inc/AES.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-ini_set("log_errors", 1);
-// Probably need to change path
-ini_set("error_log", "/srv/http/server/php-error.log");
-
 cors();
 
 $errors = array();

@@ -1,4 +1,5 @@
 <?php
+
 require_once 'inc/utilities.php';
 require_once 'inc/dbclass.php';
 
@@ -71,6 +72,23 @@ if ( ! empty($errors)) {
 if ($_SERVER['HTTP_ACCEPT'] === 'application/json') {
 	echo json_encode($data);
 } else if ($data['success'] === true) {
+
+	// CREATE TEMPORARY FILE CIPHERED TO SEND
+
+	// Get original file as a string
+	$file_contents = file_get_contents($path);
+	//Encrypt file contents with secret key
+	$file_contents = encryptWithSessionKey($file_contents);
+	// Write temporary file
+	$temp = tmpfile();
+	// https://stackoverflow.com/questions/11212569/retrieve-path-of-tmpfile
+	$metaDatas = stream_get_meta_data($temp);
+	$tmpFilename = $metaDatas['uri'];
+	fwrite($temp, $file_contents);
+	fseek($temp, 0);
+	$path = $tmpFilename;
+
+
 	// https://serverfault.com/questions/316814/php-serve-a-file-for-download-without-providing-the-direct-link
 	// https://www.php.net/manual/en/function.readfile.php
 
@@ -87,13 +105,11 @@ if ($_SERVER['HTTP_ACCEPT'] === 'application/json') {
 	ob_clean();   // discard any data in the output buffer (if possible)
 	flush();      // flush headers (if possible)
 
-	//Get file as a string
-	$file = file_get_contents($path);
-	//Encrypt file with secret key
-	$ciphertext = encryptWithSessionKey($file);
-
 	// Get file from path
-	readfile($ciphertext);
+	readfile($path);
+
+	// Close temporary file
+	fclose($temp);
 }
 
 ?>
