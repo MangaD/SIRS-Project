@@ -197,12 +197,12 @@ function viewFile(f) {
 		
 		//console.log(event.target.result); // desired file content
 		// https://stackoverflow.com/questions/24245105/how-to-get-the-filename-from-the-javascript-filereader
-		$('#viewFileModal .modal-header').html(event.target.fileName);
-		$('#viewFileTextarea').html(event.target.result);
+		$('#viewFileModal .modal-header').html(htmlEntities(event.target.fileName));
+		$('#viewFileTextarea').html(htmlEntities(event.target.result));
 		$('#viewFileModal').modal('show');
-		let footer = "<strong>Type:</strong> " + event.target.fileType;
-		footer += " <strong>Size:</strong> " + event.target.fileSize + " B";
-		footer += " <strong>Last modification:</strong> " + event.target.lastModifiedDate;
+		let footer = "<strong>Type:</strong> " + htmlEntities(event.target.fileType);
+		footer += " <strong>Size:</strong> " + htmlEntities(event.target.fileSize) + " B";
+		footer += " <strong>Last modification:</strong> " + htmlEntities(event.target.lastModifiedDate);
 		$('#viewFileModal .modal-footer').html(footer);
 		
 	}
