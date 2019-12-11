@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`uid` int NOT NULL AUTO_INCREMENT,
 	`username` varchar(50) UNIQUE NOT NULL,
 	`password` varchar(255) NOT NULL,
+	`pub_key` varchar(500) NOT NULL,
 	`admin` tinyint(1) NOT NULL DEFAULT 0,
 	-- https://stackoverflow.com/questions/5133580/which-mysql-datatype-to-use-for-an-ip-address
 	`last_ipv4` int unsigned DEFAULT NULL,

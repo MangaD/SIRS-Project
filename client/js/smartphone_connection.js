@@ -40,50 +40,13 @@ class Smartphone {
 
 					// DH exchange
 					if (window.use_custom_secure_channel) {
-
-						loaderStart();
-
-						postJSONData("DHExchange.php", {
-							request: ''
-						})
-						.then((data) => {
-							if (!data.success) {
-								if (response.do === "login") {
-									showLoginPage();
-									showLoginErrors(data.errors);
-								} else if (response.do === "register") {
-									showRegisterErrors(data.errors);
-								}
-							} else {
-								Smartphone.sendRequest({
-									action: "dh",
-									p: data.pBase64,
-									g: data.gBase64,
-									l: data.l,
-									key: data.key,
-									signedKey: data.signedKey,
-									pubKeyRSA: data.pubKeyRSA,
-									do: response.do
-								});
-							}
-
-							loaderEnd();
-						})
-						.catch((error2) => {
-							if (response.do === "login") {
-								showLoginErrors([error2]);
-							} else if (response.do === "register") {
-								showRegisterErrors([error2]);
-							}
-							console.log(error2);
-							loaderEnd();
-						});
+						postDHRequest(response);
 					} else {
 						// Plaintext server request
 						if (response.do === "login") {
 							postLogin();
 						} else if (response.do === "register") {
-							postRegister();
+							postRegister(generateRegisterRequestObject(response.pubKeyRSA_PEM));
 						}
 					}
 
@@ -101,46 +64,7 @@ class Smartphone {
 			 */
 			} else if (response.action === "dh") {
 				if (response.success) {
-
-					loaderStart();
-
-					postJSONData("DHExchange.php", {
-						request: response.pubKeyPEM,
-						signedPubKeyPEM: response.signedPubKeyPEM
-					})
-					.then((data) => {
-						if (!data.success) {
-							if (response.do === "login") {
-								showLoginErrors(data.errors);
-							} else if (response.do === "register") {
-								showRegisterErrors(data.errors);
-							}
-						} else {
-							if (response.do === "login") {
-								Smartphone.sendRequest({
-									action: "encrypt",
-									do: "login",
-									message: generateLoginRequestString()
-								});
-							} else if (response.do === "register") {
-								Smartphone.sendRequest({
-									action: "encrypt",
-									do: "register",
-									message: generateRegisterRequestString()
-								});
-							}
-						}
-
-						loaderEnd();
-					})
-					.catch((error2) => {
-						if (response.do === "login") {
-							showLoginErrors([error2]);
-						} else if (response.do === "register") {
-							showRegisterErrors([error2]);
-						}
-						loaderEnd();
-					});
+					postDHResponse(response);
 				} else {
 					if (response.do === "login") {
 						showLoginErrors(['Smartphone DH: ' + response.message]);

@@ -43,10 +43,7 @@ public class DiffieHellman {
 		kPairGen.initialize(dhParamFromRemotePubKey);
 		keyPair = kPairGen.generateKeyPair();
 		// Bob encodes his public key in PEM format, and sends it over to Alice.
-		String pubKeyPEM = "-----BEGIN PUBLIC KEY-----\n";
-		pubKeyPEM += Utility.bytesToBase64(keyPair.getPublic().getEncoded());
-		pubKeyPEM += "\n-----END PUBLIC KEY-----";
-		return pubKeyPEM;
+		return Utility.DERtoPublicKeyPEM(keyPair.getPublic().getEncoded());
 	}
 	
 	public void generateSharedSecret(String pubKeyPEM) throws NoSuchAlgorithmException,

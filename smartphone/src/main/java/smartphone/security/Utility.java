@@ -40,4 +40,12 @@ public class Utility {
 		pubKeyPEM = pubKeyPEM.replace("\n", "").replace("\r", "");
 		return Utility.base64ToBytes(pubKeyPEM);
 	}
+
+	public static String DERtoPublicKeyPEM(byte[] pubKeyDER) {
+		String pubKeyPEM = "-----BEGIN PUBLIC KEY-----\n";
+		pubKeyPEM += Utility.bytesToBase64(pubKeyDER);
+		pubKeyPEM += "\n-----END PUBLIC KEY-----";
+		return pubKeyPEM;
+	}
+
 }

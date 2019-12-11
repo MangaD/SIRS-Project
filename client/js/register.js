@@ -10,14 +10,15 @@ function register() {
 
 function postRegister(ciphertext) {
 
-	loaderStart();
-
 	cleanRegisterErrors();
 
 	// send as plaintext if no cipher provided
 	if (!ciphertext) {
-		ciphertext = generateRegisterRequestObject();
+		alert("'postRegister' requires either ciphertext or object (with RSA key).");
+		return;
 	}
+
+	loaderStart();
 
 	postJSONData("register.php", ciphertext)
 	.then((data) => {
@@ -73,17 +74,18 @@ function cleanRegisterErrors() {
 	$("#register_alerts").html('');
 }
 
-function generateRegisterRequestObject() {
+function generateRegisterRequestObject(pubKeyRSA_PEM) {
 	let usernameVal = (document.getElementById("reg_username") ? document.getElementById("reg_username").value : "");
 	let passwordVal = (document.getElementById("reg_password") ? document.getElementById("reg_password").value : "");
 	let confirm_passwordVal = (document.getElementById("reg_confirm_password") ? document.getElementById("reg_confirm_password").value : "");
 	return {
 		username: usernameVal,
 		password: passwordVal,
-		confirm_password: confirm_passwordVal
+		confirm_password: confirm_passwordVal,
+		pubKeyRSA_PEM: pubKeyRSA_PEM
 	};
 }
 
-function generateRegisterRequestString() {
-	return JSON.stringify(generateRegisterRequestObject());
+function generateRegisterRequestString(pubKeyRSA_PEM) {
+	return JSON.stringify(generateRegisterRequestObject(pubKeyRSA_PEM));
 }

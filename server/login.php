@@ -38,6 +38,9 @@ if (empty($errors)) {
 		} catch(Exception $e) {
 			$errors['decrypt'] = $e->getMessage();
 		}
+		if (isset($_SESSION['allow_register_only']) && $_SESSION['allow_register_only'] === true) {
+			$errors['allow_register_only'] = "Because you did not sign your DH public value you are only allowed to register.";
+		}
 	}
 
 	if (empty($errors)) {

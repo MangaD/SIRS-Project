@@ -107,6 +107,10 @@ public class SmartphoneServer extends WebSocketServer {
 				if (c.isAuthenticated) {
 					response.put("success", true);
 					response.put("message", "Authentication succeeeded.");
+					if (doAction.equals("register")) {
+						String clientPubKeyRSA_PEM = Utility.DERtoPublicKeyPEM(keyPair.getPublic().getEncoded());
+						response.put("pubKeyRSA_PEM", clientPubKeyRSA_PEM);
+					}
 					conn.send(response.toString());
 					return;
 				}
@@ -120,10 +124,14 @@ public class SmartphoneServer extends WebSocketServer {
 				}
 				
 				String password = jObj.getString("password");
-				
+
 				try {
 					Main.loadKeys(password);
 					c.isAuthenticated = true;
+					if (doAction.equals("register")) {
+						String clientPubKeyRSA_PEM = Utility.DERtoPublicKeyPEM(keyPair.getPublic().getEncoded());
+						response.put("pubKeyRSA_PEM", clientPubKeyRSA_PEM);
+					}
 					response.put("success", true);
 					response.put("message", "Authentication succeeeded.");
 					conn.send(response.toString());
@@ -156,7 +164,12 @@ public class SmartphoneServer extends WebSocketServer {
 				int l = jObj.getInt("l");
 				// TODO - Should verify if certificate is valid
 				String pubKeyRSA_PEM = jObj.getString("pubKeyRSA");
-				
+
+				if (doAction.equals("register")) {
+					String clientPubKeyRSA_PEM = Utility.DERtoPublicKeyPEM(keyPair.getPublic().getEncoded());
+					response.put("pubKeyRSA_PEM", clientPubKeyRSA_PEM);
+				}
+
 				try {
 					// Server PEM key to PublicKey
 					byte[] pubKeyBytes = Utility.PEMtoPublicKeyBytes(pubKeyRSA_PEM);

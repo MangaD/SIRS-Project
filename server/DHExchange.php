@@ -1,6 +1,7 @@
 <?php
 
 require_once 'inc/utilities.php';
+require_once 'inc/dbclass.php';
 require_once 'inc/DH.php';
 require_once 'inc/AES.php';
 
@@ -90,15 +91,70 @@ if (empty($errors)) {
 			if (!array_key_exists("signedPubKeyPEM", $json)) {
 				$errors['dh_pub_not_signed'] = "You did not sign your public DH value.";
 			} else {
-				// TODO - Get client's public key from database
-				$signedPubKeyPEM = trim($json['signedPubKeyPEM']);
+				$username = '';
+				if (isset($_SESSION['username'])) {
+					$username = $_SESSION['username'];
+				} else if (array_key_exists("username", $json)) {
+					$username = trim($json['username']);
+				}
 
-				$dh = $_SESSION['dh'];
-				try {
-					$dh->computeKey($request);
-					$_SESSION['aes'] = new AES();
-				} catch(Exception $e) {
-					$errors['dh_failed'] = "DH exchange: " . $e->getMessage();
+				if ($username === '') {
+					$_SESSION['allow_register_only'] = true;
+				} else {
+					try {
+						$dbclass = new DBClass();
+						$conn = $dbclass->getConnection();
+				
+						$stmt = $conn->prepare(" SELECT pub_key
+							FROM users
+							WHERE username = :username ");
+				
+						$stmt->bindValue(':username', $username, PDO::PARAM_STR);
+				
+						$stmt->execute();
+				
+						if (($row = $stmt->fetch()) !== false) {
+							// Get client's public key
+							$clientPubKeyRSA = $row["pub_key"];
+
+							// Verify signed public value
+
+							$signature_alg = "sha256";
+							if (!in_array($signature_alg, openssl_get_md_methods())) {
+								$errors['verify_failed'] = "Signature algorithm '" . $signature_alg . "' not available.";
+							} else {
+								$signedPubKeyPEM = base64_decode(trim($json['signedPubKeyPEM']));
+								$pubkeyid = openssl_pkey_get_public($clientPubKeyRSA);
+								if ($pubkeyid === false) {
+									$errors['verify_failed'] = "Failed to load your RSA public key.";
+								} else {
+									if (openssl_verify($request, $signedPubKeyPEM, $pubkeyid, $signature_alg) !== 1) {
+										$errors['verify_failed'] = "Signature of your DH public value is invalid.";
+									} else {
+										$_SESSION['allow_register_only'] = false;
+									}
+									openssl_free_key($pubkeyid);
+								}
+							}
+						} else {
+							$errors['user'] = 'No account found with that username.';
+						}
+				
+					}
+					catch(PDOException $e) {
+						$errors['exception'] = $e->getMessage();
+					}
+					$dbclass->closeConnection();
+				}
+
+				if (empty($errors)) {
+					$dh = $_SESSION['dh'];
+					try {
+						$dh->computeKey($request);
+						$_SESSION['aes'] = new AES();
+					} catch(Exception $e) {
+						$errors['dh_failed'] = "DH exchange: " . $e->getMessage();
+					}
 				}
 			}
 		}

@@ -18,7 +18,7 @@ if (!isInstalled()) {
 	$errors['post'] = 'Must send data over POST request method.';
 }
 
-$username = $password = $confirm_pass = "";
+$username = $password = $confirm_pass = $pubKeyRSA_PEM = "";
 
 $json = "";
 
@@ -42,13 +42,22 @@ if (empty($errors)) {
 	if (empty($errors)) {
 
 		if (!array_key_exists("username", $json) || !array_key_exists("password", $json) ||
-				!array_key_exists("confirm_password", $json)) {
-			$errors['arguments'] = "You did not provide username and/or password.";
+				!array_key_exists("confirm_password", $json) ||
+				!array_key_exists("pubKeyRSA_PEM", $json)) {
+			$errors['arguments'] = "You did not provide one of the following: username, password, RSA public key.";
 		} else {
 
 			$username = trim($json['username']);
 			$password = trim($json['password']);
 			$confirm_pass = trim($json['confirm_password']);
+			$pubKeyRSA_PEM = trim($json['pubKeyRSA_PEM']);
+
+			$pubKeyRes = openssl_pkey_get_public($pubKeyRSA_PEM);
+			if (!$pubKeyRes) {
+				$errors['invalid_key'] = "The RSA public key you provided is not valid.";
+			} else {
+				openssl_pkey_free($pubKeyRes);
+			}
 
 			if (empty($username)) {
 				$errors['user'] = 'Please enter username.';
@@ -88,9 +97,11 @@ if (empty($errors)) {
 		if (($row = $stmt->fetch()) !== false) {
 			$errors['user'] = 'This username is already taken.';
 		} else {
-			$stmt = $conn->prepare(" INSERT INTO users (username, password) VALUES (:username, :password) ");
+			$stmt = $conn->prepare(" INSERT INTO users (username, password, pub_key) " .
+				" VALUES (:username, :password, :pub_key) ");
 			$stmt->bindValue(':username', $username, PDO::PARAM_STR);
 			$stmt->bindValue(':password', password_hash($password, PASSWORD_DEFAULT), PDO::PARAM_STR);
+			$stmt->bindValue(':pub_key', $pubKeyRSA_PEM, PDO::PARAM_STR);
 
 			if ($stmt->execute() === false) {
 				// Because we have 'connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);'
