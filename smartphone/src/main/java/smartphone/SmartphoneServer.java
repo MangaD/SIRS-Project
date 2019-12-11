@@ -258,8 +258,53 @@ public class SmartphoneServer extends WebSocketServer {
 					response.put("message", e.getMessage());
 				}
 				conn.send(response.toString());
-			}
+			} /*else if (action.equals("addFile")) {
 
+				if (!jObj.has("hash")) {
+					response.put("success", false);
+					response.put("message", "Requires file hash.");
+					conn.send(response.toString());
+					return;
+				}
+				// TODO Should require key different than session key
+				else if (c.key == null) {
+					response.put("success", false);
+					response.put("message", "You did not make a DH exchange.");
+					conn.send(response.toString());
+					return;
+				}
+
+				String hash = jObj.getString("hash");
+
+				Main.db.addFile(hash, Utility.bytesToBase64(c.key.getEncoded()));
+
+			} else if (action.equals("decryptFile")) {
+
+				System.out.println("Received decrypt file request from: " + getAddress(conn));
+
+				if (!jObj.has("content") || !jObj.has("fileName") || !jObj.has("fileType")
+						|| !jObj.has("fileSize") || !jObj.has("fileLastModified")) {
+					response.put("success", false);
+					response.put("message", "Requires file content, name, type, size and last modified.");
+					conn.send(response.toString());
+					return;
+				}
+
+				SecretKey fKey = Main.db.getEncKey();
+
+				String ciphertext = jObj.getString("message");
+
+				try {
+					String plaintext = c.aes_gcm.decryptBase64(ciphertext, c.key);
+					response.put("success", true);
+					response.put("plaintext", plaintext);
+				} catch (Exception e) {
+					response.put("success", false);
+					response.put("message", e.getMessage());
+				}
+				conn.send(response.toString());
+			}
+			*/
 		}
 
 	}

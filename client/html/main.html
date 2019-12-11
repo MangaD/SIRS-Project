@@ -117,36 +117,9 @@
 	$('#viewFileBtn').on("change", function(e) {
 		
 		const files = e.target.files; // FileList object
-		const supportedTypes = ['text/plain', 'text/x-log'];
 
-		for (let i = 0, f; f = files[i]; i++) {
-			// Only process txt files.
-			if (!supportedTypes.includes(f.type)) {
-				alert(`File type '${f.type}' not supported.`);
-				continue;
-			}
-			
-			const reader = new FileReader();
-			reader.fileName = f.name;
-			reader.lastModifiedDate = f.lastModifiedDate;
-			reader.fileSize = f.size;
-			reader.fileType = f.type;
-
-			reader.onload = event => {
-				//console.log(event.target.result); // desired file content
-				// https://stackoverflow.com/questions/24245105/how-to-get-the-filename-from-the-javascript-filereader
-				$('#viewFileModal .modal-header').html(event.target.fileName);
-				$('#viewFileTextarea').html(event.target.result);
-				$('#viewFileModal').modal('show');
-				let footer = "<strong>Type:</strong> " + event.target.fileType;
-				footer += " <strong>Size:</strong> " + event.target.fileSize + " B";
-				footer += " <strong>Last modification:</strong> " + event.target.lastModifiedDate;
-				$('#viewFileModal .modal-footer').html(footer);
-			 }
-			reader.onerror = error => reject(error);
-			reader.onloadstart = () => loaderStart();
-			reader.onloadend = () => loaderEnd();
-			reader.readAsText(f); // you could also read images and other binaries
+		for (let i = 0, f; f = files[i]; i++) {			
+			viewFile(f);
 		}
 
 		e.preventDefault();

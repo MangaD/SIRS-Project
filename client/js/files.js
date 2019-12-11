@@ -88,6 +88,13 @@ function fileDownload(el) {
 				a.click();
 				window.URL.revokeObjectURL(url);
 				alert(`File '${fileName}' has been downloaded.`);
+
+				/*
+				Smartphone.sendRequest({
+					action: "addFile",
+					hash: hash
+				});
+				*/
 			})
 			.catch(() => alert('File not downloaded'));
 			
@@ -152,4 +159,60 @@ function generateFileListRequestObject() {
 
 function generateFileListRequestString() {
 	return JSON.stringify(generateFileListRequestObject());
+}
+
+function viewFile(f) {
+
+	const supportedTypes = ['text/plain', 'text/x-log'];
+
+	// Only process txt files.
+	if (!supportedTypes.includes(f.type)) {
+		alert(`File type '${f.type}' not supported.`);
+		return;
+	}
+
+	const reader = new FileReader();
+	reader.fileName = f.name;
+	reader.lastModifiedDate = f.lastModifiedDate;
+	reader.fileSize = f.size;
+	reader.fileType = f.type;
+
+	reader.onload = event => {
+
+		/*
+		Smartphone.sendRequest({
+			action: "decryptFile",
+			// The atob() function decodes a string of data which has been encoded
+			// using base-64 encoding. Conversely, the btoa() function creates a base-64
+			// encoded ASCII string from a "string" of binary data.
+			content: btoa(event.target.result),
+			hash: ,
+			fileName: event.target.fileName,
+			fileType: event.target.fileType,
+			fileSize: event.target.fileSize,
+			fileLastModified: event.target.lastModifiedDate
+		});
+		*/
+
+		
+		//console.log(event.target.result); // desired file content
+		// https://stackoverflow.com/questions/24245105/how-to-get-the-filename-from-the-javascript-filereader
+		$('#viewFileModal .modal-header').html(event.target.fileName);
+		$('#viewFileTextarea').html(event.target.result);
+		$('#viewFileModal').modal('show');
+		let footer = "<strong>Type:</strong> " + event.target.fileType;
+		footer += " <strong>Size:</strong> " + event.target.fileSize + " B";
+		footer += " <strong>Last modification:</strong> " + event.target.lastModifiedDate;
+		$('#viewFileModal .modal-footer').html(footer);
+		
+	}
+	reader.onerror = error => reject(error);
+	reader.onloadstart = () => loaderStart();
+	reader.onloadend = () => loaderEnd();
+	
+	// For reading as binary string
+	//reader.readAsBinaryString(f);
+
+	// For reading plain text:
+	reader.readAsText(f); // you could also read images and other binaries
 }

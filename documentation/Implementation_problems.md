@@ -16,6 +16,6 @@
 
    We considered using the smartphone to take care of all the cryptographic aspects of the client's needs, but later found out that JavaScript has a cryptographic API called [SubtleCrypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto).
 
-4. **Encrypt files on upload**
+4. **Encrypt files on upload and download**
 
    Due to time constraints we were unable to implement encryption of the file on upload.

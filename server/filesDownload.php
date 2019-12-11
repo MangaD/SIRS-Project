@@ -75,18 +75,22 @@ if ($_SERVER['HTTP_ACCEPT'] === 'application/json') {
 
 	// CREATE TEMPORARY FILE CIPHERED TO SEND
 
-	// Get original file as a string
-	$file_contents = file_get_contents($path);
-	//Encrypt file contents with secret key
-	$file_contents = encryptWithSessionKey($file_contents);
+	// TODO Should not use session key
 	// Write temporary file
-	$temp = tmpfile();
-	// https://stackoverflow.com/questions/11212569/retrieve-path-of-tmpfile
-	$metaDatas = stream_get_meta_data($temp);
-	$tmpFilename = $metaDatas['uri'];
-	fwrite($temp, $file_contents);
-	fseek($temp, 0);
-	$path = $tmpFilename;
+	/*$temp = tmpfile();
+	if (isset($_SESSION['usingSecureChannel']) && $_SESSION['usingSecureChannel'] === true) {
+		// Get original file as a string
+		$file_contents = file_get_contents($path);
+		//Encrypt file contents with secret key
+		$file_contents = encryptWithSessionKey($file_contents);
+		$data['hash'] = hash_file('sha256', $file_contents);
+		// https://stackoverflow.com/questions/11212569/retrieve-path-of-tmpfile
+		$metaDatas = stream_get_meta_data($temp);
+		$tmpFilename = $metaDatas['uri'];
+		fwrite($temp, $file_contents);
+		fseek($temp, 0);
+		$path = $tmpFilename;
+	}*/
 
 
 	// https://serverfault.com/questions/316814/php-serve-a-file-for-download-without-providing-the-direct-link
@@ -108,8 +112,10 @@ if ($_SERVER['HTTP_ACCEPT'] === 'application/json') {
 	// Get file from path
 	readfile($path);
 
+	/*
 	// Close temporary file
 	fclose($temp);
+	*/
 }
 
 ?>
