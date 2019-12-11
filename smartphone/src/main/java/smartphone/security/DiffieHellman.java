@@ -35,38 +35,34 @@ public class DiffieHellman {
 				InvalidAlgorithmParameterException, InvalidKeyException, IOException {
 		
 		BigInteger p = new BigInteger(Utility.base64ToBytes(pBase64));
-        BigInteger g = new BigInteger(Utility.base64ToBytes(gBase64));
+		BigInteger g = new BigInteger(Utility.base64ToBytes(gBase64));
 		
 		DHParameterSpec dhParamFromRemotePubKey = new DHParameterSpec(p, g, l);
 		// Bob creates his own DH key pair
 		KeyPairGenerator kPairGen = KeyPairGenerator.getInstance("DH");
 		kPairGen.initialize(dhParamFromRemotePubKey);
-        keyPair = kPairGen.generateKeyPair();
-        // Bob encodes his public key in PEM format, and sends it over to Alice.
-        String pubKeyPEM = "-----BEGIN PUBLIC KEY-----\n";
-        pubKeyPEM += Utility.bytesToBase64(keyPair.getPublic().getEncoded());
-        pubKeyPEM += "\n-----END PUBLIC KEY-----";
-        return pubKeyPEM;
+		keyPair = kPairGen.generateKeyPair();
+		// Bob encodes his public key in PEM format, and sends it over to Alice.
+		String pubKeyPEM = "-----BEGIN PUBLIC KEY-----\n";
+		pubKeyPEM += Utility.bytesToBase64(keyPair.getPublic().getEncoded());
+		pubKeyPEM += "\n-----END PUBLIC KEY-----";
+		return pubKeyPEM;
 	}
 	
 	public void generateSharedSecret(String pubKeyPEM) throws NoSuchAlgorithmException,
 			InvalidKeyException, InvalidKeySpecException {
-		
-		// PEM to PublicKey
-		// https://www.xinotes.net/notes/note/1898/
-		pubKeyPEM = pubKeyPEM.replaceAll("(-+BEGIN PUBLIC KEY-+\\r?\\n|-+END PUBLIC KEY-+\\r?\\n?)", "");
-		pubKeyPEM = pubKeyPEM.replace("\n", "").replace("\r", "");
-		byte[] pubKeyBytes = Utility.base64ToBytes(pubKeyPEM);
-		
+
+		byte[] pubKeyBytes = Utility.PEMtoPublicKeyBytes(pubKeyPEM);
+
 		// Bob creates and initializes his DH KeyAgreement object
 		KeyAgreement keyAgree = KeyAgreement.getInstance("DH");
-        keyAgree.init(keyPair.getPrivate());
+		keyAgree.init(keyPair.getPrivate());
 		
 		KeyFactory keyFac = KeyFactory.getInstance("DH");
-        X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(pubKeyBytes);
-        PublicKey pubKey = keyFac.generatePublic(x509KeySpec);
-        keyAgree.doPhase(pubKey, true);
-        sharedSecret = keyAgree.generateSecret();
+		X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(pubKeyBytes);
+		PublicKey pubKey = keyFac.generatePublic(x509KeySpec);
+		keyAgree.doPhase(pubKey, true);
+		sharedSecret = keyAgree.generateSecret();
 	}
 	
 	public SecretKey generateAESFromSharedSecret() throws Exception {
@@ -75,24 +71,24 @@ public class DiffieHellman {
 		}
 		
 		// Generate key of 256 bits from key password entered by user
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] sharedSecretHash = digest.digest(sharedSecret);
-        
-        // Debug hash
-        // https://stackoverflow.com/questions/5470219/get-md5-string-from-message-digest
-        /*
-        StringBuffer hexString = new StringBuffer();
-        for (int i = 0; i < sharedSecretHash.length; i++) {
-            if ((0xff & sharedSecretHash[i]) < 0x10) {
-                hexString.append("0"
-                        + Integer.toHexString((0xFF & sharedSecretHash[i])));
-            } else {
-                hexString.append(Integer.toHexString(0xFF & sharedSecretHash[i]));
-            }
-        }
-        System.out.println(hexString);
-        */
-        
-        return new SecretKeySpec(sharedSecretHash, "AES");
+		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+		byte[] sharedSecretHash = digest.digest(sharedSecret);
+		
+		// Debug hash
+		// https://stackoverflow.com/questions/5470219/get-md5-string-from-message-digest
+		/*
+		StringBuffer hexString = new StringBuffer();
+		for (int i = 0; i < sharedSecretHash.length; i++) {
+			if ((0xff & sharedSecretHash[i]) < 0x10) {
+				hexString.append("0"
+						+ Integer.toHexString((0xFF & sharedSecretHash[i])));
+			} else {
+				hexString.append(Integer.toHexString(0xFF & sharedSecretHash[i]));
+			}
+		}
+		System.out.println(hexString);
+		*/
+		
+		return new SecretKeySpec(sharedSecretHash, "AES");
 	}
 }

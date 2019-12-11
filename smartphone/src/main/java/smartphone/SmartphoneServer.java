@@ -16,6 +16,7 @@ import java.util.Vector;
 
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import java.security.PublicKey;
 
 import static smartphone.Main.keyPair;
 
@@ -138,10 +139,12 @@ public class SmartphoneServer extends WebSocketServer {
 					(doAction.isEmpty() ? "" : "with do='" + doAction + "' ") +
 					"from: " + getAddress(conn));
 				
-				if (!jObj.has("key") || !jObj.has("p") ||
-						!jObj.has("g") || !jObj.has("l")) {
+				if (!jObj.has("signedKey") || !jObj.has("p") ||
+						!jObj.has("key") || !jObj.has("g") || !jObj.has("l") ||
+						!jObj.has("pubKeyRSA")) {
 					response.put("success", false);
-					response.put("message", "DH requires a public key, p, g and l values.");
+					response.put("message", "DH requires a signed DH public key, p, g and l values. " +
+						"It also requires the server's RSA public key.");
 					conn.send(response.toString());
 					return;
 				}
@@ -149,17 +152,33 @@ public class SmartphoneServer extends WebSocketServer {
 				String pBase64 = jObj.getString("p");
 				String gBase64 = jObj.getString("g");
 				String key = jObj.getString("key");
+				String signedKeyBase64 = jObj.getString("signedKey");
 				int l = jObj.getInt("l");
+				// TODO - Should verify if certificate is valid
+				String pubKeyRSA_PEM = jObj.getString("pubKeyRSA");
 				
 				try {
-					boolean isCorrect = c.aeRSA.decrypt(keyPair.getPublic(), key);
+					// Server PEM key to PublicKey
+					byte[] pubKeyBytes = Utility.PEMtoPublicKeyBytes(pubKeyRSA_PEM);
+					PublicKey serverPubKey = AsymmetricEncryptionRSA.publicKeyFromByteArray(pubKeyBytes);
+
+					// Verify DH public value's signature
+					boolean isCorrect = c.aeRSA.verify(key, signedKeyBase64, serverPubKey);
+					if (!isCorrect) {
+						throw new Exception("DH public value's signature verify failed.");
+					}
+
+					// Generate our DH key pair
+					String responsePubKeyBase64 = c.dh.generateKeyPair(pBase64, gBase64, l);
+					response.put("pubKeyPEM", responsePubKeyBase64);
+					// Sign our DH public value
+					String signedPubKeyBase64 = c.aeRSA.sign(responsePubKeyBase64, keyPair.getPrivate());
+					response.put("signedPubKeyPEM", signedPubKeyBase64);
+
+					// Generate shared secret
 					c.dh.generateSharedSecret(key);
 					c.key = c.dh.generateAESFromSharedSecret();
 					response.put("success", true);
-
-					String responsePubKeyBase64 = c.dh.generateKeyPair(pBase64, gBase64, l);
-					String signedPubKeyBase64 = c.aeRSA.sign(responsePubKeyBase64, keyPair.getPrivate());
-					response.put("pubKeyPEM", signedPubKeyBase64);
 
 					//response.put("pubKeyPEM", responsePubKeyBase64);
 				} catch (Exception e) {

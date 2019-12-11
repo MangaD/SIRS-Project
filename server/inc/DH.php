@@ -61,6 +61,8 @@ class DH {
 		// and didn't work...
 		//$this->pubKey = $details['dh']['pub_key'];
 		//$this->privKey = $details['dh']['priv_key'];
+
+		openssl_pkey_free($keypair);
 	}
 
 	function computeKey($remotePubKeyPEM) {
@@ -70,6 +72,7 @@ class DH {
 		$details = openssl_pkey_get_details(openssl_pkey_get_public($remotePubKeyPEM));
 		$remote_public_key = $details['dh']['pub_key'];
 		$this->sharedSecret = openssl_dh_compute_key($remote_public_key, $privRes);
+		openssl_pkey_free($privRes);
 		if ($this->sharedSecret) {
 			// hex2bin because:
 			// "The parameter string $password must be in binary form and is derived from the exadecimal key value."

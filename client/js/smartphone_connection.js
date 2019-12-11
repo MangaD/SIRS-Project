@@ -49,6 +49,7 @@ class Smartphone {
 						.then((data) => {
 							if (!data.success) {
 								if (response.do === "login") {
+									showLoginPage();
 									showLoginErrors(data.errors);
 								} else if (response.do === "register") {
 									showRegisterErrors(data.errors);
@@ -60,6 +61,8 @@ class Smartphone {
 									g: data.gBase64,
 									l: data.l,
 									key: data.key,
+									signedKey: data.signedKey,
+									pubKeyRSA: data.pubKeyRSA,
 									do: response.do
 								});
 							}
@@ -102,7 +105,8 @@ class Smartphone {
 					loaderStart();
 
 					postJSONData("DHExchange.php", {
-						request: response.pubKeyPEM
+						request: response.pubKeyPEM,
+						signedPubKeyPEM: response.signedPubKeyPEM
 					})
 					.then((data) => {
 						if (!data.success) {
