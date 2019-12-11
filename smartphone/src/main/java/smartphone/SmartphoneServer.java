@@ -5,6 +5,7 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 
+import smartphone.security.AsymmetricEncryptionRSA;
 import smartphone.security.DiffieHellman;
 import smartphone.security.SymmetricEncryption_AES_GCM;
 import smartphone.security.Utility;
@@ -16,6 +17,8 @@ import java.util.Vector;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
+import static smartphone.Main.keyPair;
+
 public class SmartphoneServer extends WebSocketServer {
 
 	private int TCP_PORT;
@@ -26,12 +29,14 @@ public class SmartphoneServer extends WebSocketServer {
 		public DiffieHellman dh;
 		public SecretKey key;
 		public SymmetricEncryption_AES_GCM aes_gcm;
+		public AsymmetricEncryptionRSA aeRSA;
 		public Client(WebSocket ws) throws NoSuchAlgorithmException, NoSuchPaddingException {
 			this.ws = ws;
 			this.dh = new DiffieHellman();
 			this.key = null;
 			this.aes_gcm = new SymmetricEncryption_AES_GCM();
 			isAuthenticated = false;
+			aeRSA = new AsymmetricEncryptionRSA();
 		}
 	}
 
@@ -147,11 +152,16 @@ public class SmartphoneServer extends WebSocketServer {
 				int l = jObj.getInt("l");
 				
 				try {
-					String responsePubKeyBase64 = c.dh.generateKeyPair(pBase64, gBase64, l);
+					boolean isCorrect = c.aeRSA.decrypt(keyPair.getPublic(), key);
 					c.dh.generateSharedSecret(key);
 					c.key = c.dh.generateAESFromSharedSecret();
 					response.put("success", true);
-					response.put("pubKeyPEM", responsePubKeyBase64);
+
+					String responsePubKeyBase64 = c.dh.generateKeyPair(pBase64, gBase64, l);
+					String signedPubKeyBase64 = c.aeRSA.sign(responsePubKeyBase64, keyPair.getPrivate());
+					response.put("pubKeyPEM", signedPubKeyBase64);
+
+					//response.put("pubKeyPEM", responsePubKeyBase64);
 				} catch (Exception e) {
 					response.put("success", false);
 					response.put("message", e.getMessage());

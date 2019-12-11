@@ -138,3 +138,27 @@ gradle-app.setting
 **/build/
 
 # End of https://www.gitignore.io/api/java,gradle,intellij
+smartphone/gradle/wrapper/gradle-wrapper.jar
+smartphone/gradle/wrapper/gradle-wrapper.jar
+smartphone/gradle/wrapper/gradle-wrapper.properties
+smartphone/gradle/wrapper/gradle-wrapper.jar
+smartphone/gradlew
+smartphone/gradle/wrapper/gradle-wrapper.jar
+smartphone/gradlew.bat
+smartphone/smartphone.iml
+smartphone/smartphone.ipr
+smartphone/gradle/wrapper/gradle-wrapper.jar
+smartphone/smartphone.main.iml
+smartphone/gradle/wrapper/gradle-wrapper.jar
+smartphone/smartphone.test.iml
+smartphone/gradle/wrapper/gradle-wrapper.jar
+smartphone/gradle/wrapper/gradle-wrapper.jar
+smartphone/gradle/wrapper/gradle-wrapper.jar
+*.jar
+smartphone/gradle/wrapper/gradle-wrapper.jar
+smartphone/gradle/wrapper/gradle-wrapper.jar
+*.jar
+smartphone/gradle/wrapper/gradle-wrapper.jar
+smartphone/gradle/wrapper/gradle-wrapper.jar
+smartphone/gradle/wrapper/gradle-wrapper.jar
+smartphone/gradle/wrapper/gradle-wrapper.jar
