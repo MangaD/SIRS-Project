@@ -46,6 +46,17 @@ if (empty($errors)) {
 		$data['key'] = $dh->getPubKeyPEM();
 		// No longer necessary
 		//$data['pubKeyBase64'] = base64_encode($dh->getPubKey());
+
+
+		// fetch private key from file and ready it
+		$pkeyid = openssl_pkey_get_private("inc/private_key.pem");
+		// compute signature
+		openssl_sign($dh->getPubKeyPEM(), $signature, $pkeyid);
+		// free the key from memory
+		openssl_free_key($pkeyid);
+		$data['rsa_publickey_pem'] = $signature;
+		
+
 	} else {
 		SessionManager::sessionStart();
 		if (!isset($_SESSION['dh'])) {
