@@ -87,8 +87,13 @@ if ($_SERVER['HTTP_ACCEPT'] === 'application/json') {
 	ob_clean();   // discard any data in the output buffer (if possible)
 	flush();      // flush headers (if possible)
 
+	//Get file as a string
+	$file = file_get_contents($path);
+	//Encrypt file with secret key
+	$ciphertext = encryptWithSessionKey($file);
+
 	// Get file from path
-	readfile($path);
+	readfile($ciphertext);
 }
 
 ?>
