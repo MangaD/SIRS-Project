@@ -86,3 +86,8 @@ TODO (tcpdumps, etc)
 - [PHP JSON](https://www.php.net/manual/en/book.json.php)
 - [PHP URLs](https://www.php.net/manual/en/book.url.php)
 
+**Report:**
+
+- [LaTeX](https://www.latex-project.org/)
+- [draw.io](https://www.draw.io/)
+
