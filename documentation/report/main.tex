@@ -28,6 +28,8 @@
 % Tables
 \usepackage{booktabs}
 
+% Position figure where it appears in latex
+\usepackage{float}
 
 %------------------------------------------------------------
 
@@ -103,34 +105,37 @@ Besides authentication mechanisms, we're also faced with the challenge of data p
   \item The system must provide two-factor authentication.
   \item User files must be stored encrypted.
   \item User files must be decrypted only if the user has their smartphone nearby the client application.
-  \item The system must provide fault tolerance. If the system crashes after decrypting the files, make sure that the files are encrypted again.
+  \item Communication with the server may only happen whilst the user has their smartphone nearby the client application.
+  \item The system must provide fault tolerance. If the system crashes after decrypting the files, make sure that the files are not stored encrypted.
   \item Communication between the smartphone and client application must be done using a secure protocol.
   
 \end{enumerate}
 
-\subsection{Trust assumptions}
-
-Our problem assumes that the network and user's device cannot be trusted. However, we assume that the user's device is not compromised while it is in use, and that the smartphone and server are not compromised either. We also assume that the server's certificate is trusted.
 
 %------------------------------------------------------------
 
 \newpage
+
+\subsection{Trust assumptions}
+
+Our problem assumes that the network and user's device (e.g. PC) cannot be trusted. However, we assume that the user's device is not compromised while the user is using the app, and that the smartphone and server are not compromised either. We also assume that the server's certificate is trusted.
+
 \section{Proposed solution}
 
-For our solution, we shall create a simple website---on a server machine---with a register and login forms, for which we shall obviously sanitize user input and make use of SQL parameters in order to prevent XSS and SQLI respectively. The user's password shall be stored hashed and salted in order to prevent it from being easily obtained by potential attackers. As an additional security layer for authentication, we shall use 2FA with the help of Duo SDK, thus leveraging the smartphone's proximity to the user as part of an increased security solution. The server shall also log any user actions.\par
+For our solution, we shall create a simple website, separating the client logic (JavaScript) from the server logic (PHP). There will be a register and login forms, for which we shall sanitize user input and make use of SQL parameters in order to prevent XSS and SQLI respectively. The user's password shall be relatively secure (min. 10 chars, contain lowercase, uppercase, digits and symbols) and shall be stored hashed and salted in order to prevent it from being easily obtained by potential attackers, should the server's database be compromised. As an additional security layer for authentication, we shall use 2FA with the help of Duo SDK, thus leveraging the smartphone's proximity to the user as part of an increased security solution.\par
 
-The user shall be able to download files, from the server's website, which come encrypted with a symmetric key. The user's key pair shall be generated every session, and they shall be stored in the user's smartphone, which will necessarily need to be connected to the user's device in order to be able to receive it, and we shall make a simple JAVA app for this purpose. The smartphone and user's device shall connect through Wi-Fi, utilizing a secure protocol (e.g. WPA2/3). For extra security, the user's private key should be symmetrically encrypted with a password, which should be different than the user's login password (e.g. KeyStore). The symmetric key used to encrypt each file shall also be stored in the smartphone encrypted in the same fashion as the user's private key.\par
+The user shall be able to download files from the website, encrypted with a new random symmetric key. We shall make a simple Android app that will generate the user's long-term RSA key pair at its installation and will store it in the user's smartphone. The smartphone and user's device shall connect through Wi-Fi, utilizing a secure protocol (e.g. WPA2/3). For extra security, the user's private key should be symmetrically encrypted with a password, which should be different than the user's login password (e.g. KeyStore). The symmetric key used to encrypt each file shall also be stored in the smartphone encrypted with the user's public key.\par
 
-We shall create a simple client application for viewing these encrypted files that were downloaded from the server. In order for the client application to decrypt these files, the smartphone must be connected to the user's device. The system shall be fault tolerant---as soon as this connection is lost, the client application shall clean its state, thus the user shall no longer be able to view the encrypted files. We plan on using a stream cipher for this purpose, as in theory we can have large files that don't fit in volatile memory.\par
+Our client application (website's JS) shall be able to view these encrypted files that were downloaded from the server (for simplicity we'll consider only txt files). In order for the client application to decrypt these files, the smartphone must be connected to the user's device. The system shall be fault tolerant---as soon as this connection is lost, the client application shall clean its state, thus the user shall no longer be able to view the encrypted files nor communicate with the server. We plan on using a stream cipher for encrypting / decrypting, as in theory we can have large files that don't fit in volatile memory. For binary fails the alternative would be decrypting to the disk and encrypting when proximity is lost, but this does not prevent other kinds of faults (e.g. PC shutdown).\par
 
-For registration and login, an AES key shall be exchanged using a secure protocol (e.g. Diffie-Hellman). Subsequent communication between the user and the server shall be done using symmetric encryption with this key, in order to guarantee confidentiality. For integrity, each message shall be hashed together with random padding (using SHA-2) and for authenticity this hash shall be signed with the sender's private key.\par
+For registration and login, a shared AES key shall be obtained using a secure protocol, we propose Diffie-Hellman. Subsequent communication between the user and the server shall be done using symmetric encryption with this key, in order to guarantee confidentiality. For integrity, a MIC can be generated using Galois/Counter Mode (GCM) mode. Our only authenticity guarantees are that either the client or server created the message. We could provide non-repudiation by signing the message and having freshness, but we'll not consider this for this project. DH provides us with perfect forward secrecy as long as we generate new key pair values every session, but it is susceptible to man-in-the-middle, so we shall sign the exchanged public values with long-term RSA private keys.\par
 
 %------------------------------------------------------------
 
 \setcounter{figure}{0} % Reset figure counter
-\begin{figure}
+\begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{secure_channel_2.png}
+\includegraphics[width=11.8cm]{secure_channel.png}
 \caption{Secure communication}
 \end{figure}
 
@@ -139,88 +144,67 @@ For registration and login, an AES key shall be exchanged using a secure protoco
 \section{Results}
 
 \begin{itemize}
-  \item \textbf{2FA:} 
-  In order to increase strong security authentication, we proposed to implement a 2 factor authentication service in order to authenticate the client. 
+
+ \item \textbf{XSS and SQLi:} 
+  To mitigate cross-site scripting we sanitize all the inputs that are not 100\% controlled by us (user inputs, server messages and smartphone messages) that end up being displayed. These validations are deployed both in the client side (JavaScript) and in the server side (PHP).
+
+  To avoid SQL injections we used prepared statements to ensure that the values passed from the client to the server are compiled before being executed, thus not affecting the database in an undesirable way.
   
+  \item \textbf{2FA:} 
   We decided to use Duo SDK, because it is a user-centric zero-trust security platform that allows an application to protect sensitive data. 
   
   In our approach the 2FA mechanisms are: "something the user has" (phone) and "something the user knows" (password).
   
-  We managed to integrate Duo in our application successfully, making the user to authenticate in the application only upon inserting the correct password and successfully responded to the Duo challenge (push or sms on user phone).
+  We managed to integrate Duo in our application successfully, making the user authenticate in the application only upon inserting the correct password and successfully respond to the Duo's challenge.
   
   \item \textbf{Proximity:}
-  We assure that the user can only view, download or upload files (be logged in the system) when he is close to the computer that he is logged in. For this matter, the machine where the user is operating and the smartphone require to be connected to the same network. The client app pings the smartphone every 5 seconds, if the smartphone is down, proximity is broken and the client is logged out, making it impossible to view, upload or download files.
+  We assure that the user can only view, download or upload files (be logged in the system) when he is close to the computer that he is logged in. For this matter, the machine where the user is operating and the smartphone require to be connected in the same network. If connection with the smartphone is broken, proximity fails and the client is logged out, moreover losing access to the keys to decrypt the files.
   
   \item \textbf{WPA2:}
-  We assume that the client and the smartphone are connected through WiFi under the WPA2 protocols. Making the connection between these two secure.
-  In our project we simulated a smartphone using a virtual machine so we when testing we do not need to use WPA2 for the communication.
-  
-  \item \textbf{XSS and SQLi:} 
-  To mitigate cross-site scripting we sanitize all the inputs that are not 100\% controlled by us. These validations are deployed both in the client side (JavaScript) and in the server side (PHP). One additional benefit of some of the validations is that they also make the user choose stronger passwords when registering a new account.
-
-  To avoid SQL injections we used prepared statements to ensure that the values passed from the client to the server do not affect the database in an unexpected and incorrect way.
+  We assume that the client and the smartphone are connected through WiFi under the WPA2 or WPA3 protocols. Making the connection between these two secure. In our project we simulated a smartphone using a virtual machine so when testing we did not use WPA2 for the communication.
 
   \item \textbf{Password strength:} 
-  When creating a new account the user needs to enter a password that complies with the following regular expression "(?=.*\textbackslash d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@\#\textbackslash \$\%\textbackslash \^ \&]).\{10,\}". The password must be composed by at least 10 characters, of these 10 characters at least one of them must be a lowercase letter, one of them must be an uppercase letter and the user must also use at least a digit and a special character. By doing this we ensure that the user creates stronger passwords, and for example by adding the special character we can stop/mitigate common dictionary attacks.
- 
-  We also assume that the user will not disclose his password to anyone.
-  
-  The users' passwords are hashed and salted before being saved in the database.
+  When creating a new account the user needs to enter a password that must be composed by at least 10 characters, and contain at least a lowercase, an uppercase, a digit and a symbol. By doing this we prevent brute-force attacks, and also by requiring this complexity we can mitigate common dictionary attacks. The users' passwords are stored in the server's database hashed and salted.
 
-  \item \textbf{OSI layer:} ..........
-  \item \textbf{JS crypto issues:} We don't encrypt things on the client (and use smartphone instead): lack of javascript crypto libraries
-  \item \textbf{AES GCM:} Using AES GCM we created a Message Integrity Check (MIC) and with that we can prevent attacks (e.g. bit-flip attacks) on the encrypted packets. The MIC adds a few bytes to each packet and that makes the packets tamper proof.
+  \item \textbf{OSI layer:} We deal with the application, presentation and session layers which allow us to have some confidentiality in regard to the content of the messages and authentication. Still, we are unable to provide confidentiality in terms of knowing that a communication is going on and which resources are involved. For that a more in-depth protocol (e.g. Tunneling) would be required.
   
-  This approach is also useful because now with a MIC we do not need to sign the hashes as we had proposed before. This key (MIC) is only known by the client and the server and that ensures authenticity, however we cannot ensure non-repudiation, for that we would also need to ensure freshness.
+  \item \textbf{JS crypto issues:} We don't encrypt things on the client, and use the smartphone instead. One reason for this is the lack of JavaScript crypto libraries. The bonus is that it leverages proximity. The downside is that it is harder to program.
+  
+  \item \textbf{AES GCM:} Using AES operating in Galois/Counter Mode (GCM), we have a Galois Message Authentication Code (GMAC) that grants message integrity, so we can prevent bit-flip attacks on the payload.
+  
+  This approach is also useful because with GMAC we do not need create our own MACs or sign the messages' hashes. GMAC can only be generated by either the client or the server and that ensures some authenticity, however it does not ensure non-repudiation, for that we would need to sign the messages' hashes and implement freshness.
 
-  \item \textbf{Signed hash with padding:} ..........
   \item \textbf{Diffie-Hellman:} 
   
-  
-  We made use of DH in the secure channel, to ensure that we can transmit sensitive information in a non-secure channel.
-  
-  - P and G always the same 
-        Prof: Sim, PFS mantém-se nessa situação. Aliás, até é normal o P e o G serem iguais em todas as sessões de Diffie-Hellman. Existem até valores standards (https://www.ietf.org/rfc/rfc3526.txt seção 3 por ex.) que podem usar para o primo e o gerador, para que não tenham que ser vocês a criar esses números de modo a que eles tenham as propriedades que devem ter.
-  - public values signed with RSA
-  - PEM (+ DER) format to comunicate public keys between PHP and Java
-  - Client acts as middleman for secure communication (doesn't encrypt / decrypt anything himself)
-      - Smartphone -> Client -> Server
-  
-  \item \textbf{Problems:}
-    \begin{itemize}
-        \item \textbf{Duo registration:}
-        Currently the user's device (smartphone, etc) is associated with Duo at first login. It should be done at registration to avoid an attacker finding the user's login password and associating his device with the account, should the attacker make the first login.
-
-        However, because inserting the user in our database could fail after associating the user's device with Duo, this would require deleting the user's account at Duo's Admin panel. For this, we'd need to use a PHP third-party library for making REST requests to the Duo's API and integrate it with our Duo account.
-
-        This would give us some work to implement and is not the most important security fault of this project, so we chose to focus on other aspects instead given the time we had available.
-
-        \item \textbf{Check server's certificate:}
-        \item \textbf{Confidentiality:} 
-        It is possible to know that a communication is going on and with that information the attacker can try to infer what kind of message in being passed in the channel at that moment, and with more communications listened the attacker can start to observe a pattern that can lead to discover what kind of pattern each message creates.
-Everyone can know what kind of resource the user is accessing in a time period (e.g. login.php, register.php, main.php) 
-    \end{itemize}
+  We made use of DH protocol for establishing a shared secret (at login and register) in order to have perfect forward secrecy. P and G values are always the same because they take a long time to generate and are not relevant for PFS, there are even standard values for these. However, private and public values are different each session. Because DH is susceptible to man-in-the-middle, we sign the public values with long-term RSA private keys. Except on the client's public value at register because the server has no way to verify the public value. Because we use Java and PHP we had to convert PEM to DER formats and vice-versa.
 \end{itemize}
 
-%------------------------------------------------------------
-
-\newpage
-\section{Plan}
-
-\subsection{Versions}
-
+\section{Evaluation}
 \begin{itemize}
-  \item \textbf{Basic:} For our basic solution we shall create a website with a register and a login forms, with mechanisms to prevent XSS and SQLI attacks, that stores passwords hashed and salted, creates a key-pair for each user upon registration and gives it to them. The server shall also be able to encrypt trivial text files---context doesn't matter---with a symmetric key shared with the user at login, and allow the user to download them.  We shall then create a simple client application (typically JavaScript on the website) so that these files can be viewed by the user, using a stream cipher.
+    \item\textbf{Brute force:}
+    Requiring a lengthy password with a wide range of possible characters mitigates brute force, for now, yet is inconvenient for the user and may no longer be sufficient in the future as computational power evolves. A better approach would be to limit the number of login attempts within a time period.
 
-  \item \textbf{Intermediate:} On top of the basic version, we shall implement 2FA using Duo SDK and add another use for our smartphone, which is proximity detection. The user's key pair, server public key and symmetric key for each file shall be stored in the smartphone, we'll design a simple Android app to take care of this task. The communication with the smartphone shall use a secure Wi-Fi protocol (WPA 2 or 3). We shall also log user actions on the server side.
+    \item \textbf{Duo registration:}
+    Currently the user's smartphone is associated with Duo on the first login. It should be done at registration to avoid an attacker hijacking the account by potentially finding the user's server login password and associating his own smartphone with the account, should the attacker make the first login.
 
-  \item \textbf{Advanced:} Finally, to complete our solution, we shall guarantee that as soon as the connection to the smartphone is lost or the client application crashes, the encrypted files shall no longer be visible. Additionally, we'll design our own custom secure channel for communication between server and client, as explained in the previous chapter. We'll also encrypt the user's private key and files' symmetric keys using an AES key derived from a password that only the user knows about.
+    However, because inserting the user in our database could possibly fail (e.g. mysql down) after associating the user's device with Duo, this would require deleting the user's account at Duo's Admin panel. For this, we'd need to use a PHP third-party library for making REST requests to the Duo's API and integrate it with our Duo account. This would give us some work to implement and is not the most important security fault of this project, so we chose to focus on other aspects considering the time we had available.
+
+    \item \textbf{Check server's certificate:} We do not check if the server's certificate is valid as this would require a trusted 3rd-party. This is of course an essential step for a real world application.
+    
+    \item \textbf{Confidentiality:}
+    It is possible to know that a communication is going on and with that information the attacker can try to infer what kind of message is being passed in the channel at that moment, and with more communications listened the attacker can start to observe a pattern that can lead to discover what kind of message we are sending. Since we use a stream cipher the length of the ciphertext is the same as the plaintext. Moreover, everyone can know what kind of resource the user is accessing in a time period (e.g. login.php, register.php, files.php)
+    
+    \item \textbf{Non-repudiation:}
+    Our solution does not implement non-repudiation nor logging. It is also possible to perform replay attacks within a session as we do not have freshness implemented.
+    
+    \item \textbf{Encrypting files + Fault tolerance:}
+    We were unable to implement file encryption / decryption in time. But we implemented .txt viewing in our client app and proximity detection, which would be the building block for file decryption fault tolerance.
+    
+    \item \textbf{Android app:}
+    We decided to implement a Desktop app to make the implementation of this project easier considering the time we had available. But in a real world scenario we'd have to port our Java app do Android, which shouldn't be too difficult.
+    
 \end{itemize}
 
-
-%------------------------------------------------------------
-
-\newpage
 \section{References}
 
 \begin{itemize}
