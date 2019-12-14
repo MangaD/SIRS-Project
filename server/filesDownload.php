@@ -96,19 +96,6 @@ if ($_SERVER['HTTP_ACCEPT'] === 'application/json') {
 	// https://serverfault.com/questions/316814/php-serve-a-file-for-download-without-providing-the-direct-link
 	// https://www.php.net/manual/en/function.readfile.php
 
-	if (isset($_SERVER['HTTP_ORIGIN'])) {
-		header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-		header("Access-Control-Allow-Credentials: true");
-		header("Access-Control-Max-Age: 3600");
-	}
-	if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-		if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
-			header("Access-Control-Allow-Methods: POST");
-		}
-		if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
-			header("Access-Control-Allow-Headers: Accept, Content-Type, User-Agent");
-		}
-	}
 	header('Content-Description: File Transfer');
 	header('Content-Type: application/octet-stream');
 	header('Content-Disposition: attachment; filename="'.$path.'"');

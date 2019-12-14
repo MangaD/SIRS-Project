@@ -73,7 +73,7 @@ function fileDownload(el) {
 			
 			var fileName = data['name'];
 			
-			postDownload(`${window.serverAddress}/filesDownload.php`, {
+			postDownload(`filesDownload.php`, {
 				name: fileName,
 				hash: hash,
 			})
