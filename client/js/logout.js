@@ -4,6 +4,9 @@ function logout() {
 
 	loaderStart();
 
+	// Hide all modals
+	$('.modal').modal('hide');
+
 	$("#login_alerts").html('');
 
 	postJSONData("logout.php", {})
