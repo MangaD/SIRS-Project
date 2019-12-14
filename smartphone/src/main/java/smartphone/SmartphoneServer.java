@@ -344,6 +344,10 @@ public class SmartphoneServer extends WebSocketServer {
 	}
 
 	private String getAddress(WebSocket conn) {
-		return conn.getRemoteSocketAddress().getAddress().getHostAddress();
+		if (conn != null) {
+			return conn.getRemoteSocketAddress().getAddress().getHostAddress();
+		} else {
+			return "";
+		}
 	}
 }
