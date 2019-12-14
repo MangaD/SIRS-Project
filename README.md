@@ -42,8 +42,8 @@ TODO (tcpdumps, etc)
 
 ## Presentation
 
-- [documentation/presentation/T18_Mon_1500_0-14_presentation.pptx](documentation/presentation/T18_Mon_1500_0-14_presentation.pptx) - TODO
-- [documentation/presentation/T18_Mon_1500_0-14_presentation.pdf](documentation/presentation/T18_Mon_1500_0-14_presentation.pdf) - TODO
+- [documentation/presentation/T18_Mon_1500_0-14_presentation.pptx](documentation/presentation/T18_Mon_1500_0-14_presentation.pptx)
+- [documentation/presentation/T18_Mon_1500_0-14_presentation.pdf](documentation/presentation/T18_Mon_1500_0-14_presentation.pdf)
 - [Video] - TODO
 - [Screenshots] - TODO
 
@@ -91,3 +91,6 @@ TODO (tcpdumps, etc)
 - [LaTeX](https://www.latex-project.org/)
 - [draw.io](https://www.draw.io/)
 
+**Presentation:**
+
+- [POTX Template](https://www.templateswise.com/cyber-security-powerpoint-template/)
