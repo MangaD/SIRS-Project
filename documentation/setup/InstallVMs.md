@@ -109,6 +109,12 @@ sudo systemctl restart network-manager
 
 Repeat the same for User VM but with IP 192.168.0.20.
 
+On user VM may be necessary to do:
+
+```sh
+sudo ip route add default via 192.168.0.100
+```
+
 **Gateway VM:**
 
 ```sh
@@ -190,3 +196,8 @@ sudo netplan apply
 sudo systemctl restart network-manager
 ```
 
+May be necessary to do:
+
+```sh
+sudo ip route add default via 192.168.0.100
+```
