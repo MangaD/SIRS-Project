@@ -39,4 +39,5 @@ sudo mysql
 # Access website in browser:
 # http://127.0.0.1/project/server/install
 # Put in the DB credentials on the install page. For the Duo credentials please refer to DuoSetup.md
+# In your `php.ini` file, search for the `file_uploads` directive, and set it to `On`: `file_uploads = On`
 ```

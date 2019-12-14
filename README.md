@@ -34,7 +34,7 @@
 
 ## Attempting man-in-the-middle
 
-TODO (tcpdumps, etc)
+[documentation/MITM.md](documentation/MITM.md)
 
 ## Report
 
@@ -45,7 +45,7 @@ TODO (tcpdumps, etc)
 - [documentation/presentation/T18_Mon_1500_0-14_presentation.pptx](documentation/presentation/T18_Mon_1500_0-14_presentation.pptx)
 - [documentation/presentation/T18_Mon_1500_0-14_presentation.pdf](documentation/presentation/T18_Mon_1500_0-14_presentation.pdf)
 - [Video] - TODO
-- [Screenshots] - TODO
+- [Screenshots](documentation/screenshots)
 
 ## Credits
 
