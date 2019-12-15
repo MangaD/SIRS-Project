@@ -94,3 +94,8 @@
 **Presentation:**
 
 - [POTX Template](https://www.templateswise.com/cyber-security-powerpoint-template/)
+
+**Video:**
+
+- [OBS Studio](https://obsproject.com/)
+- [Shotcut](https://shotcut.org/)
