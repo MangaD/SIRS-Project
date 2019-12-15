@@ -44,7 +44,7 @@
 
 - [documentation/presentation/T18_Mon_1500_0-14_presentation.pptx](documentation/presentation/T18_Mon_1500_0-14_presentation.pptx)
 - [documentation/presentation/T18_Mon_1500_0-14_presentation.pdf](documentation/presentation/T18_Mon_1500_0-14_presentation.pdf)
-- [Video] - TODO
+- [Video](documentation/video/T18_Mon_1500_0-14_video.mp4)
 - [Screenshots](documentation/screenshots)
 
 ## Credits
