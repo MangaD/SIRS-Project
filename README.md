@@ -34,7 +34,7 @@
 
 ## Attempting man-in-the-middle
 
-[documentation/MITM.md](documentation/MITM.md)
+- [documentation/MITM.md](documentation/MITM.md)
 
 ## Report
 
