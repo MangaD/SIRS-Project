@@ -10,12 +10,22 @@
    
 2. **Confidentiality**
 
-    Despite messages being encrypted it is still visible what resources we're requesting (e.g. login.php, files.php...). This could be solved by having one PHP file for receiving all of the messages. Still, it is always possible to see that a communication between the client and server is going on, even if it is not possible to know the content.
+    Despite messages being encrypted it is still visible what resources we're requesting (e.g. login.php, files.php...). This could be solved by having one PHP file for receiving all of the messages. Still, it is always possible to see that a communication between the client and server is going on, even if it is not possible to know the content. Or maybe we could encrypt HTTP headers.
     
-3. **JavaScript Crypto**
+    Session cookie is sent in plain, should be encrypted.
+
+3. **Freshness**
+
+    We did not implement freshness so we don't avoid replay attacks. We could have implemented freshness with sequence numbers, nonces or timestamps.
+
+4. **JavaScript Crypto**
 
    We considered using the smartphone to take care of all the cryptographic aspects of the client's needs, but later found out that JavaScript has a cryptographic API called [SubtleCrypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto).
 
-4. **Encrypt files on upload and download**
+5. **Encrypt files on upload and download**
 
    Due to time constraints we were unable to implement encryption of the file on upload.
+   
+6. **WPA 2**
+
+    WPA 2 assures no one outside the network can see the packets in it. It does not assure confidentiality within the network. We'd need to use another protocol (e.g. TLS/SSL) between the smartphone and client.
